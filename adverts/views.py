@@ -10,13 +10,19 @@ from adverts.models import Advertisement
 def search_view(request):
     query = request.GET.get('q')
     category = request.GET.get('category')
+    print(category)
     category_choices = Advertisement.CategoryChoices.choices
     adverts = None
-    if query is not None:
+    if query != '' and category is None:
         adverts = Advertisement.objects.filter(Q(title__icontains=query) |
                                                Q(description__icontains=query) |
                                                Q(category__icontains=query))
-    if category:
+    if query != '' and category is not None:
+        adverts = Advertisement.objects.filter((Q(title__icontains=query) |
+                                               Q(description__icontains=query) |
+                                               Q(category__icontains=query)) &
+                                               Q(category = category))
+    else:
         adverts = Advertisement.objects.filter(category=category)
 
     context = {

@@ -6,27 +6,142 @@
     <meta name='viewport'  charset="UTF-8" content="width-device-width, initial-scale=1.0">
     <title>Search</title>
     <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <!-- noUiSlider CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/nouislider@15.7.0/dist/nouislider.min.css" rel="stylesheet">
 </head>
 <body>
     {% include 'nav.html' %}
     <div class="search-div">
-        <form method="get" action="{% url 'search_view' %}">
-            <input id="filter" name="q" type="text">
-            <select id="category" name="category">
-                {% for value, label in category_choices %}
-                	<option value="{{ value }}">{{ label }}</option>
-                {% endfor %}
-            </select>
-            <input type="range" min="0" max="5" value="2" class="rating-slider" id="ratingSlider">
+        <form method="get" action="{% url 'search_view' %}" class="search-form">
+
+            <div class="form-group">
+                <label for='filter'>Search:</label>
+                <input id="filter" name="q" type="text" value="{{ request.GET.q|default:'' }}">
+            </div>
+
+            <div class="form-group">
+                <label for="category">Category:</label>
+                <select id="category" name="category">
+                    {% for value, label in category_choices %}
+                        <option value="{{ value }}" {% if request.GET.category == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="form-group slider-group">
+                <label for="rating-slider" class="rating-label">Rating:</label>
+                <div class="slider-wrapper">
+                    <div id="rating-slider"></div>
+                    <!-- Hidden inputs to send to server -->
+                    <input type="hidden" id="min-rating" name="min_rating" value="0">
+                    <input type="hidden" id="max-rating" name="max_rating" value="5">
+                </div>
+            </div>
+            <div class="form-group slider-group">
+                <label for="price-slider" class="price-label">Price:</label>
+                <div class="slider-wrapper">
+                    <div id="price-slider"></div>
+                    <!-- Hidden inputs to send to server -->
+                    <input type="hidden" id="min-price" name="min_price" value="0">
+                    <input type="hidden" id="max-price" name="max_price" value="1000">
+                </div>
+            </div>
         </form>
     </div>
     <div class="results">
         {% for advert in adverts %}
             <div class="result">
-                <h4 class="advert_title"><a href="{% url 'advert_view' advert.id advert.slug %}">{{ advert.title|title }}</a></h4>
-                <p class="advert_category">{{ advert.get_category_display|title }}</p>
+                <div class="title-and-category">
+                    <h4 class="advert_title"><a href="{% url 'advert_view' advert.id advert.slug %}">{{ advert.title|title }}</a></h4>
+                    <p class="advert_category">{{ advert.get_category_display|title }}</p>
+                </div>
+                <div class="description">
+                    <p class="advert-description">{{ advert.description }}</p>
+                </div>
             </div>
         {% endfor %}
     </div>
+
+    <!-- noUiSlider JS -->
+    <script src="https://cdn.jsdelivr.net/npm/nouislider@15.7.0/dist/nouislider.min.js"></script>
+
+    <script>
+        const ratingSlider = document.getElementById('rating-slider');
+        const minRatingInput = document.getElementById('min-price');
+        const maxRatingInput = document.getElementById('max-price');
+
+        noUiSlider.create(ratingSlider, {
+            start: [0, 5],  // Initial values
+            connect: true,
+            step: 1,
+            range: {
+                'min': 0,
+                'max': 5
+            },
+            tooltips: [true, true],
+            format: {
+                to: function (value) {
+                    return Math.round(value);
+                },
+                from: function (value) {
+                    return Number(value);
+                }
+            }
+        });
+
+        priceSlider.noUiSlider.on('update', function (values, handle) {
+            const min = Math.round(values[0]);
+            const max = Math.round(values[1]);
+            minRatingInput.value = min;
+            maxRatingInput.value = max;
+        });
+    </script>
+
+    <script>
+        const priceSlider = document.getElementById('price-slider');
+        const priceDisplay = document.getElementById('price-range-display');
+        const minInput = document.getElementById('min-price');
+        const maxInput = document.getElementById('max-price');
+
+        noUiSlider.create(priceSlider, {
+            start: [0, 1000],  // Initial values
+            connect: true,
+            step: 10,
+            range: {
+                'min': 0,
+                'max': 1000
+            },
+            tooltips: [true, true],
+            format: {
+                to: function (value) {
+                    return Math.round(value);
+                },
+                from: function (value) {
+                    return Number(value);
+                }
+            }
+        });
+
+        priceSlider.noUiSlider.on('update', function (values, handle) {
+            const min = Math.round(values[0]);
+            const max = Math.round(values[1]);
+            priceDisplay.textContent = `$${min} - $${max}`;
+            minInput.value = min;
+            maxInput.value = max;
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const form = document.querySelector('form');
+
+            // Auto-submit when inputs change
+            form.querySelectorAll('input, select').forEach((input) => {
+                input.addEventListener('change', () => {
+                    form.submit();
+                });
+            });
+        });
+    </script>
+
 </body>
 </html>
