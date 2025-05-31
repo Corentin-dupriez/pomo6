@@ -1,0 +1,48 @@
+.image_container{
+    position: relative;
+    width: 100vw;
+    max-width: 1900px;
+    height: auto;
+    overflow: hidden;
+}
+
+.image_container::before{
+    content:'';
+    position: absolute;
+    top: 0; left: 0;right: 0;bottom: 0;
+    background: rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.home_image {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.overlay_content{
+    z-index: 2;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    width: 60%;
+}
+
+.overlay_content h1{
+    color: white;
+    margin-bottom: 0.5rem;
+    margin-left: 0.4rem;
+    font-size: clamp(1.5rem, 5vw, 3rem);
+}
+
+.overlay_input{
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    width: 100%;
+    border: 2px solid lightgray;
+    border-radius: 2rem;
+}

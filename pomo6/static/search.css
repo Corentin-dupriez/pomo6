@@ -1,0 +1,47 @@
+.search-div {
+    background-color: #FAF8F3;
+    margin-top: 0.5rem;
+    width: 100%;
+    padding: 2rem;
+}
+
+
+.search-form {
+    padding-left: 0;
+    display: flex;
+    align-items: flex-end;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.search-div input,
+.search-div select {
+    border-radius: 1rem;
+    padding: 0.25em 0.5em;
+    border: 1px solid lightgray;
+}
+
+.search-div input {
+    min-width: 200px;
+    width: 20%;
+    height: 1.5rem;
+    margin-right: 2em;
+}
+
+.search-div select {
+    appearance: none;
+    background-color: white;
+    min-width: 15ch;
+    max-width: 30ch;
+    height: 1.5rem;
+    margin-right: 2em;
+}
+
+.search-div select::after{
+    content:'';
+    width: 0.8em;
+    height: 0.5em;
+    background-color: lightgray;
+    clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+}

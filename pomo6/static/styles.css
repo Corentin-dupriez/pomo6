@@ -1,0 +1,134 @@
+@import url('reset.css');
+@import url('layout.css');
+@import url('nav.css');
+
+/* IMPORT THE RESULT PAGE SEARCH BAR CSS */
+@import url('search.css');
+
+/* IMPORT RELATED TO THE HOME PAGE IMAGE AND OVERLAY */
+@import url('hero.css');
+
+/* IMPORT FOOTER CSS */
+@import url('footer.css');
+
+
+/* SLIDERS */
+.rating-slider{
+    -webkit-appearance: none;
+    appearance: none;
+    outline: none;
+}
+
+.rating-slider::-webkit-slider-thumb{
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 1em;
+    background: #00BD9D;
+    cursor: pointer;
+}
+
+.slider-group {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-right: 2em;
+}
+
+.slider-wrapper {
+    flex: 1;
+    min-width: 150px;
+}
+
+.body {
+    position: relative;
+    display: inline-block;
+    margin: 0;
+    padding: 0;
+}
+
+.categories_overlay{
+    margin-top: 1.5rem;
+}
+
+.categories_overlay h2{
+    color: #FAF8F3;
+}
+
+.categories_grid{
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.category_card{
+    color: white;
+    cursor: pointer;
+}
+
+
+
+.results {
+    width: 100%;
+    display: block;
+}
+
+.result{
+    display: block;
+    width: 100%;
+    text-align: left;
+    background-color: #FAF8F3;
+    margin: 0.5rem;
+    padding: 3rem;
+}
+
+.login_section{
+    border: 1px solid lightgray;
+    margin: 5rem;
+    padding: 2rem 3rem;
+    border-radius: 3rem;
+    display: flex;
+    background-color: #FAF8F3;
+    width: 40%;
+    height: 50vh;
+    align-items: center;
+    justify-content: center;
+}
+
+.login_section form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login_section h2 {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.login_section label {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.login_section input {
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+}
+
+.login_section button{
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 1rem;
+    padding: 0.5rem 2.5rem;
+    background-color: #00bd9d;
+    border: black;
+    border-radius: 0.5rem;
+    color: white;
+}

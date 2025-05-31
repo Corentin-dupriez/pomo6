@@ -22,7 +22,6 @@ ENV/
 *.log
 
 # Static/media (optional if using collectstatic)
-static/
 media/
 
 # Migrations (optional if you don’t want to track them early)
