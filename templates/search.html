@@ -1,0 +1,32 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name='viewport'  charset="UTF-8" content="width-device-width, initial-scale=1.0">
+    <title>Search</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    {% include 'nav.html' %}
+    <div class="search-div">
+        <form method="get" action="{% url 'search_view' %}">
+            <input id="filter" name="q" type="text">
+            <select id="category" name="category">
+                {% for value, label in category_choices %}
+                	<option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+            </select>
+            <input type="range" min="0" max="5" value="2" class="rating-slider" id="ratingSlider">
+        </form>
+    </div>
+    <div class="results">
+        {% for advert in adverts %}
+            <div class="result">
+                <h4 class="advert_title"><a href="{% url 'advert_view' advert.id advert.slug %}">{{ advert.title|title }}</a></h4>
+                <p class="advert_category">{{ advert.get_category_display|title }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

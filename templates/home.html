@@ -1,0 +1,46 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name='viewport'  charset="UTF-8" content="width-device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    {% include 'nav.html' %}
+    <div class="body">
+        <div class="image_container">
+            <img class='home_image' src='{% static 'img_home.png' %}' alt='Welcome'>
+            <div class="overlay_content">
+                <h1>I'm looking for...</h1>
+                <form method="get" action="{% url 'search_view' %}">
+                    <input id='filter' name="q" class="overlay_input" type="text" placeholder="Some help">
+                </form>
+                <section class="categories_overlay">
+                <h2>Browse by Category</h2>
+                    <div class="categories_grid">
+                        <div class="category_card" onclick="goToCategory('IT')">IT Help</div>
+                        <div class="category_card" onclick="goToCategory('HANDYMAN')">Handyman</div>
+                        <div class="category_card" onclick="goToCategory('CLEANING')">Cleaning</div>
+                        <div class="category_card" onclick="goToCategory('CHILDCARE')">Childcare</div>
+                        <div class="category_card" onclick="goToCategory('TUTORING')">Tutoring</div>
+                        <div class="category_card" onclick="goToCategory('TRANSPORTATION')">Transportation</div>
+                        <div class="category_card" onclick="goToCategory('MOVING')">Moving help</div>
+                        <div class="category_card" onclick="goToCategory('PET')">Pet care</div>
+                    <!-- add more -->
+                    </div>
+            </section>
+            </div>
+        </div>
+    </div>
+    {% include 'footer.html' %}
+<script>
+    function goToCategory(category) {
+        const baseUrl = "{% url 'search_view' %}";
+        const encoded = encodeURIComponent(category);
+        window.location.href = `${baseUrl}?category=${encoded}`;
+    }
+</script>
+</body>
+</html>

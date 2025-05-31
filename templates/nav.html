@@ -1,0 +1,22 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+</head>
+<body>
+    <div class="top_nav">
+        <div class="branding" onclick="location.href='{% url 'home' %}'">
+            <img class="logo" src="{% static 'img_logo.png' %}">
+            <h1>pomo6</h1>
+        </div>
+        <div class="log_in_buttons">
+            <button class='register' type="button">Register</button>
+            <button class="login" type="button" onclick="location.href='{% url 'login' %}'">Log in</button>
+        </div>
+    </div>
+</body>
+</html>
