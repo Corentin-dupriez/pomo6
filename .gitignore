@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.Python
+env/
+venv/
+ENV/
+*.env
+*.db
+*.sqlite3
+
+# macOS
+.DS_Store
+
+# VS Code
+.vscode/
+
+# Logs
+*.log
+
+# Static/media (optional if using collectstatic)
+static/
+media/
+
+# Migrations (optional if you don’t want to track them early)
+**/migrations/
+!**/migrations/__init__.py
