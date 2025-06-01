@@ -46,3 +46,41 @@
     border: 2px solid lightgray;
     border-radius: 2rem;
 }
+
+@media (max-width: 768px) {
+    .overlay_content h1 {
+        font-size: 1.5rem;
+    }
+
+    .categories-overlay h2 {
+        font-size: 1.2rem;
+        margin-top: 1rem;
+    }
+
+    .categories-overlay {
+        text-align: center;
+    }
+
+    .image_container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden;
+        position: relative;
+    }
+
+    .home_image {
+        height: 100%;
+        width: auto;
+        max-width: none;
+        object-fit: cover;
+        display: block;
+        margin: 0 auto;
+    }
+
+    .category_card {
+        font-size: 0.95rem;
+        padding: 0.6rem;
+    }
+}
