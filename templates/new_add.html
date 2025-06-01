@@ -1,0 +1,42 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        form {
+            width: 80%;
+        }
+        .new-add-form {
+            display: flex;
+            flex-direction: column;
+            margin: 1rem;
+        }
+        .form-button {
+            color: #FAF8F3;
+            border: 0;
+            border-radius: 0.4rem;
+            margin: 0.5rem auto 0.25rem auto;
+            width: 60%;
+        }
+        .submit-form-button {
+            background-color: #00BD9D;
+        }
+    </style>
+</head>
+<body>
+    {% include 'nav.html' %}
+    <form method="post">
+        <div class="new-add-form">
+            {% csrf_token %}
+            {% for field in form %}
+                {{ field }}
+            {% endfor %}
+            <button type="submit" class="form-button submit-form-button">Submit</button>
+            <button type="reset" class="form-button reset-form-button">Reset</button>
+        </div>
+    </form>
+</body>
+</html>
