@@ -6,13 +6,13 @@
     <meta charset="UTF-8">
     <meta name='viewport' content="width-device-width, initial-scale=1.0">
     <title>Home</title>
-    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
     {% include 'nav.html' %}
     <div class="body">
         <div class="image_container">
-            <img class='home_image' src='{% static 'img_home.png' %}' alt='Welcome'>
+            <img class='home_image' src='{% static 'images/img_home.png' %}' alt='Welcome'>
             <div class="overlay_content">
                 <h1>I'm looking for...</h1>
                 <form method="get" action="{% url 'search_view' %}">

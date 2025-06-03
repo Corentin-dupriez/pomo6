@@ -39,5 +39,9 @@ def advert_view(request, pk: int, slug: str):
 
 def create_ad_view(request):
     form = AdvertForm(request.POST or None)
+
+    if request.method == 'POST' and form.is_valid():
+        form.save()
+
     context = {'form': form}
     return render(request, 'new_add.html', context)
