@@ -2,4 +2,6 @@
     background-color: #FAF8F3;
     width: 100%;
     text-align: center;
+    justify-items: center;
+    padding: 1em;
 }

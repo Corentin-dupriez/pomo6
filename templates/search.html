@@ -1,16 +1,12 @@
-{% load static %}
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta name='viewport'  charset="UTF-8" content="width-device-width, initial-scale=1.0">
-    <title>Search</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+{% extends 'base.html' %}
+{% block title %}
+Ads search
+{% endblock %}
+{% block head %}
     <!-- noUiSlider CSS -->
     <link href="https://cdn.jsdelivr.net/npm/nouislider@15.7.0/dist/nouislider.min.css" rel="stylesheet">
-</head>
-<body>
-    {% include 'nav.html' %}
+{% endblock %}
+{% block content %}
     <div class="search-div">
         <form method="get" action="{% url 'search_view' %}" class="search-form">
 
@@ -60,7 +56,20 @@
             </div>
         {% endfor %}
     </div>
+    {% with params="q="|add:query|add:"&category="|add:category %}
+        <div class="pagination">
+            {% if adverts.has_previous %}
+                <a href="?{{ params }}&page={{ adverts.previous_page_number }}">Previous</a>
+            {% endif %}
+            <span>Page {{ adverts.number }} of {{ adverts.paginator.num_pages }}</span>
+            {% if adverts.has_next %}
+                <a href="?{{ params }}&page={{ adverts.next_page_number }}">Next</a>
+            {% endif %}
+        </div>
+    {% endwith %}
+{% endblock %}
 
+{% block scripts %}
     <!-- noUiSlider JS -->
     <script src="https://cdn.jsdelivr.net/npm/nouislider@15.7.0/dist/nouislider.min.js"></script>
 
@@ -143,5 +152,4 @@
         });
     </script>
 
-</body>
-</html>
+{% endblock %}

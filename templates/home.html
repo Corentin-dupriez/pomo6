@@ -1,15 +1,12 @@
+{% extends 'base.html' %}
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name='viewport' content="width-device-width, initial-scale=1.0">
-    <title>Home</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-</head>
-<body>
-    {% include 'nav.html' %}
+{% block title %}
+Home
+{% endblock %}
+{% block head %}
+{% endblock %}
+    {% block content %}
     <div class="body">
         <div class="image_container">
             <img class='home_image' src='{% static 'images/img_home.png' %}' alt='Welcome'>
@@ -35,7 +32,8 @@
             </div>
         </div>
     </div>
-    {% include 'footer.html' %}
+    {% endblock %}
+{% block scripts %}
 <script>
     function goToCategory(category) {
         const baseUrl = "{% url 'search_view' %}";
@@ -43,5 +41,4 @@
         window.location.href = `${baseUrl}?category=${encoded}`;
     }
 </script>
-</body>
-</html>
+{% endblock %}

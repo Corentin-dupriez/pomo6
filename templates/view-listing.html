@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+    <meta charset="UTF-8">
+    <meta name='viewport' content="width-device-width, initial-scale=1.0">
+    <title>View listing</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+{% endblock %}
+
+{% block content %}
+    <h1>{{ advert.title }}</h1>
+    <p>{{ advert.category }}</p>
+    <p>{{ advert.description }}</p>
+{% endblock %}

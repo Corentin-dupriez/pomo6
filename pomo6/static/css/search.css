@@ -1,7 +1,6 @@
 .search-div {
     background-color: #FAF8F3;
     margin-top: 0.5rem;
-    width: 100%;
     padding: 2rem;
 }
 
@@ -44,4 +43,10 @@
     height: 0.5em;
     background-color: lightgray;
     clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+}
+
+.pagination{
+    display: flex;
+    justify-content: center;
+    gap: 1em;
 }
