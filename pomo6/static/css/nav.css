@@ -10,6 +10,7 @@
     align-items: center;
     position: relative;
     justify-content: space-between;
+    box-shadow: 0 3px 2px lightgray ;
 }
 
 .branding{

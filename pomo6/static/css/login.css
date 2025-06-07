@@ -1,0 +1,47 @@
+.login_section{
+    border: 1px solid lightgray;
+    margin: 5rem;
+    padding: 2rem 3rem;
+    border-radius: 3rem;
+    display: flex;
+    background-color: #FAF8F3;
+    width: 40%;
+    height: 50vh;
+    align-items: center;
+    justify-content: center;
+}
+
+.login_section form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.login_section h2 {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.login_section label {
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.login_section input {
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+}
+
+.login_section button{
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 1rem;
+    padding: 0.5rem 2.5rem;
+    background-color: #00bd9d;
+    border: black;
+    border-radius: 0.5rem;
+    color: white;
+}

@@ -1,13 +1,6 @@
 {% load static %}
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Navigation bar</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-</head>
-<body>
+
     <div class="top_nav">
         <div class="branding" onclick="location.href='{% url 'home' %}'">
             <img class="logo" src="{% static 'images/img_logo.png' %}">
@@ -18,5 +11,3 @@
             <button class="login" type="button" onclick="location.href='{% url 'login' %}'">Log in</button>
         </div>
     </div>
-</body>
-</html>
