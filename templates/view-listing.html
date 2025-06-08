@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+{% load round %}
 
 {% block head %}
     <meta charset="UTF-8">
@@ -9,7 +10,19 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{{ advert.title }}</h1>
-    <p>{{ advert.category }}</p>
-    <p>{{ advert.description }}</p>
+    <div class="ad-details">
+        <h1>{{ advert.title }}</h1>
+        <p>{{ advert.category }}</p>
+        <p>{{ advert.description }}</p>
+    </div>
+    <div class="add-comments">
+        {% for order in advert.orders.all %}
+            <div class="comment-info">
+                {% for rating in order.ratings.all %}
+                    <p>{{ order.user }}</p>
+                    <p>{{ rating.rating | round }}</p>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
 {% endblock %}

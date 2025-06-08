@@ -28,8 +28,8 @@ Ads search
                 <div class="slider-wrapper">
                     <div id="rating-slider"></div>
                     <!-- Hidden inputs to send to server -->
-                    <input type="hidden" id="min-rating" name="min_rating" value="0">
-                    <input type="hidden" id="max-rating" name="max_rating" value="5">
+                    <input type="hidden" id="min-rating" name="min_rating" value="{{ min_rating }}">
+                    <input type="hidden" id="max-rating" name="max_rating" value="{{ max_rating }}">
                 </div>
             </div>
             <div class="form-group slider-group">
@@ -75,11 +75,11 @@ Ads search
 
     <script>
         const ratingSlider = document.getElementById('rating-slider');
-        const minRatingInput = document.getElementById('min-price');
-        const maxRatingInput = document.getElementById('max-price');
+        const minRatingInput = document.getElementById('min-rating');
+        const maxRatingInput = document.getElementById('max-rating');
 
         noUiSlider.create(ratingSlider, {
-            start: [0, 5],  // Initial values
+            start: [{{min_rating}}, {{max_rating}}],  // Initial values
             connect: true,
             step: 1,
             range: {
@@ -97,12 +97,22 @@ Ads search
             }
         });
 
-        priceSlider.noUiSlider.on('update', function (values, handle) {
+        ratingSlider.noUiSlider.on('update', function (values, handle) {
             const min = Math.round(values[0]);
             const max = Math.round(values[1]);
             minRatingInput.value = min;
             maxRatingInput.value = max;
         });
+
+        ratingSlider.noUiSlider.on('set', function (values) {
+        minRatingInput.value = values[0];
+        maxRatingInput.value = values[1];
+
+        // Trigger change event to auto-submit
+        minRatingInput.dispatchEvent(new Event('change', { bubbles: true }));
+        maxRatingInput.dispatchEvent(new Event('change', { bubbles: true }));
+    });
+
     </script>
 
     <script>

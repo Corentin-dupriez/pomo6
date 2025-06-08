@@ -43,7 +43,8 @@ class Advertisement(CreatedDateMixin):
 
 class Order(CreatedDateMixin):
     advertisement = models.ForeignKey(Advertisement,
-                                      on_delete=models.CASCADE,)
+                                      on_delete=models.CASCADE,
+                                      related_name='orders',)
     #TO-DO: WILL HAVE TO CHANGE MODEL TO FK ONCE USERS ARE IMPLEMENTED
     user = models.CharField(max_length=50)
     completed = models.BooleanField(default=False)
@@ -51,7 +52,8 @@ class Order(CreatedDateMixin):
 
 class Ratings(CreatedDateMixin):
     order = models.ForeignKey(Order,
-                              on_delete=models.CASCADE)
+                              on_delete=models.CASCADE,
+                              related_name='ratings')
     rating = models.DecimalField(decimal_places=1,
                                  max_digits=2,
                                  validators=[RatingValidator('The rating must be between 0 and 5')])
