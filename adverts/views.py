@@ -1,6 +1,7 @@
+from django.db.models.functions import Coalesce
 from django.http import HttpResponse
 from django.shortcuts import render
-from django.db.models import Q
+from django.db.models import Q, Avg, Count, ExpressionWrapper, FloatField
 from django.core.paginator import Paginator
 
 from adverts.forms import AdvertForm
@@ -12,7 +13,16 @@ def search_view(request):
     query = request.GET.get('q', '').strip()
     category = request.GET.get('category')
     category_choices = Advertisement.CategoryChoices.choices
-    adverts = Advertisement.objects.all()
+    adverts = Advertisement.objects.all().annotate(
+        avg_rating=Coalesce(Avg('order__ratings__rating'), 0, output_field=FloatField()),
+        customers = Count('order', filter=Q(order__completed=True), distinct=True, output_field=FloatField()),)
+
+    adverts =    adverts.annotate(note=ExpressionWrapper(
+            Coalesce(Avg('order__ratings__rating'), 0)* 0.7 +
+            Count('order', filter=Q(order__completed=True), distinct=True) * 0.3,
+            output_field=FloatField()
+        )
+    ).order_by('-note')
 
     if query:
         adverts = adverts.filter(Q(title__icontains=query) |
