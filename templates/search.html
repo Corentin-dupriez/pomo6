@@ -9,20 +9,7 @@ Ads search
 {% block content %}
     <div class="search-div">
         <form method="get" action="{% url 'search_view' %}" class="search-form">
-
-            <div class="form-group">
-                <label for='filter'>Search:</label>
-                <input id="filter" name="q" type="text" value="{{ request.GET.q|default:'' }}">
-            </div>
-
-            <div class="form-group">
-                <label for="category">Category:</label>
-                <select id="category" name="category">
-                    {% for value, label in category_choices %}
-                        <option value="{{ value }}" {% if request.GET.category == value %}selected{% endif %}>{{ label }}</option>
-                    {% endfor %}
-                </select>
-            </div>
+            {{ form }}
             <div class="form-group slider-group">
                 <label for="rating-slider" class="rating-label">Rating:</label>
                 <div class="slider-wrapper">
@@ -44,7 +31,7 @@ Ads search
         </form>
     </div>
     <div class="results">
-        {% for advert in adverts %}
+        {% for advert in advertisement_list %}
             <div class="result">
                 <div class="title-and-category">
                     <h4 class="advert_title"><a href="{% url 'advert_view' advert.id advert.slug %}">{{ advert.title|title }}</a></h4>
@@ -56,14 +43,14 @@ Ads search
             </div>
         {% endfor %}
     </div>
-    {% with params="q="|add:query|add:"&category="|add:category %}
+    {% with params="query="|add:query|add:"&category="|add:category %}
         <div class="pagination">
-            {% if adverts.has_previous %}
-                <a href="?{{ params }}&page={{ adverts.previous_page_number }}">Previous</a>
+            {% if page_obj.has_previous %}
+                <a href="?{{ params }}&page={{ page_obj.previous_page_number }}">Previous</a>
             {% endif %}
-            <span>Page {{ adverts.number }} of {{ adverts.paginator.num_pages }}</span>
-            {% if adverts.has_next %}
-                <a href="?{{ params }}&page={{ adverts.next_page_number }}">Next</a>
+            <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+                <a href="?{{ params }}&page={{ page_obj.next_page_number }}">Next</a>
             {% endif %}
         </div>
     {% endwith %}

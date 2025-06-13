@@ -3,60 +3,80 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.db.models import Q, Avg, Count, ExpressionWrapper, FloatField
 from django.core.paginator import Paginator
+from django.views.generic import ListView
 
-from adverts.forms import AdvertForm
+from adverts.forms import AdvertForm, SearchForm
 from adverts.models import Advertisement, Ratings, Order
 
+class ResultsView(ListView):
+    model = Advertisement
+    template_name = 'search.html'
+    form_class = SearchForm
+    paginate_by = 5
+    paginator_class = Paginator
 
-#Search view used to filter and display the results of the search
-def search_view(request):
-    query = request.GET.get('q', '').strip()
-    category = request.GET.get('category')
-    min_rating = request.GET.get('min_rating', 0)
-    max_rating = request.GET.get('max_rating', 5)
-    category_choices = Advertisement.CategoryChoices.choices
+    def get_queryset(self):
+        query = self.request.GET.get('query', '').strip()
+        category = self.request.GET.get('category')
 
-    #annotate the results to get the ratings and customers of the listing
-    #also add another column weighing the ratings and customer numbers
-    adverts = Advertisement.objects.all().annotate(
-        avg_rating=Coalesce(Avg('orders__ratings__rating'), 0, output_field=FloatField()),
-        customers = Count('orders', filter=Q(orders__completed=True), distinct=True, output_field=FloatField()),
-        note=ExpressionWrapper(
-            Coalesce(Avg('orders__ratings__rating'), 0)* 0.7 +
-            Count('orders', filter=Q(orders__completed=True), distinct=True) * 0.3,
-            output_field=FloatField()
+        try:
+            min_rating = int(self.request.GET.get('min_rating', 0))
+        except ValueError:
+            min_rating = 0
+
+        try:
+            max_rating = int(self.request.GET.get('max_rating', 5))
+        except ValueError:
+            max_rating = 5
+
+        queryset = Advertisement.objects.all().annotate(
+            avg_rating=Coalesce(Avg('orders__ratings__rating'), 0, output_field=FloatField()),
+            customers = Count('orders', filter=Q(orders__completed=True), distinct=True, output_field=FloatField()),
+            note=ExpressionWrapper(
+                Coalesce(Avg('orders__ratings__rating'), 0)* 0.7 +
+                Count('orders', filter=Q(orders__completed=True), distinct=True) * 0.3,
+                output_field=FloatField()
+            )
         )
-    ).order_by('-note')
 
-    if query:
-        adverts = adverts.filter(Q(title__icontains=query) |
-                                    Q(description__icontains=query) |
-                                    Q(category__icontains=query))
+        if query:
+            queryset = queryset.filter(Q(title__icontains=query) |
+                                     Q(description__icontains=query) |
+                                     Q(category__icontains=query))
 
-    if category :
-        adverts = adverts.filter(Q(category = category))
+        if category:
+            queryset = queryset.filter(category=category)
 
-    if min_rating:
-        adverts = adverts.filter(Q(avg_rating__gte=min_rating))
+        if min_rating:
+            queryset = queryset.filter(Q(note__gte=min_rating))
 
-    if max_rating:
-        adverts = adverts.filter(Q(avg_rating__lte=max_rating))
+        if max_rating:
+            queryset = queryset.filter(Q(note__lte=max_rating))
 
-    #create a paginator objet to return 5 results per page
-    paginator = Paginator(adverts, 5)
-    page = request.GET.get('page')
-    page_obj = paginator.get_page(page)
+        return queryset.order_by('-note')
 
-    context = {
-        'adverts': page_obj,
-        'category': category,
-        'query': query,
-        'min_rating': min_rating,
-        'max_rating': max_rating,
-        'category_choices': category_choices,
-    }
+    def get_context_data(
+        self, *, object_list = ..., **kwargs
+    ):
+        try:
+            min_rating = int(self.request.GET.get('min_rating', 0))
+        except ValueError:
+            min_rating = 0
 
-    return render(request, 'search.html', context)
+        try:
+            max_rating = int(self.request.GET.get('max_rating', 5))
+        except ValueError:
+            max_rating = 5
+
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'form': self.form_class(self.request.GET or None),
+            'query': self.request.GET.get('query', ''),
+            'category': self.request.GET.get('category', ''),
+            'min_rating': min_rating,
+            'max_rating': max_rating,
+        })
+        return context
 
 def advert_view(request, pk: int, slug: str):
     advert = Advertisement.objects.filter(id=pk).first()
