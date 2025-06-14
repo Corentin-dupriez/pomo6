@@ -10,19 +10,21 @@
 {% endblock %}
 
 {% block content %}
-    <div class="ad-details">
-        <h1>{{ advertisement.title }}</h1>
-        <p>{{ advertisement.category }}</p>
-        <p>{{ advertisement.description }}</p>
-    </div>
-    <div class="add-comments">
-        {% for order in advertisement.orders.all %}
-            <div class="comment-info">
-                {% for rating in order.ratings.all %}
-                    <p>{{ order.user }}</p>
-                    <p>{{ rating.rating | round }}</p>
-                {% endfor %}
-            </div>
-        {% endfor %}
+    <div class="page-container content">
+        <div class="ad-details">
+            <h1>{{ advertisement.title }}</h1>
+            <p>{{ advertisement.category }}</p>
+            <p>{{ advertisement.description }}</p>
+        </div>
+        <div class="add-comments">
+            {% for order in advertisement.orders.all %}
+                <div class="comment-info">
+                    {% for rating in order.ratings.all %}
+                        <p>{{ order.user }}</p>
+                        <p>{{ rating.rating | round }}</p>
+                    {% endfor %}
+                </div>
+            {% endfor %}
+        </div>
     </div>
 {% endblock %}

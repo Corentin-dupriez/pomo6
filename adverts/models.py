@@ -25,6 +25,9 @@ class Advertisement(CreatedDateMixin):
                                 choices=CategoryChoices.choices,
                                 default=CategoryChoices.OTHER)
     slug = models.SlugField(blank=True)
+    image = models.ImageField(upload_to='media',
+                              blank=True,
+                              null=True,)
 
     #TO-DO: WILL HAVE TO CHANGE MODEL TO FK ONCE USERS ARE IMPLEMENTED
     user = models.CharField(max_length=50)

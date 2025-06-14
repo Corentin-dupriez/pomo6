@@ -16,6 +16,8 @@
 
 @import 'login.css';
 
+@import "new-listing.css";
+
 
 .categories_overlay{
     margin-top: 1.5rem;

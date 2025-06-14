@@ -48,16 +48,24 @@
     font-size: 1rem;
     cursor: pointer;
     padding: 0.5rem 2.5rem;
+    border-radius: 0.5rem;
 }
 
 .login {
     background-color: #00bd9d;
-    border: black;
-    border-radius: 0.5rem;
+    border: none;
     color: white;
+}
+
+.login:hover {
+    background-color: #009f84;
 }
 
 .register{
     background-color: #FAF8F3;
     border: #FAF8F3;
+}
+
+.register:hover {
+    background-color: #cccccc;
 }

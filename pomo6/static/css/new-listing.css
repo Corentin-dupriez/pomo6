@@ -1,0 +1,80 @@
+        body{
+            margin: 0;
+            padding: 0;
+        }
+
+        form {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .new-add-form {
+            display: flex;
+            flex-direction: column;
+            background-color: #FAF8F3;
+            border: 1px solid lightgray;
+            border-radius: 2rem;
+            margin: 2rem auto;
+            width: 100%;
+            max-width: 700px;
+            padding: 2rem;
+        }
+
+        .new-add-form input,
+        .new-add-form textarea,
+        .new-add-form select{
+            border: 1px solid lightgray;
+            border-radius: 0.4rem;
+            text-indent: 0.5em;
+            font-size: 0.8rem;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .new-add-form input {
+            height: 1.5rem;
+        }
+
+        .new-add-form textarea{
+            resize: vertical;
+            min-height: 8rem;
+            height: 20rem;
+        }
+
+        .add-form-fields{
+            padding: 0.5rem;
+            gap: 1rem;
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            margin: auto;
+        }
+
+        .form-button {
+            color: #FAF8F3;
+            border: 0;
+            border-radius: 0.4rem;
+            margin: 0.5rem auto 0.25rem auto;
+            width: 90%;
+            height: 1.5rem;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .submit-form-button {
+            background-color: #00BD9D;
+        }
+
+        .submit-form-button:hover {
+            background-color: #009f84;
+        }
+
+        .reset-form-button{
+            background-color: #888;
+        }
+
+        .reset-form-button:hover{
+            background-color: #666;
+        }

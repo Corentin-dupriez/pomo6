@@ -98,6 +98,22 @@
     padding: 3rem;
 }
 
+a:link{
+    color: #00BD9D;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+a:visited{
+    color: #00BD9D;
+}
+
+.result .title-and-category p{
+    font-weight: bold;
+    color: gray;
+    font-size: 0.9rem;
+}
+
 @media (max-width: 768px) {
     .search-form {
         display: flex;

@@ -6,8 +6,16 @@
             <img class="logo" src="{% static 'images/img_logo.png' %}">
             <h1>pomo6</h1>
         </div>
+        {% if not user.is_authenticated %}
         <div class="log_in_buttons">
             <button class='register' type="button">Register</button>
             <button class="login" type="button" onclick="location.href='{% url 'login' %}'">Log in</button>
         </div>
+            {% else %}
+            <div class="log_in_buttons">
+                <div class="user-actions">
+                    <button class="login" type="button" onclick="location.href='{% url 'create_ad_view' %}'">Add a listing</button>
+                </div>
+            </div>
+        {% endif %}
     </div>
