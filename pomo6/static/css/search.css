@@ -108,10 +108,29 @@ a:visited{
     color: #00BD9D;
 }
 
+.listing-header {
+    display: flex;
+}
+
+.title-and-category {
+    margin-left: 1rem;
+}
+
 .result .title-and-category p{
     font-weight: bold;
     color: gray;
     font-size: 0.9rem;
+}
+
+.listing-header img{
+    height: 5rem;
+    width: auto;
+    max-width: 8rem;
+    margin-top: 3rem;
+}
+
+.description {
+    margin-left: 8.5rem;
 }
 
 @media (max-width: 768px) {

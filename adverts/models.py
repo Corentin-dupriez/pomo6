@@ -28,6 +28,13 @@ class Advertisement(CreatedDateMixin):
     image = models.ImageField(upload_to='media',
                               blank=True,
                               null=True,)
+    is_fixed_price = models.BooleanField(default=True)
+    fixed_price = models.FloatField(blank=True,
+                                    null=True)
+    min_price = models.FloatField(blank=True,
+                                  null=True)
+    max_price = models.FloatField(blank=True,
+                                  null=True)
 
     #TO-DO: WILL HAVE TO CHANGE MODEL TO FK ONCE USERS ARE IMPLEMENTED
     user = models.CharField(max_length=50)

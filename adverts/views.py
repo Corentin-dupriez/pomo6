@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.db.models import Q, Avg, Count, ExpressionWrapper, FloatField
 from django.core.paginator import Paginator
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, CreateView
 
 from adverts.forms import AdvertForm, SearchForm
 from adverts.models import Advertisement, Ratings, Order
@@ -83,6 +83,10 @@ class ListingView(DetailView):
     model = Advertisement
     template_name = 'view-listing.html'
 
+class ListingCreateView(CreateView):
+    model = Advertisement
+    form_class = AdvertForm
+    template_name = 'new-listing.html'
 
 def create_ad_view(request):
     form = AdvertForm(request.POST or None)
@@ -91,5 +95,5 @@ def create_ad_view(request):
         form.save()
 
     context = {'form': form}
-    return render(request, 'new_add.html', context)
+    return render(request, 'new-listing.html', context)
 

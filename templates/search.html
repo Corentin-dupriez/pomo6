@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load round %}
 {% block title %}
 Ads search
 {% endblock %}
@@ -33,9 +34,21 @@ Ads search
     <div class="results">
         {% for advert in advertisement_list %}
             <div class="result">
-                <div class="title-and-category">
-                    <h4 class="advert_title"><a href="{% url 'advert_view' advert.id advert.slug %}">{{ advert.title|title }}</a></h4>
-                    <p class="advert_category">{{ advert.get_category_display|title }}</p>
+                <div class="listing-header">
+                    <img src="https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png">
+                    <div class="title-and-category">
+                        <h4 class="advert_title"><a href="{% url 'advert_view' advert.id advert.slug %}">{{ advert.title|title }}</a></h4>
+                        <p class="advert_category">{{ advert.get_category_display|title }}</p>
+                        {% if advert.is_fixed_price %}
+                            {% if advert.fixed_price %}
+                                <p>{{ advert.fixed_price|round }} €</p>
+                            {% else %}
+                                <p>Free!</p>
+                            {% endif %}
+                        {% else %}
+                            <p>{{ advert.min_price|round }} € - {{ advert.max_price|round }} €</p>
+                        {% endif %}
+                    </div>
                 </div>
                 <div class="description">
                     <p class="advert-description">{{ advert.description }}</p>
