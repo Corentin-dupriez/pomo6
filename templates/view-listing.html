@@ -11,12 +11,12 @@
 
 {% block content %}
     <div class="ad-details">
-        <h1>{{ advert.title }}</h1>
-        <p>{{ advert.category }}</p>
-        <p>{{ advert.description }}</p>
+        <h1>{{ advertisement.title }}</h1>
+        <p>{{ advertisement.category }}</p>
+        <p>{{ advertisement.description }}</p>
     </div>
     <div class="add-comments">
-        {% for order in advert.orders.all %}
+        {% for order in advertisement.orders.all %}
             <div class="comment-info">
                 {% for rating in order.ratings.all %}
                     <p>{{ order.user }}</p>

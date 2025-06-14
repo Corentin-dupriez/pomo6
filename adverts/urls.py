@@ -6,6 +6,6 @@ urlpatterns = [
     path('search/', views.ResultsView.as_view(), name='search_view'),
     path('new/', views.create_ad_view, name='create_ad_view'),
     path('<int:pk>/<slug:slug>', include(
-        [path('', views.advert_view, name='advert_view'),
-         path('edit/', views.advert_view, name='advert_edit'),]))
+        [path('', views.ListingView.as_view(), name='advert_view'),
+         path('edit/', views.ListingView.as_view(), name='advert_edit'),]))
 ]
