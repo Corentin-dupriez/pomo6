@@ -10,8 +10,11 @@
     <div class="listing-content">
         <div class="ad-details">
             <div class="ad-header">
-                <img src="https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png">
-                <div class="ad-title-and-category">
+               {% if not advertisement.image %}
+                        <img src="https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png">
+                    {% else %}
+                        <img src="{{ advertisement.image.url }}">
+                    {% endif %}                <div class="ad-title-and-category">
                     <h1>{{ advertisement.title }}</h1>
                     <p>{{ advertisement.category }}</p>
                 </div>

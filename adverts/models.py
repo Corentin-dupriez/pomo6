@@ -25,7 +25,7 @@ class Advertisement(CreatedDateMixin):
                                 choices=CategoryChoices.choices,
                                 default=CategoryChoices.OTHER)
     slug = models.SlugField(blank=True)
-    image = models.ImageField(upload_to='media/',
+    image = models.ImageField(upload_to='images/',
                               blank=True,
                               null=True,)
     is_fixed_price = models.BooleanField(default=True)
