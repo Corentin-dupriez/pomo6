@@ -18,6 +18,8 @@
 
 @import "new-listing.css";
 
+@import "view-listing.css";
+
 
 .categories_overlay{
     margin-top: 1.5rem;

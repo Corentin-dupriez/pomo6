@@ -7,9 +7,7 @@
         <div class="new-add-form">
             <div class="add-form-fields">
                 {% csrf_token %}
-                {% for field in form %}
-                    {{ field }}
-                {% endfor %}
+                {{form}}
             </div>
             <button type="submit" class="form-button submit-form-button">Submit</button>
             <button type="reset" class="form-button reset-form-button">Reset</button>

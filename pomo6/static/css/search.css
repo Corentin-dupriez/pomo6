@@ -1,6 +1,7 @@
 .search-div {
     background-color: #FAF8F3;
     margin-top: 0.5rem;
+    margin-bottom: 0.25rem;
     padding: 2rem;
 }
 
@@ -94,8 +95,8 @@
     text-align: left;
     justify-content: center;
     background-color: #FAF8F3;
-    margin: 0.5rem auto;
-    padding: 3rem;
+    margin: 0.25rem auto;
+    padding: 2rem;
 }
 
 a:link{
@@ -123,14 +124,15 @@ a:visited{
 }
 
 .listing-header img{
-    height: 5rem;
+    height: 6rem;
     width: auto;
-    max-width: 8rem;
-    margin-top: 3rem;
+    max-width: 10rem;
+    margin-top: 2rem;
 }
 
 .description {
-    margin-left: 8.5rem;
+    margin-left: 10rem;
+    margin-right: 5rem;
 }
 
 @media (max-width: 768px) {

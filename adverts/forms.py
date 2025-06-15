@@ -12,4 +12,11 @@ class SearchForm(forms.Form):
 class AdvertForm(forms.ModelForm):
     class Meta:
         model = Advertisement
-        fields = ['title', 'description', 'category', 'image']
+        fields = ['title',
+                  'description',
+                  'category',
+                  'image',
+                  'is_fixed_price',
+                  'fixed_price',
+                  'min_price',
+                  'max_price', ]

@@ -3,25 +3,28 @@
 {% load round %}
 
 {% block head %}
-    <meta charset="UTF-8">
-    <meta name='viewport' content="width-device-width, initial-scale=1.0">
     <title>View listing</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 {% endblock %}
 
 {% block content %}
-    <div class="page-container content">
+    <div class="listing-content">
         <div class="ad-details">
-            <h1>{{ advertisement.title }}</h1>
-            <p>{{ advertisement.category }}</p>
+            <div class="ad-header">
+                <img src="https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png">
+                <div class="ad-title-and-category">
+                    <h1>{{ advertisement.title }}</h1>
+                    <p>{{ advertisement.category }}</p>
+                </div>
+            </div>
             <p>{{ advertisement.description }}</p>
         </div>
-        <div class="add-comments">
+        <div class="ad-comments">
+            <h3>See what others think: </h3>
             {% for order in advertisement.orders.all %}
                 <div class="comment-info">
                     {% for rating in order.ratings.all %}
                         <p>{{ order.user }}</p>
-                        <p>{{ rating.rating | round }}</p>
+                        <p>{{ rating.rating | round }}/5</p>
                     {% endfor %}
                 </div>
             {% endfor %}

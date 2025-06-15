@@ -1,0 +1,34 @@
+.listing-content {
+    margin: 0.5rem auto 0.5rem auto;
+    padding: 1rem;
+    background-color: #FAF8F3;
+    width: 80%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: scroll;
+}
+
+.ad-header {
+    display: flex;
+}
+
+.ad-details img {
+    height: 8rem;
+    width: auto;
+    margin-right: 1rem;
+    margin-top: 1.7rem;
+}
+
+.ad-title-and-category {
+    display: inline;
+}
+
+.ad-comments{
+    display: flex;
+    flex-direction: column;
+}
+
+.comment-info {
+    border-bottom: 1px solid lightgray;
+}

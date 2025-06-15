@@ -3,7 +3,8 @@ from django.http import HttpResponse
 from django.shortcuts import render
 from django.db.models import Q, Avg, Count, ExpressionWrapper, FloatField
 from django.core.paginator import Paginator
-from django.views.generic import ListView, DetailView, CreateView
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
 
 from adverts.forms import AdvertForm, SearchForm
 from adverts.models import Advertisement, Ratings, Order
@@ -87,13 +88,11 @@ class ListingCreateView(CreateView):
     model = Advertisement
     form_class = AdvertForm
     template_name = 'new-listing.html'
+    success_url = reverse_lazy('home')
 
-def create_ad_view(request):
-    form = AdvertForm(request.POST or None)
-
-    if request.method == 'POST' and form.is_valid():
-        form.save()
-
-    context = {'form': form}
-    return render(request, 'new-listing.html', context)
+class ListingUpdateView(UpdateView):
+    model = Advertisement
+    form_class = AdvertForm
+    template_name = 'new-listing.html'
+    success_url = reverse_lazy('home')
 
