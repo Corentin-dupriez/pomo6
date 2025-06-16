@@ -1,34 +1,85 @@
-.listing-content {
+.offer-container {
     margin: 0.5rem auto 0.5rem auto;
-    padding: 1rem;
+    padding: 2rem;
     background-color: #FAF8F3;
     width: 80%;
     height: 100vh;
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+    border-radius: 0.6rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+}
+
+.offer-details{
     display: flex;
     flex-direction: column;
-    overflow: scroll;
+    grid-column: 1;
 }
 
-.ad-header {
-    display: flex;
+.offer-image {
+  width: 100%;
+  height: 200px;
+  background-color: #eaeaea;
+  border-radius: 10px;
+  background-size: cover;
+  background-position: center;
+  margin-bottom: 1rem;
 }
 
-.ad-details img {
-    height: 8rem;
-    width: auto;
-    margin-right: 1rem;
-    margin-top: 1.7rem;
+.offer-details h1{
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
 }
 
-.ad-title-and-category {
-    display: inline;
+.offer-description {
+  font-size: 1rem;
+  line-height: 1.5;
+  margin-bottom: 1.5rem;
+}
+
+.seller-profile {
+    grid-column: 2;
+    height: fit-content;
+    text-align: center;
+    border: 2px solid #eee;
+    padding: 1rem;
+}
+
+.seller-profile h1{
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin: 0;
 }
 
 .ad-comments{
-    display: flex;
-    flex-direction: column;
+    margin-top: 1.5rem;
+}
+
+.ad-comments h3 {
+    font-size: 1.2rem;
+    margin-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+    padding-bottom: 0.3rem;
 }
 
 .comment-info {
     border-bottom: 1px solid lightgray;
+    padding: 1rem;
+    margin-bottom: 0.8rem;
+}
+
+.comment-info p{
+    font-weight: bold;
+}
+
+@media (max-width: 768px) {
+    .offer-container{
+        grid-template-columns: 1fr;
+    }
+    .seller-profile{
+        grid-column: 1;
+        margin-top: 2rem;
+    }
+
 }

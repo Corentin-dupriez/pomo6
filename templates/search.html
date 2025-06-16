@@ -25,8 +25,8 @@ Ads search
                 <div class="slider-wrapper">
                     <div id="price-slider"></div>
                     <!-- Hidden inputs to send to server -->
-                    <input type="hidden" id="min-price" name="min_price" value="0">
-                    <input type="hidden" id="max-price" name="max_price" value="1000">
+                    <input type="hidden" id="min-price" name="min_price" value="{{ min_price }}">
+                    <input type="hidden" id="max-price" name="max_price" value="{{ max_price }}">
                 </div>
             </div>
         </form>
@@ -121,12 +121,11 @@ Ads search
 
     <script>
         const priceSlider = document.getElementById('price-slider');
-        const priceDisplay = document.getElementById('price-range-display');
         const minInput = document.getElementById('min-price');
         const maxInput = document.getElementById('max-price');
 
         noUiSlider.create(priceSlider, {
-            start: [0, 1000],  // Initial values
+            start: [{{min_price}}, {{max_price}}],  // Initial values
             connect: true,
             step: 10,
             range: {
@@ -144,12 +143,14 @@ Ads search
             }
         });
 
-        priceSlider.noUiSlider.on('update', function (values, handle) {
-            const min = Math.round(values[0]);
-            const max = Math.round(values[1]);
-            priceDisplay.textContent = `$${min} - $${max}`;
-            minInput.value = min;
-            maxInput.value = max;
+
+        priceSlider.noUiSlider.on('set', function (values) {
+        minInput.value = values[0];
+        maxInput.value = values[1];
+
+        // Trigger change event to auto-submit
+        minInput.dispatchEvent(new Event('change', { bubbles: true }));
+        maxInput.dispatchEvent(new Event('change', { bubbles: true }));
         });
     </script>
 

@@ -30,6 +30,9 @@ class ResultsView(ListView):
         except ValueError:
             max_rating = 5
 
+        min_price = int(self.request.GET.get('min_price', 0))
+        max_price = int(self.request.GET.get('max_price', 1000))
+
         queryset = Advertisement.objects.all().annotate(
             avg_rating=Coalesce(Avg('orders__ratings__rating'), 0, output_field=FloatField()),
             customers = Count('orders', filter=Q(orders__completed=True), distinct=True, output_field=FloatField()),
@@ -54,6 +57,16 @@ class ResultsView(ListView):
         if max_rating:
             queryset = queryset.filter(Q(note__lte=max_rating))
 
+        if min_price:
+            queryset = queryset.filter(Q(fixed_price__gte=min_price)|
+                                       Q(min_price__gte=min_price)|
+                                       Q(min_price__lte=max_price))
+
+        if max_price:
+            queryset = queryset.filter(Q(fixed_price__lte=max_price)|
+                                       Q(fixed_price__isnull=True)|
+                                       Q(max_price__lte=max_price))
+
         return queryset.order_by('-note')
 
     def get_context_data(
@@ -69,6 +82,9 @@ class ResultsView(ListView):
         except ValueError:
             max_rating = 5
 
+        min_price = int(self.request.GET.get('min_price', 0))
+        max_price = int(self.request.GET.get('max_price', 1000))
+
         context = super().get_context_data(**kwargs)
         context.update({
             'form': self.form_class(self.request.GET or None),
@@ -76,6 +92,8 @@ class ResultsView(ListView):
             'category': self.request.GET.get('category', ''),
             'min_rating': min_rating,
             'max_rating': max_rating,
+            'min_price': min_price,
+            'max_price': max_price,
         })
         return context
 

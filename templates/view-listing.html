@@ -7,30 +7,26 @@
 {% endblock %}
 
 {% block content %}
-    <div class="listing-content">
-        <div class="ad-details">
-            <div class="ad-header">
-               {% if not advertisement.image %}
-                        <img src="https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png">
-                    {% else %}
-                        <img src="{{ advertisement.image.url }}">
-                    {% endif %}                <div class="ad-title-and-category">
-                    <h1>{{ advertisement.title }}</h1>
-                    <p>{{ advertisement.category }}</p>
-                </div>
+    <div class="offer-container">
+        <div class="offer-details">
+            <div class="offer-image" style="background-image: url('https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png')"></div>
+            <h1>{{ advertisement.title }}</h1>
+            <div class="category-tag">{{ advertisement.category }}</div>
+            <p class="offer-description">Description: <br>{{ advertisement.description }}</p>
+        </div>
+        <div class="seller-profile">
+            <h1>Joe le clodo</h1>
+        </div>
+            <div class="ad-comments">
+                <h3>Reviews: </h3>
+                {% for order in advertisement.orders.all %}
+                    <div class="comment-info">
+                        {% for rating in order.ratings.all %}
+                            <p>{{ order.user }}</p>
+                            <p>{{ rating.rating | round }}/5</p>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
             </div>
-            <p>{{ advertisement.description }}</p>
         </div>
-        <div class="ad-comments">
-            <h3>See what others think: </h3>
-            {% for order in advertisement.orders.all %}
-                <div class="comment-info">
-                    {% for rating in order.ratings.all %}
-                        <p>{{ order.user }}</p>
-                        <p>{{ rating.rating | round }}/5</p>
-                    {% endfor %}
-                </div>
-            {% endfor %}
-        </div>
-    </div>
 {% endblock %}
