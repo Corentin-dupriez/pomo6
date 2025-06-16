@@ -3,12 +3,13 @@
     padding: 2rem;
     background-color: #FAF8F3;
     width: 80%;
-    height: 100vh;
+    height: auto;
     display: grid;
     grid-template-columns: 2fr 1fr;
     gap: 2rem;
     border-radius: 0.6rem;
     box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    overflow: visible;
 }
 
 .offer-details{
@@ -67,6 +68,7 @@
     border-bottom: 1px solid lightgray;
     padding: 1rem;
     margin-bottom: 0.8rem;
+    box-sizing: border-box;
 }
 
 .comment-info p{

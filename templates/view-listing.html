@@ -9,7 +9,11 @@
 {% block content %}
     <div class="offer-container">
         <div class="offer-details">
-            <div class="offer-image" style="background-image: url('https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png')"></div>
+            {% if not advertisement.image %}
+                <div class="offer-image" style="background-image: url('https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png')"></div>
+            {% else %}
+                <div class="offer-image" style="background-image: url('{{ advertisement.image.url }}')"></div>
+            {% endif %}
             <h1>{{ advertisement.title }}</h1>
             <div class="category-tag">{{ advertisement.category }}</div>
             <p class="offer-description">Description: <br>{{ advertisement.description }}</p>
