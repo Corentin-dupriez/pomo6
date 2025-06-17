@@ -1,8 +1,8 @@
 .search-div {
     background-color: #FAF8F3;
-    margin-top: 0.5rem;
-    margin-bottom: 0.25rem;
+    margin: 0.5rem 0.5rem 0.25rem 0.5rem;
     padding: 2rem;
+    border-radius: 0.4rem;
 }
 
 
@@ -84,19 +84,23 @@
 }
 
 .results {
-    width: 100%;
     display: flex;
     flex-direction: column;
 }
 
 .result{
-    display: block;
-    width: 100%;
     text-align: left;
     justify-content: center;
     background-color: #FAF8F3;
-    margin: 0.25rem auto;
+    margin: 0.25rem 0.5rem 0.25rem 0.5rem;
     padding: 2rem;
+    display: grid;
+    grid-template-columns: 3fr 5fr;
+    align-items: center;
+}
+
+.description {
+
 }
 
 a:link{
@@ -128,6 +132,7 @@ a:visited{
     width: 100%;
     max-width: 10rem;
     margin-top: 2rem;
+    object-fit: cover;
 }
 
 .description {
