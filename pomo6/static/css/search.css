@@ -125,7 +125,7 @@ a:visited{
 
 .listing-header img{
     height: 6rem;
-    width: auto;
+    width: 100%;
     max-width: 10rem;
     margin-top: 2rem;
 }
