@@ -1,6 +1,6 @@
 .login_section{
     border: 1px solid lightgray;
-    margin: 5rem;
+    margin: 5rem auto;
     padding: 2rem 3rem;
     border-radius: 3rem;
     display: flex;

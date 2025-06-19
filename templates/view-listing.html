@@ -15,6 +15,11 @@
                 <div class="offer-image" style="background-image: url('{{ advertisement.image.url }}')"></div>
             {% endif %}
             <h1>{{ advertisement.title }}</h1>
+            {% if advertisement.nb_ratings != 0  %}
+            <div>{{ advertisement.avg_rating|round }}/5</div>
+            {% else %}
+                <div>Not rated yet!</div>
+            {% endif %}
             <div class="category-tag">{{ advertisement.category }}</div>
             <p class="offer-description">Description: <br>{{ advertisement.description }}</p>
         </div>

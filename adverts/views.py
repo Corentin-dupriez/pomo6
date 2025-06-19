@@ -1,6 +1,6 @@
 from django.db.models.functions import Coalesce
 from django.http import HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.db.models import Q, Avg, Count, ExpressionWrapper, FloatField
 from django.core.paginator import Paginator
 from django.urls import reverse_lazy
@@ -101,6 +101,13 @@ class ResultsView(ListView):
 class ListingView(DetailView):
     model = Advertisement
     template_name = 'view-listing.html'
+
+    def get_object(self, queryset=None):
+        queryset = Advertisement.objects.annotate(
+            avg_rating=Coalesce(Avg('orders__ratings__rating'), 0, output_field=FloatField()),
+            nb_ratings=Coalesce(Count('orders', filter=Q(orders__completed=True), distinct=True), 0),
+        )
+        return get_object_or_404(queryset, pk=self.kwargs.get('pk'))
 
 class ListingCreateView(CreateView):
     model = Advertisement

@@ -5,12 +5,54 @@
 {% block content %}
     <form method="post" enctype="multipart/form-data">
         <div class="new-add-form">
+            <h2>Create a new listing</h2>
             <div class="add-form-fields">
                 {% csrf_token %}
-                {{form}}
+                {{ form.title.label_tag }}
+                {{form.title}}
+                {{ form.category.label_tag }}
+                {{ form.category }}
+                {{ form.description.label_tag }}
+                {{ form.description }}
+                {{ form.image.label_tag }}
+                {{ form.image }}
+                {{ form.is_fixed_price.label_tag }}
+                {{ form.is_fixed_price }}
+                <div id="fixed-price-field">
+                    {{ form.fixed_price.label_tag }}
+                    {{ form.fixed_price }}
+                </div>
+                <div id="range-price-field">
+                    {{ form.min_price.label_tag }}
+                    {{ form.min_price }}
+                    {{ form.max_price.label_tag }}
+                    {{ form.max_price }}
+                </div>
             </div>
             <button type="submit" class="form-button submit-form-button">Submit</button>
             <button type="reset" class="form-button reset-form-button">Reset</button>
         </div>
     </form>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const isFixed = document.getElementById('fixed-price');
+    const FixPrice = document.getElementById('fixed-price-field');
+    const RangePrice = document.getElementById('range-price-field');
+
+    function togglePricing(){
+        if (isFixed.checked) {
+            FixPrice.style.display = '';
+            RangePrice.style.display = 'none';
+        } else{
+            FixPrice.style.display = 'none';
+            RangePrice.style.display = '';
+        }
+    }
+    togglePricing()
+    isFixed.addEventListener('change', togglePricing)
+})
+</script>
 {% endblock %}

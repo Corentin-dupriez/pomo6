@@ -40,3 +40,34 @@
     color: white;
     cursor: pointer;
 }
+
+input,
+textarea,
+select{
+    border: 1px solid lightgray;
+    border-radius: 0.4rem;
+    text-indent: 0.5em;
+    font-size: 0.8rem;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+    border-color: #14a09d;
+    outline: none;
+}
+
+select {
+    appearance: none;
+    background-color: white;
+    min-width: 15ch;
+    background-image: url("data:image/svg+xml;utf8,<svg fill='%2300a6a6' height='16' viewBox='0 0 24 24' width='16' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 0.4rem center;
+    background-size: 16px;
+    max-width: 30ch;
+    height: 1.5rem;
+    margin-right: 2em;
+}

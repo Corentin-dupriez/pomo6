@@ -1,14 +1,5 @@
-{% load static %}
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Log in</title>
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-</head>
-<body>
-    {% include 'nav.html' %}
+{% extends 'base.html' %}
+{% block content %}
     <div class="login_section">
         <form>
             <h2>Login</h2>
@@ -19,5 +10,4 @@
             <button type="submit">Log in</button>
         </form>
     </div>
-</body>
-</html>
+{% endblock %}
