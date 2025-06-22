@@ -31,6 +31,12 @@
 .offer-details h1{
     font-size: 1.8rem;
     margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.listing-meta{
+    font-size: 1rem;
+    margin-bottom: 15px;
 }
 
 .offer-description {

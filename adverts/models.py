@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from django.utils.text import slugify
 
 from adverts.mixins import CreatedDateMixin
@@ -20,7 +21,6 @@ class Advertisement(CreatedDateMixin):
 
     title = models.CharField(max_length=100)
     description = models.TextField(max_length=2000)
-    views = models.PositiveIntegerField(default=0)
     category = models.CharField(max_length=100,
                                 choices=CategoryChoices.choices,
                                 default=CategoryChoices.OTHER)
@@ -43,9 +43,9 @@ class Advertisement(CreatedDateMixin):
         if not self.slug:
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
-    
+
     def increase_views(self):
-        self.views += 1
+        Views.objects.create(advertisement=self, view_date=timezone.now())
 
     def __str__(self):
         return self.title
@@ -72,3 +72,9 @@ class Ratings(CreatedDateMixin):
 
     def __str__(self):
         return f'{self.user} - {self.rating}'
+
+
+class Views(models.Model):
+    view_date = models.DateTimeField(auto_now_add=True)
+    advertisement = models.ForeignKey(Advertisement,
+                                      on_delete=models.CASCADE,)

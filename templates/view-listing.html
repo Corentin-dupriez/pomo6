@@ -16,11 +16,11 @@
             {% endif %}
             <h1>{{ advertisement.title }}</h1>
             {% if advertisement.nb_ratings != 0  %}
-            <div>{{ advertisement.avg_rating|round }}/5</div>
+            <div class="listing-meta">Rated: {{ advertisement.avg_rating|round }}/5</div>
             {% else %}
-                <div>Not rated yet!</div>
+                <div class="listing-meta">Not rated yet!</div>
             {% endif %}
-            <div class="category-tag">{{ advertisement.category }}</div>
+            <div class="category-tag">Category: {{ advertisement.category }}</div>
             <p class="offer-description">Description: <br>{{ advertisement.description }}</p>
         </div>
         <div class="seller-profile">

@@ -69,9 +69,7 @@ class ResultsView(ListView):
 
         return queryset.order_by('-note')
 
-    def get_context_data(
-        self, *, object_list = ..., **kwargs
-    ):
+    def get_context_data(self, *, object_list = ..., **kwargs):
         try:
             min_rating = int(self.request.GET.get('min_rating', 0))
         except ValueError:
@@ -109,11 +107,18 @@ class ListingView(DetailView):
         )
         return get_object_or_404(queryset, pk=self.kwargs.get('pk'))
 
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.increase_views()
+        return super().get(request, *args, **kwargs)
+
+
 class ListingCreateView(CreateView):
     model = Advertisement
     form_class = AdvertForm
     template_name = 'new-listing.html'
     success_url = reverse_lazy('home')
+
 
 class ListingUpdateView(UpdateView):
     model = Advertisement
