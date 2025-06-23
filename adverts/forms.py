@@ -3,7 +3,9 @@ from django import forms
 from adverts.models import Advertisement
 
 class SearchForm(forms.Form):
-    query = forms.CharField(required=False, label='Search for')
+    query = forms.CharField(required=False,
+                            label='Search for')
+
     category = forms.ChoiceField(choices=[('', 'All categories')] +
                                          list(Advertisement.CategoryChoices.choices),
                                  required=False)

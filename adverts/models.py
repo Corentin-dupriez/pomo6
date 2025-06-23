@@ -3,7 +3,7 @@ from django.utils import timezone
 from django.utils.text import slugify
 
 from adverts.mixins import CreatedDateMixin
-from adverts.validators import RatingValidator
+from adverts.validators import RatingValidator, FileExtensionValidator
 
 
 # Create your models here.
@@ -27,7 +27,8 @@ class Advertisement(CreatedDateMixin):
     slug = models.SlugField(blank=True)
     image = models.ImageField(upload_to='images/',
                               blank=True,
-                              null=True,)
+                              null=True,
+                              validators=[FileExtensionValidator()])
     is_fixed_price = models.BooleanField(default=True)
     fixed_price = models.FloatField(blank=True,
                                     null=True)
@@ -72,6 +73,14 @@ class Ratings(CreatedDateMixin):
 
     def __str__(self):
         return f'{self.user} - {self.rating}'
+
+class RatingResponse(CreatedDateMixin):
+    to_rating = models.ForeignKey(Ratings,
+                                  on_delete=models.CASCADE,
+                                  related_name='responses')
+
+    comment = models.TextField(blank=True,
+                               null=True)
 
 
 class Views(models.Model):

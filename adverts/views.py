@@ -123,7 +123,7 @@ class ListingView(DetailView):
         queryset = Advertisement.objects.annotate(
             avg_rating=Coalesce(Avg('orders__ratings__rating'), 0, output_field=FloatField()),
             nb_ratings=Coalesce(Count('orders', filter=Q(orders__completed=True), distinct=True), 0),
-        )
+        ).prefetch_related('orders__ratings').prefetch_related('orders__ratings__responses')
         return get_object_or_404(queryset, pk=self.kwargs.get('pk'))
 
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:

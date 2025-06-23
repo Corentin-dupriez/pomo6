@@ -87,6 +87,13 @@
     color: #666666;
 }
 
+.rating-response-comment {
+    margin-left: 2rem;
+    color: #666666;
+    border-top: 1px solid lightgray;
+    padding-top: 0.4rem;
+}
+
 @media (max-width: 768px) {
     .offer-container{
         grid-template-columns: 1fr;

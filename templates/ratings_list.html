@@ -8,6 +8,11 @@
                 <p class="comment-user">{{ order.user }}</p>
                 <p class="comment-rating">{{ rating.rating | round }}/5</p>
                 <p class="comment-text">{{ rating.comment }}</p>
+                {% if rating.responses %}
+                    {% for response in rating.responses.all %}
+                        <p class="rating-response-comment">{{ response.comment }}</p>
+                    {% endfor %}
+                {% endif %}
             {% endfor %}
         </div>
     {% endfor %}
