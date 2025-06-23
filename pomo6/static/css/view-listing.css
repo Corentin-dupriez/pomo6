@@ -77,8 +77,14 @@
     box-sizing: border-box;
 }
 
-.comment-info p{
+.comment-user,
+.comment-rating {
     font-weight: bold;
+}
+
+.comment-text {
+    font-weight: lighter;
+    color: #666666;
 }
 
 @media (max-width: 768px) {
