@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load round %}
+
+{% block head %}
+    <title>View listing</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="offer-container">
+        <div class="offer-details">
+            {% if not advertisement.image %}
+                <div class="offer-image" style="background-image: url('https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png')"></div>
+            {% else %}
+                <div class="offer-image" style="background-image: url('{{ advertisement.image.url }}')"></div>
+            {% endif %}
+            <h1>{{ advertisement.title }}</h1>
+            {% if advertisement.nb_ratings != 0  %}
+            <div class="listing-meta">Rated: {{ advertisement.avg_rating|round }}/5</div>
+            {% else %}
+                <div class="listing-meta">Not rated yet!</div>
+            {% endif %}
+            <div class="category-tag">Category: {{ advertisement.category }}</div>
+            <p class="offer-description">Description: <br>{{ advertisement.description }}</p>
+            <h2>Statistics:</h2>
+            <canvas id="myChart" width="400" height="200"></canvas>
+        </div>
+        <div class="seller-profile">
+            <h1>Joe le clodo</h1>
+        </div>
+            <div class="ad-comments">
+                <h3>Reviews: </h3>
+                {% for order in advertisement.orders.all %}
+                    <div class="comment-info">
+                        {% for rating in order.ratings.all %}
+                            <p>{{ order.user }}</p>
+                            <p>{{ rating.rating | round }}/5</p>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        const labels = JSON.parse('{{ labels|safe }}');
+        const data = JSON.parse('{{ data|safe }}');
+
+        new Chart(document.getElementById('myChart'), {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Views',
+                    data: data,
+                    tension: 0.25,
+                    fill: false,
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {y: {
+                    beginAtZero: true
+                }
+                }
+            }
+        });
+    </script>
+{% endblock %}

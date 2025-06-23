@@ -1,13 +1,14 @@
-from django.db.models.functions import Coalesce
-from django.http import HttpResponse
-from django.shortcuts import render, get_object_or_404
-from django.db.models import Q, Avg, Count, ExpressionWrapper, FloatField
+import json
+from django.db.models.functions import Coalesce, TruncDate
+from django.http import HttpResponse, HttpRequest
+from django.shortcuts import get_object_or_404
+from django.db.models import Q, Avg, Count, ExpressionWrapper, FloatField, QuerySet
 from django.core.paginator import Paginator
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
-
 from adverts.forms import AdvertForm, SearchForm
-from adverts.models import Advertisement, Ratings, Order
+from adverts.models import Advertisement, Views
+
 
 class ResultsView(ListView):
     model = Advertisement
@@ -16,10 +17,7 @@ class ResultsView(ListView):
     paginate_by = 5
     paginator_class = Paginator
 
-    def get_queryset(self):
-        query = self.request.GET.get('query', '').strip()
-        category = self.request.GET.get('category')
-
+    def get_ratings(self) -> tuple:
         try:
             min_rating = int(self.request.GET.get('min_rating', 0))
         except ValueError:
@@ -29,6 +27,14 @@ class ResultsView(ListView):
             max_rating = int(self.request.GET.get('max_rating', 5))
         except ValueError:
             max_rating = 5
+
+        return min_rating, max_rating
+
+    def get_queryset(self) -> QuerySet:
+        query = self.request.GET.get('query', '').strip()
+        category = self.request.GET.get('category')
+
+        min_rating, max_rating = self.get_ratings()
 
         min_price = int(self.request.GET.get('min_price', 0))
         max_price = int(self.request.GET.get('max_price', 1000))
@@ -69,16 +75,8 @@ class ResultsView(ListView):
 
         return queryset.order_by('-note')
 
-    def get_context_data(self, *, object_list = ..., **kwargs):
-        try:
-            min_rating = int(self.request.GET.get('min_rating', 0))
-        except ValueError:
-            min_rating = 0
-
-        try:
-            max_rating = int(self.request.GET.get('max_rating', 5))
-        except ValueError:
-            max_rating = 5
+    def get_context_data(self, *, object_list = ..., **kwargs) -> dict:
+        min_rating, max_rating = self.get_ratings()
 
         min_price = int(self.request.GET.get('min_price', 0))
         max_price = int(self.request.GET.get('max_price', 1000))
@@ -98,18 +96,40 @@ class ResultsView(ListView):
 
 class ListingView(DetailView):
     model = Advertisement
-    template_name = 'view-listing.html'
 
-    def get_object(self, queryset=None):
+    def get_context_data(self, **kwargs) -> dict:
+        context = super().get_context_data(**kwargs)
+
+        queryset = (Views.objects.annotate(date=TruncDate('view_date'))
+                    .values('date')
+                    .annotate(count=Count('id'))
+                    .order_by('date'))
+
+        labels = [row['date'].strftime('%Y-%m-%d') for row in queryset]
+        data = [row['count'] for row in queryset]
+
+        context["labels"] = json.dumps(labels)
+        context["data"] = json.dumps(data)
+
+        return context
+
+    def get_template_names(self) -> list:
+        if self.request.user.is_authenticated or self.request.user.is_superuser:
+            return ['view-listing-by-owner.html']
+        else:
+            return ['view-listing.html']
+
+    def get_object(self, queryset:QuerySet=None) -> Advertisement:
         queryset = Advertisement.objects.annotate(
             avg_rating=Coalesce(Avg('orders__ratings__rating'), 0, output_field=FloatField()),
             nb_ratings=Coalesce(Count('orders', filter=Q(orders__completed=True), distinct=True), 0),
         )
         return get_object_or_404(queryset, pk=self.kwargs.get('pk'))
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         self.object = self.get_object()
-        self.object.increase_views()
+        if not self.request.user.is_superuser:
+            self.object.increase_views()
         return super().get(request, *args, **kwargs)
 
 
