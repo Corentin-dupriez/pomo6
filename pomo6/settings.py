@@ -32,7 +32,9 @@ ALLOWED_HOSTS = []
 # Application definition
 PROJECT_APPS = ['adverts',
                 'profiles',
-                'common',]
+                'common',
+                'chat',
+                'channels',]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -40,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
+    'daphne',
     'django.contrib.staticfiles',
     'pomo6',
 ] + PROJECT_APPS
@@ -73,6 +76,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'pomo6.wsgi.application'
+ASGI_APPLICATION = 'pomo6.asgi.application'
 
 
 # Database
@@ -89,6 +93,11 @@ DATABASES = {
     }
 }
 
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/5.2/ref/settings/#auth-password-validators

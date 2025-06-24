@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% for thread in threads %}
+        <div class="result">
+            <p>{{ thread }}</p>
+        </div>
+    {% endfor %}
+{% endblock %}

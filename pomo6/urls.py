@@ -26,6 +26,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('profiles/', include('profiles.urls')),
     path('adverts/', include('adverts.urls')),
+    path('chat/', include('chat.urls')),
 ]
 
 if settings.DEBUG:

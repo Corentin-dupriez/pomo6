@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {% for message in messages  %}
+        <p><strong>{{ message.sender.username }}: </strong>{{ message.content }}</p>
+    {% endfor %}
+    <div id="chat-box"></div>
+    <input id="msg-input" type="text" placeholder="Type a message ...">
+    <button onclick="sendMessage()">Send</button>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        const threadId = '{{ thread.pk }}';
+        const userId = '{{ request.user.pk }}';
+        const socket = new WebSocket(`ws://${window.location.host}/ws/chat/${threadId}/`);
+
+        socket.onmessage = function (e) {
+          const data = JSON.parse(e.data);
+          const msgBox = document.getElementById('chat-box');
+          msgBox.innerHTML += `<p><strong>User ${data.sender_id}:</strong> ${data.content}</p>`
+        };
+
+        function sendMessage(){
+            const input = document.getElementById('msg-input');
+            const message = input.value;
+            socket.send(JSON.stringify({content: message}));
+            input.value = '';
+        }
+
+    </script>
+{% endblock %}
