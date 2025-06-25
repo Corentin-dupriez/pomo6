@@ -76,10 +76,6 @@
     align-items: center;
 }
 
-.description {
-
-}
-
 a:link{
     color: #00BD9D;
     font-weight: bold;
@@ -98,7 +94,8 @@ a:visited{
     margin-left: 1rem;
 }
 
-.result .title-and-category p{
+.result .title-and-category p,
+.last-message-date{
     font-weight: bold;
     color: gray;
     font-size: 0.9rem;

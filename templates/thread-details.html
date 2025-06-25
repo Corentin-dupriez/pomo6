@@ -1,12 +1,17 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    {% for message in messages  %}
-        <p><strong>{{ message.sender.username }}: </strong>{{ message.content }}</p>
-    {% endfor %}
-    <div id="chat-box"></div>
-    <input id="msg-input" type="text" placeholder="Type a message ...">
-    <button onclick="sendMessage()">Send</button>
+    <div id="chat-box" class="chat-container">
+        {% for message in messages  %}
+            <div class="message-row {% if message.sender_id == request.user.pk %}own{% else %}other{% endif %}">
+                <p><strong>{{ message.sender.username }}: </strong>{{ message.content }}</p>
+            </div>
+        {% endfor %}
+        <div class="new-message">
+            <input id="msg-input" type="text" placeholder="Type a message ...">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
 {% endblock %}
 
 {% block scripts %}

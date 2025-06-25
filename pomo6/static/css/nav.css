@@ -22,9 +22,15 @@
     cursor: pointer;
 }
 
-.logo{
-    height: 3rem;
-    width: auto;
+.logo,
+.nav-button{
+    height: 2.6rem;
+    padding: 0.4rem;
+}
+
+
+.nav-button{
+    margin: auto;
 }
 
 .top_nav h1 {
@@ -47,7 +53,7 @@
 .log_in_buttons button{
     font-size: 1rem;
     cursor: pointer;
-    padding: 0.5rem 2.5rem;
+    padding: 0.5rem 2rem;
     border-radius: 0.5rem;
 }
 

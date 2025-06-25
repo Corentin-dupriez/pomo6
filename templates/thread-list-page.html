@@ -1,9 +1,16 @@
 {% extends 'base.html' %}
+{% load last_message %}
 
 {% block content %}
     {% for thread in threads %}
         <div class="result">
-            <p>{{ thread }}</p>
+            <div class="last-message-info">
+                <a href="{% url 'thread-detail' thread.pk %}"><p>{{ thread }}</p></a>
+                {% with thread|last_message as last_message %}
+                    <p class="last-message-date">{{ last_message.created_at }}</p>
+                    <p>{{ last_message.content }}</p>
+            {% endwith %}
+            </div>
         </div>
     {% endfor %}
 {% endblock %}

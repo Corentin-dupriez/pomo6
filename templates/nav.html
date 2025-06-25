@@ -13,9 +13,9 @@
         </div>
             {% else %}
             <div class="log_in_buttons">
-                <div class="user-actions">
+                    <a><img class="nav-button" src="{% static 'images/account_circle_24dp_00BD9D_FILL0_wght400_GRAD0_opsz24.svg' %}"></a>
+                    <a href="{% url 'thread-list' %}"><img class="nav-button" src="{% static 'images/chat_bubble_24dp_00BD9D_FILL0_wght400_GRAD0_opsz24.svg' %}"></a>
                     <button class="login" type="button" onclick="location.href='{% url 'create_ad_view' %}'">Add a listing</button>
-                </div>
             </div>
         {% endif %}
     </div>

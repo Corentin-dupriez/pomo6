@@ -20,6 +20,8 @@
 
 @import "view-listing.css";
 
+@import 'chat.css';
+
 
 .categories_overlay{
     margin-top: 1.5rem;
