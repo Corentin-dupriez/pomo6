@@ -38,6 +38,11 @@
     height: 1.5rem;
 }
 
+#send-button:disabled {
+    background-color: lightgray;
+    cursor: default;
+}
+
 .new-message button{
     cursor: pointer;
     border-radius: 0.5rem;

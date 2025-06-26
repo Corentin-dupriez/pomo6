@@ -34,7 +34,8 @@ PROJECT_APPS = ['adverts',
                 'profiles',
                 'common',
                 'chat',
-                'channels',]
+                'channels',
+                'accounts']
 
 INSTALLED_APPS = [
     'django.contrib.admin',

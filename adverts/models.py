@@ -39,6 +39,11 @@ class Advertisement(CreatedDateMixin):
 
     #TO-DO: WILL HAVE TO CHANGE MODEL TO FK ONCE USERS ARE IMPLEMENTED
     user = models.CharField(max_length=50)
+
+    class Meta:
+        permissions = [
+            ('approve_listing', 'Can approve listing'),
+        ]
     
     def save(self, *args, **kwargs):
         if not self.slug:

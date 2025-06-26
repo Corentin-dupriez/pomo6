@@ -9,7 +9,7 @@
         {% endfor %}
         <div class="new-message">
             <input id="msg-input" type="text" placeholder="Type a message ...">
-            <button onclick="sendMessage()">Send</button>
+            <button id='send-button' onclick="sendMessage()">Send</button>
         </div>
     </div>
 {% endblock %}
@@ -32,6 +32,22 @@
             socket.send(JSON.stringify({content: message}));
             input.value = '';
         }
+
+        let userMessage = document.getElementById('msg-input');
+        let sendButton = document.getElementById('send-button');
+
+        sendButton.disabled = !userMessage.value.trim();
+
+        userMessage.addEventListener('input', () => {
+            sendButton.disabled = !userMessage.value.trim();
+        });
+
+        userMessage.addEventListener('keydown', (event) => {
+            if (event.key == 'Enter' && !sendButton.disabled) {
+                event.preventDefault();
+                sendButton.click();
+            }
+        })
 
     </script>
 {% endblock %}

@@ -1,19 +1,20 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 
 class Thread(models.Model):
-    participants = models.ManyToManyField('auth.User',
+    participants = models.ManyToManyField(get_user_model(),
                                           related_name='threads')
 
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'Thread between {' and '.join([user.first_name + ' ' + user.last_name if user.first_name else user.username for user in self.participants.all()])}'
+        return f'Thread between {' and '.join([user.get_full_name() for user in self.participants.all()])}'
 
 class Message(models.Model):
     thread = models.ForeignKey(Thread,
                                on_delete=models.CASCADE)
 
-    sender = models.ForeignKey('auth.User',
+    sender = models.ForeignKey(get_user_model(),
                                on_delete=models.CASCADE,
                                related_name='sender')
 
