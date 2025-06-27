@@ -94,14 +94,19 @@
     padding-top: 0.4rem;
 }
 
-.response-container{
-    width: 100%;
-    display: inline;
+.response-container form{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
 
 .response-container input{
-    width: 100%;
+    width: 80%;
     height: 2rem;
+}
+
+.response-container button {
+    margin-top: 0;
 }
 
 @media (max-width: 768px) {
