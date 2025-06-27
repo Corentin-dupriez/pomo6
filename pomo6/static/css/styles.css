@@ -73,3 +73,14 @@ select {
     height: 1.5rem;
     margin-right: 2em;
 }
+
+.primary-btn{
+    font-size: 1rem;
+    cursor: pointer;
+    margin-top: 1rem;
+    padding: 0.5rem 2.5rem;
+    background-color: #00bd9d;
+    border: black;
+    border-radius: 0.5rem;
+    color: white;
+}

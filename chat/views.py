@@ -27,3 +27,6 @@ class ThreadDetailView(LoginRequiredMixin, DetailView):
     def get_context_data(self, **kwargs) -> dict:
         kwargs.update({'messages': Message.objects.filter(thread=self.get_object())})
         return super().get_context_data(**kwargs)
+
+    def get_object(self, **kwargs):
+        return Thread.objects.filter(participants=self.request.user).filter(participants=self.kwargs.get('other_user')).first()

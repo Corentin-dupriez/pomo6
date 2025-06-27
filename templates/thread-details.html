@@ -2,11 +2,13 @@
 
 {% block content %}
     <div id="chat-box" class="chat-container">
-        {% for message in messages  %}
-            <div class="message-row {% if message.sender_id == request.user.pk %}own{% else %}other{% endif %}">
-                <p><strong>{{ message.sender.username }}: </strong>{{ message.content }}</p>
-            </div>
-        {% endfor %}
+        <div class="message-area" id="chat-log">
+            {% for message in messages  %}
+                <div class="message-row {% if message.sender_id == request.user.pk %}own{% else %}other{% endif %}">
+                    <p><strong>{{ message.sender.username }}: </strong>{{ message.content }}</p>
+                </div>
+            {% endfor %}
+        </div>
         <div class="new-message">
             <input id="msg-input" type="text" placeholder="Type a message ...">
             <button id='send-button' onclick="sendMessage()">Send</button>
@@ -16,14 +18,21 @@
 
 {% block scripts %}
     <script>
-        const threadId = '{{ thread.pk }}';
-        const userId = '{{ request.user.pk }}';
+        const threadId = '3';
+        const userId = '{{ request.user.username }}';
         const socket = new WebSocket(`ws://${window.location.host}/ws/chat/${threadId}/`);
 
         socket.onmessage = function (e) {
           const data = JSON.parse(e.data);
-          const msgBox = document.getElementById('chat-box');
-          msgBox.innerHTML += `<p><strong>User ${data.sender_id}:</strong> ${data.content}</p>`
+          const messageLog = document.getElementById('chat-log');
+
+          const isOwn = data.sender_id === userId;
+          const msgRow = document.createElement('div');
+          msgRow.className = 'message-row' + (isOwn? ' own': ' other');
+          msgRow.innerHTML = `<p><strong>${data.sender_id}:</strong> ${data.content}</p>`;
+
+          messageLog.appendChild(msgRow);
+          messageLog.scrollTop = messageLog.scrollHeight;
         };
 
         function sendMessage(){
@@ -33,8 +42,8 @@
             input.value = '';
         }
 
-        let userMessage = document.getElementById('msg-input');
-        let sendButton = document.getElementById('send-button');
+        const userMessage = document.getElementById('msg-input');
+        const sendButton = document.getElementById('send-button');
 
         sendButton.disabled = !userMessage.value.trim();
 

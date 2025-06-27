@@ -8,10 +8,17 @@
                 <p class="comment-user">{{ order.user }}</p>
                 <p class="comment-rating">{{ rating.rating | round }}/5</p>
                 <p class="comment-text">{{ rating.comment }}</p>
-                {% if rating.responses %}
+                {% if rating.responses.all %}
                     {% for response in rating.responses.all %}
                         <p class="rating-response-comment">{{ response.comment }}</p>
                     {% endfor %}
+                {% else %}
+                    <div class="response-container">
+                        <form method="post">
+                            <input type="text" placeholder="Respond here...">
+                            <button class="primary-btn">Send</button>
+                        </form>
+                    </div>
                 {% endif %}
             {% endfor %}
         </div>

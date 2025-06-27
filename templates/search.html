@@ -110,6 +110,7 @@ Ads search
         minRatingInput.value = values[0];
         maxRatingInput.value = values[1];
 
+        document.querySelector('.search-form').submit();
         // Trigger change event to auto-submit
         minRatingInput.dispatchEvent(new Event('change', { bubbles: true }));
         maxRatingInput.dispatchEvent(new Event('change', { bubbles: true }));
@@ -154,7 +155,7 @@ Ads search
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const form = document.querySelector('form');
+            const form = document.querySelector('.search-form');
 
             // Auto-submit when inputs change
             form.querySelectorAll('input, select').forEach((input) => {

@@ -107,14 +107,14 @@ class ListingView(DetailView):
 
         labels = [row['date'].strftime('%Y-%m-%d') for row in queryset]
         data = [row['count'] for row in queryset]
-
+        context['connected_user'] = self.request.user
         context["labels"] = json.dumps(labels)
         context["data"] = json.dumps(data)
 
         return context
 
     def get_template_names(self) -> list:
-        if self.request.user.is_authenticated or self.request.user.is_superuser:
+        if self.request.user.is_authenticated and (self.request.user.is_superuser or self.request.user == self.object.user):
             return ['view-listing-by-owner.html']
         else:
             return ['view-listing.html']
@@ -128,7 +128,7 @@ class ListingView(DetailView):
 
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         self.object = self.get_object()
-        if not self.request.user.is_superuser:
+        if not self.request.user.is_superuser and self.request.user != self.object.user:
             self.object.increase_views()
         return super().get(request, *args, **kwargs)
 

@@ -7,6 +7,7 @@ class Thread(models.Model):
 
     created_at = models.DateTimeField(auto_now_add=True)
 
+
     def __str__(self):
         return f'Thread between {' and '.join([user.get_full_name() for user in self.participants.all()])}'
 

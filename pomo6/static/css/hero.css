@@ -4,6 +4,7 @@
     max-width: 1900px;
     height: auto;
     overflow: hidden;
+    z-index: 1;
 }
 
 .image_container::before{
@@ -18,6 +19,10 @@
     width: 100%;
     height: auto;
     display: block;
+}
+
+.home_image img {
+    z-index: 1;
 }
 
 .overlay_content{

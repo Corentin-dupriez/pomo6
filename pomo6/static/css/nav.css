@@ -3,7 +3,7 @@
     background-color: #FAF8F3;
     max-width: 1900px;
     width: 100%;
-    overflow: hidden;
+    overflow: visible;
     flex-wrap: wrap;
     margin: 0;
     display: flex;
@@ -11,6 +11,7 @@
     position: relative;
     justify-content: space-between;
     box-shadow: 0 3px 2px lightgray ;
+    z-index: 999;
 }
 
 .branding{
@@ -74,4 +75,27 @@
 
 .register:hover {
     background-color: #cccccc;
+}
+
+.nav-links {
+    display: none;
+    position: absolute;
+    top: 2rem;
+    right: 11rem;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 0.5rem;
+    list-style: none;
+    z-index: 9999;
+}
+
+.nav-links.active {
+    display: flex;
+    flex-direction: column;
+}
+
+#menu-toggle {
+    display: block;
+    cursor: pointer;
 }

@@ -1,10 +1,11 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.utils import timezone
 from django.utils.text import slugify
-
 from adverts.mixins import CreatedDateMixin
 from adverts.validators import RatingValidator, FileExtensionValidator
 
+UserModel = get_user_model()
 
 # Create your models here.
 class Advertisement(CreatedDateMixin):
@@ -37,8 +38,9 @@ class Advertisement(CreatedDateMixin):
     max_price = models.FloatField(blank=True,
                                   null=True)
 
-    #TO-DO: WILL HAVE TO CHANGE MODEL TO FK ONCE USERS ARE IMPLEMENTED
-    user = models.CharField(max_length=50)
+    user = models.ForeignKey(UserModel,
+                             on_delete=models.CASCADE,
+                             related_name='advertisements',)
 
     class Meta:
         permissions = [
