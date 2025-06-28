@@ -18,7 +18,7 @@
 
 {% block scripts %}
     <script>
-        const threadId = '3';
+        const threadId = 4;
         const userId = '{{ request.user.username }}';
         const socket = new WebSocket(`ws://${window.location.host}/ws/chat/${threadId}/`);
 

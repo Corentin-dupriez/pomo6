@@ -7,12 +7,18 @@
             <h1>pomo6</h1>
         </div>
         {% if not user.is_authenticated %}
-        <div class="log_in_buttons">
+        <div class="menu">
             <button class='register' type="button" onclick="location.href='{% url 'register' %}'">Register</button>
             <button class="login" type="button" onclick="location.href='{% url 'login' %}'">Log in</button>
         </div>
             {% else %}
-            <div class="log_in_buttons">
+            <div class="hamburger" onclick="toggleMobileMenu()">☰</div>
+            <div class="mobile-menu" id="mobile-menu">
+                <a href="{% url 'create_ad_view' %}">Add a listing</a>
+                <a href="#">Profile</a>
+                <a href="{% url 'logout' %}">Logout</a>
+            </div>
+            <div class="menu mobile-hidden" id="full-menu">
                 <div class="nav-button" id="menu-toggle"><img src="{% static 'images/account_circle_24dp_00BD9D_FILL0_wght400_GRAD0_opsz24.svg' %}"></div>
                 <ul class="nav-links" id="nav-links">
                     <li><a href="#">Profile</a> </li>
@@ -35,4 +41,9 @@
     menuToggle.addEventListener('click', () => {
         navLinks.classList.toggle('active');
     });
+
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobile-menu');
+        menu.classList.toggle('mobile-visible')
+    }
 </script>

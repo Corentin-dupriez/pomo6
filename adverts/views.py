@@ -115,9 +115,9 @@ class ListingView(DetailView):
 
     def get_template_names(self) -> list:
         if self.request.user.is_authenticated and (self.request.user.is_superuser or self.request.user == self.object.user):
-            return ['view-listing-by-owner.html']
+            return ['listings/view-listing-by-owner.html']
         else:
-            return ['view-listing.html']
+            return ['listings/view-listing.html']
 
     def get_object(self, queryset:QuerySet=None) -> Advertisement:
         queryset = Advertisement.objects.annotate(
@@ -136,13 +136,13 @@ class ListingView(DetailView):
 class ListingCreateView(CreateView):
     model = Advertisement
     form_class = AdvertForm
-    template_name = 'new-listing.html'
+    template_name = 'listings/new-listing.html'
     success_url = reverse_lazy('home')
 
 
 class ListingUpdateView(UpdateView):
     model = Advertisement
     form_class = AdvertForm
-    template_name = 'new-listing.html'
+    template_name = 'listings/new-listing.html'
     success_url = reverse_lazy('home')
 

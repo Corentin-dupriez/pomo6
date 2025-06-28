@@ -11,7 +11,7 @@ class ThreadListView(LoginRequiredMixin, ListView):
     model = Thread
     context_object_name = 'threads'
     paginate_by = 10
-    template_name = 'thread-list-page.html'
+    template_name = 'chat/thread-list-page.html'
     login_url = reverse_lazy('login')
 
     def get_queryset(self) -> QuerySet:
@@ -21,7 +21,7 @@ class ThreadListView(LoginRequiredMixin, ListView):
 class ThreadDetailView(LoginRequiredMixin, DetailView):
     model = Thread
     context_object_name = 'thread'
-    template_name = 'thread-details.html'
+    template_name = 'chat/thread-details.html'
     login_url = reverse_lazy('login')
 
     def get_context_data(self, **kwargs) -> dict:
@@ -29,4 +29,5 @@ class ThreadDetailView(LoginRequiredMixin, DetailView):
         return super().get_context_data(**kwargs)
 
     def get_object(self, **kwargs):
-        return Thread.objects.filter(participants=self.request.user).filter(participants=self.kwargs.get('other_user')).first()
+        print(Thread.objects.filter(participants=self.request.user).first())
+        return Thread.objects.filter(pk=self.kwargs['pk']).first()

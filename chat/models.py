@@ -9,7 +9,7 @@ class Thread(models.Model):
 
 
     def __str__(self):
-        return f'Thread between {' and '.join([user.get_full_name() for user in self.participants.all()])}'
+        return f'Thread between {' and '.join([user.get_username() for user in self.participants.all()])}'
 
 class Message(models.Model):
     thread = models.ForeignKey(Thread,
