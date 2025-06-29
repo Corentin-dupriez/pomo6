@@ -78,9 +78,6 @@ class Ratings(CreatedDateMixin):
     comment = models.TextField(blank=True,
                                null=True)
 
-    def __str__(self):
-        return f'{self.user} - {self.rating}'
-
 class RatingResponse(CreatedDateMixin):
     to_rating = models.ForeignKey(Ratings,
                                   on_delete=models.CASCADE,

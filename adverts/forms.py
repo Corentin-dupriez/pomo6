@@ -1,6 +1,7 @@
 from django import forms
 
-from adverts.models import Advertisement
+from adverts.models import Advertisement, RatingResponse
+
 
 class SearchForm(forms.Form):
     query = forms.CharField(required=False,
@@ -40,3 +41,11 @@ class AdvertForm(forms.ModelForm):
             'min_price': forms.NumberInput(attrs={'id': 'range-price-field'}),
             'max_price': forms.NumberInput(attrs={'id': 'range-price-field'}),
         }
+
+class RatingResponseForm(forms.ModelForm):
+    to_rating_id = forms.IntegerField(widget=forms.HiddenInput())
+
+    class Meta:
+        model = RatingResponse
+        fields = ['comment']
+        labels = {'comment': ''}

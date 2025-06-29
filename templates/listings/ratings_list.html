@@ -15,7 +15,9 @@
                 {% else %}
                     <div class="response-container">
                         <form method="post">
-                            <input type="text" placeholder="Respond here...">
+                            {% csrf_token %}
+                            {{form}}
+                            <input type="hidden" name="to_rating_id" value="{{ rating.id }}">
                             <button class="primary-btn">Send</button>
                         </form>
                     </div>

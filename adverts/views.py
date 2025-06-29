@@ -5,9 +5,9 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Q, Avg, Count, ExpressionWrapper, FloatField, QuerySet
 from django.core.paginator import Paginator
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, UpdateView
-from adverts.forms import AdvertForm, SearchForm
-from adverts.models import Advertisement, Views
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, FormView
+from adverts.forms import AdvertForm, SearchForm, RatingResponseForm
+from adverts.models import Advertisement, Views, Ratings
 
 
 class ResultsView(ListView):
@@ -94,8 +94,13 @@ class ResultsView(ListView):
         return context
 
 
-class ListingView(DetailView):
+class ListingView(DetailView, FormView):
     model = Advertisement
+    form_class = RatingResponseForm
+
+    def get_success_url(self):
+        return reverse_lazy('advert_view', kwargs={'pk': self.kwargs.get('pk'),
+                                                   'slug': self.kwargs.get('slug')})
 
     def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
@@ -131,6 +136,17 @@ class ListingView(DetailView):
         if not self.request.user.is_superuser and self.request.user != self.object.user:
             self.object.increase_views()
         return super().get(request, *args, **kwargs)
+    
+    def form_valid(self, form):
+        rating_id = form.cleaned_data['to_rating_id']
+        
+        rating = get_object_or_404(Ratings, pk=rating_id)
+        
+        response = form.save(commit=False)
+        response.to_rating = rating
+        response.save()
+        
+        return super().form_valid(form)
 
 
 class ListingCreateView(CreateView):

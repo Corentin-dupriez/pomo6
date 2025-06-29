@@ -7,7 +7,7 @@ urlpatterns = [
     path('new/', views.ListingCreateView.as_view(), name='create_ad_view'),
     path('<int:pk>/<slug:slug>', include(
         [path('', views.ListingView.as_view(), name='advert_view'),
-         path('edit/', views.ListingUpdateView.as_view(), name='advert_edit'),
+         path('edit/', views.ListingUpdateView.as_view(), name='advert_edit')
          ]
     )
          )
