@@ -13,6 +13,7 @@
                         <p class="rating-response-comment">{{ response.comment }}</p>
                     {% endfor %}
                 {% else %}
+                    {% if advertisement.user == request.user%}
                     <div class="response-container">
                         <form method="post">
                             {% csrf_token %}
@@ -20,6 +21,7 @@
                             <input type="hidden" name="to_rating_id" value="{{ rating.id }}">
                             <button class="primary-btn">Send</button>
                         </form>
+                    {% endif %}
                     </div>
                 {% endif %}
             {% endfor %}

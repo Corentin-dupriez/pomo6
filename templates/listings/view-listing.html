@@ -11,9 +11,7 @@
             {% include 'listings/listing-details.html' %}
             <a href="{% url 'thread-detail' 1 %}"><button class="primary-btn">Contact the seller</button></a>
         </div>
-        <div class="seller-profile">
-            <h1><a href="{% url 'profile' advertisement.user.pk %}">{{ advertisement.user.get_username }}</a></h1>
-        </div>
-            {% include 'listings/ratings_list.html' %}
-        </div>
+        {% include 'listings/seller-profile.html' %}
+        {% include 'listings/ratings_list.html' %}
+    </div>
 {% endblock %}

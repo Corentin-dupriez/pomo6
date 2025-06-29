@@ -1,0 +1,5 @@
+<div class="seller-profile">
+    <div class="profile-image profile-image-smaller" style="background-image: url('{{ user.profile.image.url}}')"></div>
+     <h1><a href="{% url 'profile' advertisement.user.pk %}">{{ advertisement.user.get_username }}</a></h1>
+    <p>{{ advertisement.user.profile.description }}</p>
+</div>

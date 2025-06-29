@@ -2,8 +2,11 @@
 
 {% block content %}
     <div class="profile-container">
-        <div class="profile-image" style="background-image: url('https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png')"></div>
+        <div class="profile-image" style="background-image: url('{{ userprofile.image.url }}')"></div>
         <h1>{{ object.user.username }}</h1>
         <p>{{ object.description }}</p>
+        <a class="edit-profile" href="{% url 'profile-edit' object.pk %}">
+            <button class="primary-btn">Edit profile</button>
+        </a>
     </div>
 {% endblock %}

@@ -48,6 +48,10 @@
   margin-bottom: 1rem;
 }
 
+.profile-image-smaller {
+    height: 100px;
+}
+
 .categories_overlay{
     margin-top: 1.5rem;
 }

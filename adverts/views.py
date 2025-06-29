@@ -105,7 +105,8 @@ class ListingView(DetailView, FormView):
     def get_context_data(self, **kwargs) -> dict:
         context = super().get_context_data(**kwargs)
 
-        queryset = (Views.objects.annotate(date=TruncDate('view_date'))
+        queryset = (Views.objects.filter(advertisement=context['object'])
+                    .annotate(date=TruncDate('view_date'))
                     .values('date')
                     .annotate(count=Count('id'))
                     .order_by('date'))
@@ -154,6 +155,11 @@ class ListingCreateView(CreateView):
     form_class = AdvertForm
     template_name = 'listings/new-listing.html'
     success_url = reverse_lazy('home')
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
 
 class ListingUpdateView(UpdateView):

@@ -2,3 +2,16 @@
     display: flex;
     flex-direction: column;
 }
+
+.edit-profile {
+    display: block;
+    text-align: center;
+    margin: 0 auto;
+}
+
+.profile-form{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+}

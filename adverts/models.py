@@ -1,9 +1,10 @@
 from django.contrib.auth import get_user_model
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.utils import timezone
 from django.utils.text import slugify
 from adverts.mixins import CreatedDateMixin
-from adverts.validators import RatingValidator, FileExtensionValidator
+from adverts.validators import RatingValidator
 
 UserModel = get_user_model()
 
@@ -25,7 +26,8 @@ class Advertisement(CreatedDateMixin):
     category = models.CharField(max_length=100,
                                 choices=CategoryChoices.choices,
                                 default=CategoryChoices.OTHER)
-    slug = models.SlugField(blank=True)
+    slug = models.SlugField(blank=True,
+                            max_length=200,)
     image = models.ImageField(upload_to='images/',
                               blank=True,
                               null=True,

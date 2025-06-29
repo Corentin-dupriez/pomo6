@@ -42,6 +42,18 @@ class AdvertForm(forms.ModelForm):
             'max_price': forms.NumberInput(attrs={'id': 'range-price-field'}),
         }
 
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user', None)
+        super(forms.ModelForm, self).__init__(*args, **kwargs)
+
+    def save(self, commit=True):
+        obj = super().save(commit=False)
+        obj.user = self.user
+        if commit:
+            obj.save()
+        return obj
+
+
 class RatingResponseForm(forms.ModelForm):
     to_rating_id = forms.IntegerField(widget=forms.HiddenInput())
 
