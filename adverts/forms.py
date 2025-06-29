@@ -42,11 +42,11 @@ class AdvertForm(forms.ModelForm):
             'max_price': forms.NumberInput(attrs={'id': 'range-price-field'}),
         }
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         self.user = kwargs.pop('user', None)
         super(forms.ModelForm, self).__init__(*args, **kwargs)
 
-    def save(self, commit=True):
+    def save(self, commit=True) -> Advertisement:
         obj = super().save(commit=False)
         obj.user = self.user
         if commit:

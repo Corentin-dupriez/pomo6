@@ -98,7 +98,7 @@ class ListingView(DetailView, FormView):
     model = Advertisement
     form_class = RatingResponseForm
 
-    def get_success_url(self):
+    def get_success_url(self) -> str:
         return reverse_lazy('advert_view', kwargs={'pk': self.kwargs.get('pk'),
                                                    'slug': self.kwargs.get('slug')})
 
@@ -138,7 +138,7 @@ class ListingView(DetailView, FormView):
             self.object.increase_views()
         return super().get(request, *args, **kwargs)
     
-    def form_valid(self, form):
+    def form_valid(self, form) -> HttpResponse:
         rating_id = form.cleaned_data['to_rating_id']
         
         rating = get_object_or_404(Ratings, pk=rating_id)
@@ -156,7 +156,7 @@ class ListingCreateView(CreateView):
     template_name = 'listings/new-listing.html'
     success_url = reverse_lazy('home')
 
-    def get_form_kwargs(self):
+    def get_form_kwargs(self) -> dict:
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
         return kwargs

@@ -49,15 +49,15 @@ class Advertisement(CreatedDateMixin):
             ('approve_listing', 'Can approve listing'),
         ]
     
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs) -> None:
         if not self.slug:
             self.slug = slugify(self.title)
         super().save(*args, **kwargs)
 
-    def increase_views(self):
+    def increase_views(self) -> None:
         Views.objects.create(advertisement=self, view_date=timezone.now())
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.title
 
 
