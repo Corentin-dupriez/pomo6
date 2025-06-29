@@ -15,7 +15,7 @@
             <canvas id="myChart" width="400" height="200"></canvas>
         </div>
         <div class="seller-profile">
-            <h1>{{ advertisement.user.get_username }}</h1>
+             <h1><a href="{% url 'profile' advertisement.user.pk %}">{{ advertisement.user.get_username }}</a></h1>
         </div>
         {% include 'listings/ratings_list.html' %}
         </div>

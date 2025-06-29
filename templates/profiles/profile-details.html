@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="profile-container">
+        <div class="profile-image" style="background-image: url('https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png')"></div>
+        <h1>{{ object.user.username }}</h1>
+        <p>{{ object.description }}</p>
+    </div>
+{% endblock %}
