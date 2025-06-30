@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 UserModel = get_user_model()
 
 class UserProfile(models.Model):
+    #Profile created by a signal every time a new user registers
     user = models.OneToOneField(UserModel,
                                 on_delete=models.CASCADE,
                                 related_name='profile',)
@@ -17,5 +18,5 @@ class UserProfile(models.Model):
                               upload_to='images/',
                               validators=[FileExtensionValidator(['png', 'jpg', 'jpeg'])])
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.user.username

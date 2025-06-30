@@ -1,5 +1,12 @@
+{% load static %}
+
 <div class="seller-profile">
-    <div class="profile-image profile-image-smaller" style="background-image: url('{{ user.profile.image.url}}')"></div>
+    {% if advertisement.user.profile.image %}
+        <p>image</p>
+    <div class="profile-image profile-image-smaller" style="background-image: url('{{ advertisement.user.profile.image.url }}')"></div>
+    {% else %}
+        <div class="profile-image profile-image-smaller" style="background-image: url('{% static 'images/img_home.png' %}')"></div>
+    {% endif %}
      <h1><a href="{% url 'profile' advertisement.user.pk %}">{{ advertisement.user.get_username }}</a></h1>
     <p>{{ advertisement.user.profile.description }}</p>
 </div>

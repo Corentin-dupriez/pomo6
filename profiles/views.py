@@ -19,4 +19,4 @@ class ProfileEditView(UpdateView):
     form_class = ProfileEditForm
 
     def get_success_url(self) -> str:
-        return reverse_lazy('profile', kwargs={'pk': self.object.pk})
+        return reverse_lazy('profile', kwargs={'pk': self.object.user.pk})

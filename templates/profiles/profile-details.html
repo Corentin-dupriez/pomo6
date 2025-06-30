@@ -1,8 +1,13 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
     <div class="profile-container">
+    {% if userprofile.image  %}
         <div class="profile-image" style="background-image: url('{{ userprofile.image.url }}')"></div>
+    {% else %}
+        <div class="profile-image" style="background-image: url('{% static 'images/img_home.png' %}')"></div>
+    {% endif %}
         <h1>{{ object.user.username }}</h1>
         <p>{{ object.description }}</p>
         <a class="edit-profile" href="{% url 'profile-edit' object.pk %}">
