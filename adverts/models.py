@@ -1,4 +1,9 @@
+import io
+import os.path
+
+from PIL import Image
 from django.contrib.auth import get_user_model
+from django.core.files.base import ContentFile
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.utils import timezone
@@ -52,6 +57,15 @@ class Advertisement(CreatedDateMixin):
     def save(self, *args, **kwargs) -> None:
         if not self.slug:
             self.slug = slugify(self.title)
+
+        if self.image:
+            img = Image.open(self.image)
+            img = img.convert('RGB')
+            buffer = io.BytesIO()
+            img.save(buffer, format='webp')
+            filename = os.path.splitext(self.image.name)[0] + '.webp'
+            self.image.save(filename, ContentFile(buffer.getvalue()), save=False)
+
         super().save(*args, **kwargs)
 
     def increase_views(self) -> None:
