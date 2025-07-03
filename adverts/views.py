@@ -1,4 +1,5 @@
 import json
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models.functions import Coalesce, TruncDate
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import get_object_or_404
@@ -75,6 +76,7 @@ class ResultsView(ListView):
 
         return queryset.order_by('-note')
 
+
     def get_context_data(self, *, object_list = ..., **kwargs) -> dict:
         min_rating, max_rating = self.get_ratings()
 
@@ -119,11 +121,13 @@ class ListingView(DetailView, FormView):
 
         return context
 
+
     def get_template_names(self) -> list:
         if self.request.user.is_authenticated and (self.request.user.is_superuser or self.request.user == self.object.user):
             return ['listings/view-listing-by-owner.html']
         else:
             return ['listings/view-listing.html']
+
 
     def get_object(self, queryset:QuerySet=None) -> Advertisement:
         queryset = Advertisement.objects.annotate(
@@ -132,12 +136,14 @@ class ListingView(DetailView, FormView):
         ).prefetch_related('orders__ratings').prefetch_related('orders__ratings__responses')
         return get_object_or_404(queryset, pk=self.kwargs.get('pk'))
 
+
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         self.object = self.get_object()
         if not self.request.user.is_superuser and self.request.user != self.object.user:
             self.object.increase_views()
         return super().get(request, *args, **kwargs)
-    
+
+
     def form_valid(self, form) -> HttpResponse:
         rating_id = form.cleaned_data['to_rating_id']
         
@@ -150,11 +156,12 @@ class ListingView(DetailView, FormView):
         return super().form_valid(form)
 
 
-class ListingCreateView(CreateView):
+class ListingCreateView(LoginRequiredMixin, CreateView):
     model = Advertisement
     form_class = AdvertForm
     template_name = 'listings/new-listing.html'
     success_url = reverse_lazy('home')
+
 
     def get_form_kwargs(self) -> dict:
         kwargs = super().get_form_kwargs()
@@ -162,9 +169,14 @@ class ListingCreateView(CreateView):
         return kwargs
 
 
-class ListingUpdateView(UpdateView):
+class ListingUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Advertisement
     form_class = AdvertForm
     template_name = 'listings/new-listing.html'
     success_url = reverse_lazy('home')
+
+
+    def test_func(self):
+        return self.get_object().user == self.request.user
+
 

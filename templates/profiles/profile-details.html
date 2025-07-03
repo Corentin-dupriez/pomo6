@@ -10,8 +10,10 @@
     {% endif %}
         <h1>{{ object.user.username }}</h1>
         <p>{{ object.description }}</p>
+    {% if request.user == userprofile.user %}
         <a class="edit-profile" href="{% url 'profile-edit' object.pk %}">
             <button class="primary-btn">Edit profile</button>
         </a>
+    {% endif %}
     </div>
 {% endblock %}
