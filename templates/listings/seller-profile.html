@@ -2,7 +2,6 @@
 
 <div class="seller-profile">
     {% if advertisement.user.profile.image %}
-        <p>image</p>
     <div class="profile-image profile-image-smaller" style="background-image: url('{{ advertisement.user.profile.image.url }}')"></div>
     {% else %}
         <div class="profile-image profile-image-smaller" style="background-image: url('{% static 'images/img_home.png' %}')"></div>

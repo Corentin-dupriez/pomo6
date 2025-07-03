@@ -18,9 +18,10 @@
 
 {% block scripts %}
     <script>
-        const threadId = 4;
+        const otherUserId = '{{ thread.advert.user.pk }}';
         const userId = '{{ request.user.username }}';
-        const socket = new WebSocket(`ws://${window.location.host}/ws/chat/${threadId}/`);
+        const advertId = '{{ thread.advert.pk }}'
+        const socket = new WebSocket(`ws://${window.location.host}/ws/chat/${otherUserId}/${advertId}/`);
 
         socket.onmessage = function (e) {
           const data = JSON.parse(e.data);

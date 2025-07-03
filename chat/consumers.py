@@ -10,13 +10,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
         self.user = self.scope['user']
         self.other_user = self.scope['url_route']['kwargs']['other_user']
+        self.advertisement = self.scope['url_route']['kwargs']['advert_id']
 
         self.other_user = await self.get_user(self.other_user)
+
         if not self.user.is_authenticated or not self.other_user:
             await self.close()
             return
 
-        self.chat = await self.get_or_create_chat(self.user, self.other_user)
+        self.chat = await self.get_or_create_chat(self.user, self.other_user, advert_id=self.advertisement)
         self.thread_id = self.chat.id
         self.room_name = f'chat_{self.chat.id}'
 
@@ -31,6 +33,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
             self.room_name,
             self.channel_name
         )
+
+        has_messages = await sync_to_async(self.chat.messages.exists)()
+
+        if not has_messages:
+            await sync_to_async(self.chat.delete)()
+
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
@@ -62,13 +70,16 @@ class ChatConsumer(AsyncWebsocketConsumer):
             return None
 
     @database_sync_to_async
-    def get_or_create_chat(self, user, other_user):
-        chat = Thread.objects.filter(participants=user).filter(participants=other_user).first()
+    def get_or_create_chat(self, user, other_user, advert_id):
+        chat = (Thread.objects.filter(participants=user)
+                .filter(participants=other_user)
+                .filter(advert=advert_id).first())
         if chat:
             return chat
 
         chat = Thread.objects.create()
         chat.participants.set([user, other_user])
+        chat.advert = advert_id
         return chat
 
     @sync_to_async
