@@ -8,6 +8,7 @@ Ads search
     <link href="https://cdn.jsdelivr.net/npm/nouislider@15.7.0/dist/nouislider.min.css" rel="stylesheet">
 {% endblock %}
 {% block content %}
+    {% if not my_listings %}
     <div class="search-div">
         <form method="get" action="{% url 'search_view' %}" class="search-form">
             {{ form }}
@@ -31,6 +32,7 @@ Ads search
             </div>
         </form>
     </div>
+    {% endif %}
     <div class="results">
         {% for advert in advertisement_list %}
             <div class="result">
@@ -55,6 +57,9 @@ Ads search
                     </div>
                 </div>
                 <p class="advert-description">{{ advert.description }}</p>
+            {% if not advert.approved and request.user.is_superuser %}
+                <button class="primary-btn">Approve listing</button>
+            {% endif %}
             </div>
         {% endfor %}
     </div>

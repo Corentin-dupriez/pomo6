@@ -11,7 +11,9 @@ from adverts.forms import AdvertForm, SearchForm, RatingResponseForm
 from adverts.models import Advertisement, Views, Ratings
 
 
-class ResultsView(ListView):
+class BaseResultsView(ListView):
+    # This is the base results view. It returns the advert listings matching the search criteria.
+    # It is inherited by other views (such as my listings).
     model = Advertisement
     template_name = 'search.html'
     form_class = SearchForm
@@ -42,9 +44,9 @@ class ResultsView(ListView):
 
         queryset = Advertisement.objects.all().annotate(
             avg_rating=Coalesce(Avg('orders__ratings__rating'), 0, output_field=FloatField()),
-            customers = Count('orders', filter=Q(orders__completed=True), distinct=True, output_field=FloatField()),
+            customers=Count('orders', filter=Q(orders__completed=True), distinct=True, output_field=FloatField()),
             note=ExpressionWrapper(
-                Coalesce(Avg('orders__ratings__rating'), 0)* 0.7 +
+                Coalesce(Avg('orders__ratings__rating'), 0) * 0.7 +
                 Count('orders', filter=Q(orders__completed=True), distinct=True) * 0.3,
                 output_field=FloatField()
             )
@@ -52,8 +54,8 @@ class ResultsView(ListView):
 
         if query:
             queryset = queryset.filter(Q(title__icontains=query) |
-                                     Q(description__icontains=query) |
-                                     Q(category__icontains=query))
+                                       Q(description__icontains=query) |
+                                       Q(category__icontains=query))
 
         if category:
             queryset = queryset.filter(category=category)
@@ -65,19 +67,18 @@ class ResultsView(ListView):
             queryset = queryset.filter(Q(note__lte=max_rating))
 
         if min_price:
-            queryset = queryset.filter(Q(fixed_price__gte=min_price)|
-                                       Q(min_price__gte=min_price)|
+            queryset = queryset.filter(Q(fixed_price__gte=min_price) |
+                                       Q(min_price__gte=min_price) |
                                        Q(min_price__lte=max_price))
 
         if max_price:
-            queryset = queryset.filter(Q(fixed_price__lte=max_price)|
-                                       Q(fixed_price__isnull=True)|
+            queryset = queryset.filter(Q(fixed_price__lte=max_price) |
+                                       Q(fixed_price__isnull=True) |
                                        Q(max_price__lte=max_price))
 
         return queryset.order_by('-note')
 
-
-    def get_context_data(self, *, object_list = ..., **kwargs) -> dict:
+    def get_context_data(self, *, object_list=..., **kwargs) -> dict:
         min_rating, max_rating = self.get_ratings()
 
         min_price = int(self.request.GET.get('min_price', 0))
@@ -94,6 +95,12 @@ class ResultsView(ListView):
             'max_price': max_price,
         })
         return context
+
+class ResultsView(BaseResultsView):
+    def get_queryset(self) -> QuerySet:
+        query = super().get_queryset()
+        query = query.filter(approved=True)
+        return query
 
 
 class ListingView(DetailView, FormView):
@@ -155,6 +162,28 @@ class ListingView(DetailView, FormView):
         
         return super().form_valid(form)
 
+
+class MyListingsView(BaseResultsView):
+    def get_queryset(self) -> QuerySet:
+        queryset = super().get_queryset()
+        queryset = queryset.filter(user=self.request.user)
+        return queryset
+
+    def get_context_data(self, **kwargs) -> dict:
+        ctx = super().get_context_data()
+        ctx['my_listings'] = True
+        return ctx
+
+
+class ListingsToApproveView(UserPassesTestMixin, LoginRequiredMixin, BaseResultsView):
+
+    def test_func(self) -> bool:
+        return self.request.user.is_superuser #Add check on the user's authorizations
+
+    def get_queryset(self) -> QuerySet:
+        queryset = super().get_queryset()
+        queryset = queryset.filter(approved=False)
+        return queryset
 
 class ListingCreateView(LoginRequiredMixin, CreateView):
     model = Advertisement

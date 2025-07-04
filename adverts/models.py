@@ -49,6 +49,8 @@ class Advertisement(CreatedDateMixin):
                              on_delete=models.CASCADE,
                              related_name='advertisements',)
 
+    approved = models.BooleanField(default=False)
+
     class Meta:
         permissions = [
             ('approve_listing', 'Can approve listing'),
@@ -70,6 +72,9 @@ class Advertisement(CreatedDateMixin):
 
     def increase_views(self) -> None:
         Views.objects.create(advertisement=self, view_date=timezone.now())
+
+    def approve_listings(self) -> None:
+        self.approved = True
 
     def __str__(self) -> str:
         return self.title
