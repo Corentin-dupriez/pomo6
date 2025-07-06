@@ -15,6 +15,10 @@ class UserProfile(models.Model):
                                 related_name='profile',
                                 primary_key=True)
 
+    first_name = models.CharField(max_length=100)
+
+    last_name = models.CharField(max_length=100)
+
     description = models.TextField(blank=True,
                                    null=True)
 
@@ -38,3 +42,6 @@ class UserProfile(models.Model):
 
     def __str__(self) -> str:
         return self.user.username
+
+    def full_name(self) -> str:
+        return self.first_name + ' ' + self.last_name or self.user.username
