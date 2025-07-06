@@ -42,6 +42,8 @@
 
 .ad-comments{
     margin-top: 1.5rem;
+    display: flex;
+    flex-direction: column;
 }
 
 .ad-comments h3 {
@@ -56,6 +58,9 @@
     padding: 1rem;
     margin-bottom: 0.8rem;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
 }
 
 .comment-user,

@@ -9,7 +9,7 @@
     <div class="offer-container">
         <div class="offer-details">
             {% include 'listings/listing-details.html' %}
-            <a href="{% url 'thread-detail' 1 %}"><button class="primary-btn">Contact the seller</button></a>
+            <a href="{% url 'thread-redirect' object.id  %}"><button class="primary-btn">Contact the seller</button></a>
         </div>
         {% include 'listings/seller-profile.html' %}
         {% include 'listings/ratings_list.html' %}

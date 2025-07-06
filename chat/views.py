@@ -4,7 +4,9 @@ from django.db.models import QuerySet
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views import View
-from django.views.generic import ListView, DetailView
+from django.views.generic import ListView, DetailView, RedirectView
+
+from adverts.models import Advertisement
 from chat.models import Thread, Message
 
 class ThreadListView(LoginRequiredMixin, ListView):
@@ -29,5 +31,19 @@ class ThreadDetailView(LoginRequiredMixin, DetailView):
         return super().get_context_data(**kwargs)
 
     def get_object(self, **kwargs):
-        print(Thread.objects.filter(participants=self.request.user).first())
         return Thread.objects.filter(pk=self.kwargs['pk']).first()
+
+
+class ThreadRedirectView(LoginRequiredMixin, RedirectView):
+    permanent = False
+
+    def get_redirect_url(self, *args, **kwargs):
+        advert = Advertisement.objects.get(pk=self.kwargs['advert_id'])
+        chat = Thread.objects.filter(advert_id=advert.pk).filter(participants=self.request.user).first()
+
+        if not chat:
+            chat = Thread.objects.create(advert_id=self.kwargs['advert_id'])
+            chat.participants.add(self.request.user, advert.user)
+            chat.save()
+
+        return reverse_lazy('thread-detail', kwargs={'pk': chat.pk})

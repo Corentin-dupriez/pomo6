@@ -3,28 +3,28 @@
 <div class="ad-comments">
     <h3>Reviews: </h3>
     {% for order in advertisement.orders.all %}
-        <div class="comment-info">
             {% for rating in order.ratings.all %}
-                <p class="comment-user">{{ order.user }}</p>
-                <p class="comment-rating">{{ rating.rating | round }}/5</p>
-                <p class="comment-text">{{ rating.comment }}</p>
-                {% if rating.responses.all %}
-                    {% for response in rating.responses.all %}
+                <div class="comment-info">
+                    <p class="comment-user">{{ order.user }}</p>
+                    <p class="comment-rating">{{ rating.rating | round }}/5</p>
+                    <p class="comment-text">{{ rating.comment }}</p>
+                    {% if rating.responses.all %}
+                        {% for response in rating.responses.all %}
                         <p class="rating-response-comment">{{ response.comment }}</p>
-                    {% endfor %}
-                {% else %}
-                    {% if advertisement.user == request.user%}
-                    <div class="response-container">
-                        <form method="post">
-                            {% csrf_token %}
-                            {{form}}
-                            <input type="hidden" name="to_rating_id" value="{{ rating.id }}">
-                            <button class="primary-btn">Send</button>
-                        </form>
+                        {% endfor %}
+                    {% else %}
+                        {% if advertisement.user == request.user%}
+                        <div class="response-container">
+                            <form method="post">
+                                {% csrf_token %}
+                                {{form}}
+                                <input type="hidden" name="to_rating_id" value="{{ rating.id }}">
+                                <button class="primary-btn">Send</button>
+                            </form>
+                        </div>
+                        {% endif %}
                     {% endif %}
-                    </div>
-                {% endif %}
+                </div>
             {% endfor %}
-        </div>
     {% endfor %}
 </div>

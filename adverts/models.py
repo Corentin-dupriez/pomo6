@@ -1,6 +1,5 @@
 import io
 import os.path
-
 from PIL import Image
 from django.contrib.auth import get_user_model
 from django.core.files.base import ContentFile
@@ -15,6 +14,7 @@ UserModel = get_user_model()
 
 # Create your models here.
 class Advertisement(CreatedDateMixin):
+
     class CategoryChoices(models.TextChoices):
         IT_HELP = ('IT', 'IT Help')
         HANDYMAN = ('HANDYMAN', 'Handyman')
@@ -27,21 +27,29 @@ class Advertisement(CreatedDateMixin):
 
 
     title = models.CharField(max_length=100)
+
     description = models.TextField(max_length=2000)
+
     category = models.CharField(max_length=100,
                                 choices=CategoryChoices.choices,
                                 default=CategoryChoices.OTHER)
+
     slug = models.SlugField(blank=True,
                             max_length=200,)
+
     image = models.ImageField(upload_to='images/',
                               blank=True,
                               null=True,
-                              validators=[FileExtensionValidator()])
+                              validators=[FileExtensionValidator(['png', 'jpg', 'jpeg', 'webp'])])
+
     is_fixed_price = models.BooleanField(default=True)
+
     fixed_price = models.FloatField(blank=True,
                                     null=True)
+
     min_price = models.FloatField(blank=True,
                                   null=True)
+
     max_price = models.FloatField(blank=True,
                                   null=True)
 
@@ -84,18 +92,29 @@ class Order(CreatedDateMixin):
     advertisement = models.ForeignKey(Advertisement,
                                       on_delete=models.CASCADE,
                                       related_name='orders',)
-    #TO-DO: WILL HAVE TO CHANGE MODEL TO FK ONCE USERS ARE IMPLEMENTED
-    user = models.CharField(max_length=50)
+
+    user = models.ForeignKey(UserModel,
+                             on_delete=models.CASCADE,
+                             related_name='orders',)
+
     completed = models.BooleanField(default=False)
+
+    created_on = models.DateField(default=timezone.now)
+
+    def __str__(self) -> str:
+        return f'Order for {self.advertisement} made on {self.created_on}'
+
 
 
 class Ratings(CreatedDateMixin):
     order = models.ForeignKey(Order,
                               on_delete=models.CASCADE,
                               related_name='ratings')
+
     rating = models.DecimalField(decimal_places=1,
                                  max_digits=2,
                                  validators=[RatingValidator('The rating must be between 0 and 5')])
+
     comment = models.TextField(blank=True,
                                null=True)
 
@@ -110,5 +129,7 @@ class RatingResponse(CreatedDateMixin):
 
 class Views(models.Model):
     view_date = models.DateTimeField(auto_now_add=True)
+
     advertisement = models.ForeignKey(Advertisement,
-                                      on_delete=models.CASCADE,)
+                                      on_delete=models.CASCADE,
+                                      related_name='views')

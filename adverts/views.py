@@ -177,6 +177,11 @@ class MyListingsView(BaseResultsView):
 
 class ListingsToApproveView(UserPassesTestMixin, LoginRequiredMixin, BaseResultsView):
 
+    def get_context_data(self, *, object_list=..., **kwargs) -> dict:
+        ctx = super().get_context_data()
+        ctx['to_approve'] = True
+        return ctx
+
     def test_func(self) -> bool:
         return self.request.user.is_superuser #Add check on the user's authorizations
 

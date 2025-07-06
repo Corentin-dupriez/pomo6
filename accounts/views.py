@@ -9,8 +9,9 @@ from profiles.models import UserProfile
 class RegisterView(CreateView):
     template_name = 'registration/register.html'
     form_class = UserCreationForm
-    success_url = reverse_lazy('home')
 
+    def get_success_url(self):
+        return reverse_lazy('profile-edit', kwargs={'pk': self.object.pk})
 
     def form_valid(self, form):
         result = super().form_valid(form)
