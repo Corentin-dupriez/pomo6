@@ -1,6 +1,7 @@
 from django.urls import path, include
 
 from adverts import views
+from adverts.views import PredictCategoryView
 
 urlpatterns = [
     path('search/', views.ResultsView.as_view(), name='search_view'),
@@ -10,7 +11,8 @@ urlpatterns = [
     path('<int:pk>/<slug:slug>/', include(
         [path('', views.ListingView.as_view(), name='advert_view'),
          path('edit/', views.ListingUpdateView.as_view(), name='advert_edit')
-         ]
-    )
-         )
+         ],
+    ),
+         ),
+    path('api/predict-category/', PredictCategoryView.as_view(), name='predict_category'),
 ]

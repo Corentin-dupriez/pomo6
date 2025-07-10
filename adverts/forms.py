@@ -32,9 +32,9 @@ class AdvertForm(forms.ModelForm):
                   'min_price': 'Min Price',
                   'max_price': 'Max Price',}
         widgets = {
-            'title': forms.TextInput(),
+            'title': forms.TextInput(attrs={'id': 'id-title'}),
             'description': forms.Textarea(),
-            'category': forms.Select(),
+            'category': forms.Select(attrs={'id': 'id-category'}),
             'image': forms.FileInput(),
             'is_fixed_price': forms.CheckboxInput(attrs={'id': 'fixed-price'}),
             'fixed_price': forms.NumberInput(attrs={'id': 'fixed-price-field'}),

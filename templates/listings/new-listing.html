@@ -41,18 +41,51 @@ document.addEventListener('DOMContentLoaded', () => {
     const isFixed = document.getElementById('fixed-price');
     const FixPrice = document.getElementById('fixed-price-field');
     const RangePrice = document.getElementById('range-price-field');
+    const titleInput = document.getElementById('id-title');
+    const categorySelect = document.getElementById('id-category');
 
-    function togglePricing(){
+    function togglePricing() {
         if (isFixed.checked) {
             FixPrice.style.display = '';
             RangePrice.style.display = 'none';
-        } else{
+        } else {
             FixPrice.style.display = 'none';
             RangePrice.style.display = '';
         }
     }
+
     togglePricing()
     isFixed.addEventListener('change', togglePricing)
-})
+
+    let debounceTimer;
+
+    titleInput.addEventListener('input', () => {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => {
+            const title = titleInput.value.trim();
+            if (title.length > 15) {
+                fetch('/adverts/api/predict-category/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: JSON.stringify({title: title})
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        const predicted = data.predicted_category;
+
+                        for (let option of categorySelect.options) {
+                            if (option.value.toLowerCase() === predicted.toLowerCase()) {
+                                categorySelect.value = option.value;
+                                break;
+                            }
+                        }
+                    })
+            }
+        }, 500);
+    });
+});
 </script>
 {% endblock %}

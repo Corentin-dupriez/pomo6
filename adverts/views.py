@@ -1,4 +1,6 @@
 import json
+import os
+import joblib
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models.functions import Coalesce, TruncDate
 from django.http import HttpResponse, HttpRequest
@@ -9,6 +11,14 @@ from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, FormView
 from adverts.forms import AdvertForm, SearchForm, RatingResponseForm
 from adverts.models import Advertisement, Views, Ratings
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
+#import model and vectorizer required for API
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+model = joblib.load(os.path.join(BASE_DIR, "ml_model", "model.pkl"))
+vectorizer = joblib.load(os.path.join(BASE_DIR, "ml_model", "vectorizer.pkl"))
 
 
 class BaseResultsView(ListView):
@@ -214,3 +224,14 @@ class ListingUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         return self.get_object().user == self.request.user
 
 
+class PredictCategoryView(APIView):
+    def post(self, request, *args, **kwargs):
+        title = request.data.get('title', '')
+
+        if not title:
+            return Response({'error': 'title is required'}, status=status.HTTP_400_BAD_REQUEST)
+
+        title_vec = vectorizer.transform([title])
+        predicted_category = model.predict(title_vec)[0]
+
+        return Response({'predicted_category': predicted_category}, status=status.HTTP_200_OK)
