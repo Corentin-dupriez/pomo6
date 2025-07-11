@@ -59,6 +59,8 @@ class Advertisement(CreatedDateMixin):
 
     approved = models.BooleanField(default=False)
 
+    archived = models.BooleanField(default=False)
+
     class Meta:
         permissions = [
             ('approve_listing', 'Can approve listing'),

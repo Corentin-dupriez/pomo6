@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="login_section">
+        <p>Are you sure you want to delete {{ object }}?</p>
+        <form method="post"> {% csrf_token %}
+            {{ form }}
+            <input type="submit" value="Confirm" class="primary-btn">
+        </form>
+    </div>
+{% endblock %}

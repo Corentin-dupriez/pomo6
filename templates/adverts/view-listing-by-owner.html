@@ -10,12 +10,15 @@
 {% block content %}
     <div class="offer-container">
         <div class="offer-details">
-            {% include 'listings/listing-details.html' %}
+            {% include 'adverts/listing-details.html' %}
+            <a class="primary-btn" href="{% url 'advert_delete' object.pk object.slug %}">
+                <p class="primary-btn-text">Delete</p>
+            </a>
             <h3>Statistics:</h3>
             <canvas id="myChart" width="400" height="200"></canvas>
         </div>
-        {% include 'listings/seller-profile.html' %}
-        {% include 'listings/ratings_list.html' %}
+        {% include 'adverts/seller-profile.html' %}
+        {% include 'adverts/ratings_list.html' %}
         </div>
 {% endblock %}
 

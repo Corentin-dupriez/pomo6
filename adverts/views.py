@@ -3,12 +3,12 @@ import os
 import joblib
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models.functions import Coalesce, TruncDate
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.db.models import Q, Avg, Count, ExpressionWrapper, FloatField, QuerySet
 from django.core.paginator import Paginator
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, FormView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, FormView, DeleteView
 from adverts.forms import AdvertForm, SearchForm, RatingResponseForm
 from adverts.models import Advertisement, Views, Ratings
 from rest_framework.views import APIView
@@ -22,8 +22,8 @@ vectorizer = joblib.load(os.path.join(BASE_DIR, "ml_model", "vectorizer.pkl"))
 
 
 class BaseResultsView(ListView):
-    # This is the base results view. It returns the advert listings matching the search criteria.
-    # It is inherited by other views (such as my listings).
+    # This is the base results view. It returns the advert adverts matching the search criteria.
+    # It is inherited by other views (such as my adverts).
     model = Advertisement
     template_name = 'search.html'
     form_class = SearchForm
@@ -109,7 +109,7 @@ class BaseResultsView(ListView):
 class ResultsView(BaseResultsView):
     def get_queryset(self) -> QuerySet:
         query = super().get_queryset()
-        query = query.filter(approved=True)
+        query = query.filter(approved=True, archived=False)
         return query
 
 
@@ -140,10 +140,10 @@ class ListingView(DetailView, FormView):
 
 
     def get_template_names(self) -> list:
-        if self.request.user.is_authenticated and (self.request.user.is_superuser or self.request.user == self.object.user):
-            return ['listings/view-listing-by-owner.html']
+        if self.request.user.is_authenticated and self.request.user == self.object.user:
+            return ['adverts/view-listing-by-owner.html']
         else:
-            return ['listings/view-listing.html']
+            return ['adverts/view-listing.html']
 
 
     def get_object(self, queryset:QuerySet=None) -> Advertisement:
@@ -184,6 +184,19 @@ class MyListingsView(BaseResultsView):
         ctx['my_listings'] = True
         return ctx
 
+class ListingDeleteView(DeleteView):
+    model = Advertisement
+    success_url = reverse_lazy('home')
+
+    def post(self, request, *args, **kwargs) -> HttpResponse:
+        self.object = self.get_object()
+        if self.object.approved:
+            self.object.archived = True
+            self.object.save()
+            return HttpResponseRedirect(self.get_success_url())
+        else:
+            return super().post(request, *args, **kwargs)
+
 
 class ListingsToApproveView(UserPassesTestMixin, LoginRequiredMixin, BaseResultsView):
 
@@ -203,7 +216,7 @@ class ListingsToApproveView(UserPassesTestMixin, LoginRequiredMixin, BaseResults
 class ListingCreateView(LoginRequiredMixin, CreateView):
     model = Advertisement
     form_class = AdvertForm
-    template_name = 'listings/new-listing.html'
+    template_name = 'adverts/new-listing.html'
     success_url = reverse_lazy('home')
 
 
@@ -216,7 +229,7 @@ class ListingCreateView(LoginRequiredMixin, CreateView):
 class ListingUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Advertisement
     form_class = AdvertForm
-    template_name = 'listings/new-listing.html'
+    template_name = 'adverts/new-listing.html'
     success_url = reverse_lazy('home')
 
 

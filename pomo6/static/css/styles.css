@@ -112,4 +112,14 @@ select {
     border: black;
     border-radius: 0.5rem;
     color: white;
+    align-items: center;
+    display: flex;
+}
+
+.primary-btn-text {
+    color: white;
+    font-size: 1rem;
+    margin: 0 auto;
+    align-items: center;
+    display: flex;
 }
