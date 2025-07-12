@@ -1,7 +1,7 @@
 from django.urls import path, include
 
 from adverts import views
-from adverts.views import PredictCategoryView
+from adverts.views import PredictCategoryView, CreateOrderView
 
 urlpatterns = [
     path('search/', views.ResultsView.as_view(), name='search_view'),
@@ -12,6 +12,9 @@ urlpatterns = [
         [path('', views.ListingView.as_view(), name='advert_view'),
          path('edit/', views.ListingUpdateView.as_view(), name='advert_edit'),
          path('delete/', views.ListingDeleteView.as_view(), name='advert_delete'),
+         path('orders/', include([
+             path('create/', CreateOrderView.as_view(), name='create_order'),
+         ]))
          ],
     ),
          ),

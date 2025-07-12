@@ -1,6 +1,6 @@
 from django import forms
 
-from adverts.models import Advertisement, RatingResponse
+from adverts.models import Advertisement, RatingResponse, Order
 
 
 class SearchForm(forms.Form):
@@ -61,3 +61,8 @@ class RatingResponseForm(forms.ModelForm):
         model = RatingResponse
         fields = ['comment']
         labels = {'comment': ''}
+
+class OrderForm(forms.ModelForm):
+    class Meta:
+        model = Order
+        fields = ['amount', 'description']

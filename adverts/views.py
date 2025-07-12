@@ -9,8 +9,8 @@ from django.db.models import Q, Avg, Count, ExpressionWrapper, FloatField, Query
 from django.core.paginator import Paginator
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, FormView, DeleteView
-from adverts.forms import AdvertForm, SearchForm, RatingResponseForm
-from adverts.models import Advertisement, Views, Ratings
+from adverts.forms import AdvertForm, SearchForm, RatingResponseForm, OrderForm
+from adverts.models import Advertisement, Views, Ratings, Order
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -52,12 +52,13 @@ class BaseResultsView(ListView):
         min_price = int(self.request.GET.get('min_price', 0))
         max_price = int(self.request.GET.get('max_price', 1000))
 
+        #To the queryset, we add a note column, which is based on average rating and orders count
         queryset = Advertisement.objects.all().annotate(
             avg_rating=Coalesce(Avg('orders__ratings__rating'), 0, output_field=FloatField()),
-            customers=Count('orders', filter=Q(orders__completed=True), distinct=True, output_field=FloatField()),
+            customers=Count('orders', filter=Q(orders__status='COMPLETED'), distinct=True, output_field=FloatField()),
             note=ExpressionWrapper(
                 Coalesce(Avg('orders__ratings__rating'), 0) * 0.7 +
-                Count('orders', filter=Q(orders__completed=True), distinct=True) * 0.3,
+                Count('orders', filter=Q(orders__status='COMPLETED'), distinct=True) * 0.3,
                 output_field=FloatField()
             )
         )
@@ -107,6 +108,8 @@ class BaseResultsView(ListView):
         return context
 
 class ResultsView(BaseResultsView):
+    #Get the queryset of the base view, and filter it to return only approved and not archived listings
+    #This view is used to display search results on the search page
     def get_queryset(self) -> QuerySet:
         query = super().get_queryset()
         query = query.filter(approved=True, archived=False)
@@ -130,6 +133,7 @@ class ListingView(DetailView, FormView):
                     .annotate(count=Count('id'))
                     .order_by('date'))
 
+        #The following is used to display the graph containing the views of the listing
         labels = [row['date'].strftime('%Y-%m-%d') for row in queryset]
         data = [row['count'] for row in queryset]
         context['connected_user'] = self.request.user
@@ -149,19 +153,21 @@ class ListingView(DetailView, FormView):
     def get_object(self, queryset:QuerySet=None) -> Advertisement:
         queryset = Advertisement.objects.annotate(
             avg_rating=Coalesce(Avg('orders__ratings__rating'), 0, output_field=FloatField()),
-            nb_ratings=Coalesce(Count('orders', filter=Q(orders__completed=True), distinct=True), 0),
+            nb_ratings=Coalesce(Count('orders', filter=Q(orders__status='COMPLETED'), distinct=True), 0),
         ).prefetch_related('orders__ratings').prefetch_related('orders__ratings__responses')
         return get_object_or_404(queryset, pk=self.kwargs.get('pk'))
 
 
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         self.object = self.get_object()
+        #increase the number of views if the user is not superuser or the listing creator
         if not self.request.user.is_superuser and self.request.user != self.object.user:
             self.object.increase_views()
         return super().get(request, *args, **kwargs)
 
 
     def form_valid(self, form) -> HttpResponse:
+        #Used to add a response to a rating comment
         rating_id = form.cleaned_data['to_rating_id']
         
         rating = get_object_or_404(Ratings, pk=rating_id)
@@ -175,6 +181,7 @@ class ListingView(DetailView, FormView):
 
 class MyListingsView(BaseResultsView):
     def get_queryset(self) -> QuerySet:
+        #Get the queryset of the base view, but filter for the results of the connected user
         queryset = super().get_queryset()
         queryset = queryset.filter(user=self.request.user)
         return queryset
@@ -184,9 +191,12 @@ class MyListingsView(BaseResultsView):
         ctx['my_listings'] = True
         return ctx
 
-class ListingDeleteView(DeleteView):
+class ListingDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Advertisement
     success_url = reverse_lazy('home')
+
+    def test_func(self):
+        return self.request.user.is_superuser or self.request.user == self.object.user
 
     def post(self, request, *args, **kwargs) -> HttpResponse:
         self.object = self.get_object()
@@ -206,19 +216,19 @@ class ListingsToApproveView(UserPassesTestMixin, LoginRequiredMixin, BaseResults
         return ctx
 
     def test_func(self) -> bool:
-        return self.request.user.is_superuser #Add check on the user's authorizations
+        return self.request.user.is_superuser #TODO: Add check on the user's authorizations
 
     def get_queryset(self) -> QuerySet:
         queryset = super().get_queryset()
         queryset = queryset.filter(approved=False)
         return queryset
 
+
 class ListingCreateView(LoginRequiredMixin, CreateView):
     model = Advertisement
     form_class = AdvertForm
     template_name = 'adverts/new-listing.html'
     success_url = reverse_lazy('home')
-
 
     def get_form_kwargs(self) -> dict:
         kwargs = super().get_form_kwargs()
@@ -232,10 +242,18 @@ class ListingUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     template_name = 'adverts/new-listing.html'
     success_url = reverse_lazy('home')
 
-
     def test_func(self):
         return self.get_object().user == self.request.user
 
+class CreateOrderView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+    model = Order
+    form_class = OrderForm
+    template_name = 'orders/new_order.html'
+    success_url = reverse_lazy('home')
+
+    def test_func(self):
+        advert = get_object_or_404(Advertisement, pk=self.kwargs.get('pk'))
+        return advert.user == self.request.user
 
 class PredictCategoryView(APIView):
     def post(self, request, *args, **kwargs):

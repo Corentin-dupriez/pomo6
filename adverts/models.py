@@ -12,7 +12,7 @@ from adverts.validators import RatingValidator
 
 UserModel = get_user_model()
 
-# Create your models here.
+
 class Advertisement(CreatedDateMixin):
 
     class CategoryChoices(models.TextChoices):
@@ -89,9 +89,16 @@ class Advertisement(CreatedDateMixin):
     def __str__(self) -> str:
         return self.title
 
-
 class Order(CreatedDateMixin):
-    advertisement = models.ForeignKey(Advertisement,
+    class StatusChoices(models.TextChoices):
+        CREATED = ('CREATED', 'Created')
+        SUBMITTED = ('SUBMITTED', 'Submitted')
+        APPROVED = ('APPROVED', 'Approved')
+        REJECTED = ('REJECTED', 'Rejected')
+        PROCESSING = ('PROCESSING', 'Processing')
+        COMPLETED = ('COMPLETED', 'Completed')
+
+    advertisement = models.ForeignKey(to='Advertisement',
                                       on_delete=models.CASCADE,
                                       related_name='orders',)
 
@@ -99,13 +106,24 @@ class Order(CreatedDateMixin):
                              on_delete=models.CASCADE,
                              related_name='orders',)
 
-    completed = models.BooleanField(default=False)
+    description = models.TextField(max_length=2000)
 
-    created_on = models.DateField(default=timezone.now)
+    last_modified = models.DateField(null=True,
+                                     blank=True)
+
+    accepted_on = models.DateField(null=True,
+                                   blank=True)
+
+    amount = models.FloatField(default=0)
+
+    status = models.CharField(max_length=20,
+                              choices=StatusChoices.choices,)
+
+    completed_on = models.DateField(null=True,
+                                    blank=True)
 
     def __str__(self) -> str:
-        return f'Order for {self.advertisement} made on {self.created_on}'
-
+        return f'Order for {self.advertisement} made on {self.created}'
 
 
 class Ratings(CreatedDateMixin):
@@ -127,7 +145,6 @@ class RatingResponse(CreatedDateMixin):
 
     comment = models.TextField(blank=True,
                                null=True)
-
 
 class Views(models.Model):
     view_date = models.DateTimeField(auto_now_add=True)
