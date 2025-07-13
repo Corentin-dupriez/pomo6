@@ -1,9 +1,13 @@
+.chat-header {
+
+}
+
 .chat-container{
     width: 60%;
     max-width: 1920px;
     margin: auto;
     padding: 20px;
-    height: 80vh;
+    height: 70vh;
     overflow-y: scroll;
     display: flex;
     flex-direction: column;
@@ -59,4 +63,9 @@
 .last-message-info{
     display: flex;
     flex-direction: column;
+}
+
+.chat-actions{
+    width: 50%;
+    margin: auto;
 }

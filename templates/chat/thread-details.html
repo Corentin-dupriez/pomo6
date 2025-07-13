@@ -1,6 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
+    <div class="chat-header">
+        <h4>{{ thread.advert }}</h4>
+    </div>
     <div id="chat-box" class="chat-container">
         <div class="message-area" id="chat-log">
             {% for message in messages  %}
@@ -13,6 +16,9 @@
             <input id="msg-input" type="text" placeholder="Type a message ...">
             <button id='send-button' onclick="sendMessage()">Send</button>
         </div>
+    </div>
+    <div class="chat-actions">
+        <a class="primary-btn" href="{% url 'create_order' thread.advert.id thread.advert.slug %}">Create an offer</a>
     </div>
 {% endblock %}
 

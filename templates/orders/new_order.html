@@ -2,7 +2,9 @@
 
 {% block content %}
 <form> {% csrf_token %}
-    {{ form }}
-    <button type="submit">Submit offer</button>
+    <div class="new-add-form">
+        {{ form }}
+        <button class="form-button submit-form-button" type="submit">Submit offer</button>
+    </div>
 </form>
 {% endblock %}
