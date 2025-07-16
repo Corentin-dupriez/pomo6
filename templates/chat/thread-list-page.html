@@ -8,7 +8,7 @@
                 <a href="{% url 'thread-detail' thread.pk %}"><p>{{ thread }}</p></a>
                 {% with thread|last_message as last_message %}
                     <p class="last-message-date">{{ last_message.created_at }}</p>
-                    <p><b>{{ last_message.sender.username }}:</b> {{ last_message.content }}</p>
+                    <p class="text"><b>{{ last_message.sender.username }}:</b> {{ last_message.content }}</p>
             {% endwith %}
             </div>
         </div>

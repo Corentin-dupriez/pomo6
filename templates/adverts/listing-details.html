@@ -5,11 +5,11 @@
 {% else %}
     <div class="offer-image" style="background-image: url('{{ advertisement.image.url }}')"></div>
 {% endif %}
-<h1>{{ advertisement.title }}</h1>
+<h1 class="text">{{ advertisement.title }}</h1>
 {% if advertisement.nb_ratings != 0  %}
-<div class="listing-meta">Rated: {{ advertisement.avg_rating|round }}/5</div>
+<div class="listing-meta text">Rated: {{ advertisement.avg_rating|round }}/5</div>
 {% else %}
-    <div class="listing-meta">Not rated yet!</div>
+    <div class="listing-meta text">Not rated yet!</div>
 {% endif %}
-<div class="category-tag">Category: {{ advertisement.category }}</div>
-<p class="offer-description">Description: <br>{{ advertisement.description }}</p>
+<div class="category-tag text">Category: {{ advertisement.category }}</div>
+<p class="offer-description text">Description: <br>{{ advertisement.description }}</p>

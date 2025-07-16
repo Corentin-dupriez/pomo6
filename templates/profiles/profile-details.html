@@ -8,8 +8,8 @@
     {% else %}
         <div class="profile-image" style="background-image: url('{% static 'images/img_home.png' %}')"></div>
     {% endif %}
-        <h1>{{ object.full_name}}</h1>
-        <p>{{ object.description }}</p>
+        <h1 class="text">{{ object.full_name}}</h1>
+        <p class="text">{{ object.description }}</p>
     {% if request.user == userprofile.user %}
         <a class="edit-profile" href="{% url 'profile-edit' object.pk %}">
             <button class="primary-btn">Edit profile</button>

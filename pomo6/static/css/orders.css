@@ -16,3 +16,16 @@
 .offer-status li.active-status{
     color: #00BD9D;
 }
+
+.offer-info {
+    margin-top: 5rem;
+    border-top: #333333 1px solid;
+    padding: 2.5rem;
+}
+
+.action-buttons {
+    margin: 5rem auto;
+    justify-content: center;
+    display: flex;
+    gap: 1rem;
+}

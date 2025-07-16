@@ -1,12 +1,12 @@
 {% load round %}
 
 <div class="ad-comments">
-    <h3>Reviews: </h3>
+    <h3 class="text">Reviews: </h3>
     {% for order in advertisement.orders.all %}
             {% for rating in order.ratings.all %}
                 <div class="comment-info">
-                    <p class="comment-user">{{ order.user }}</p>
-                    <p class="comment-rating">{{ rating.rating | round }}/5</p>
+                    <p class="comment-user text">{{ order.user }}</p>
+                    <p class="comment-rating text">{{ rating.rating | round }}/5</p>
                     <p class="comment-text">{{ rating.comment }}</p>
                     {% if rating.responses.all %}
                         {% for response in rating.responses.all %}

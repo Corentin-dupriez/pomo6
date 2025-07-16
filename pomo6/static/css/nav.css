@@ -8,6 +8,7 @@
     margin: 0;
     display: flex;
     align-items: center;
+    justify-items: center;
     position: relative;
     justify-content: space-between;
     box-shadow: 0 3px 2px lightgray ;
@@ -73,6 +74,7 @@
     background-color: #00bd9d;
     border: none;
     color: white;
+    height: 2.1rem;
 }
 
 .login:hover {

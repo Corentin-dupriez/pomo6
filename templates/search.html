@@ -56,7 +56,7 @@ Ads search
                         {% endif %}
                     </div>
                 </div>
-                <p class="advert-description">{{ advert.description }}</p>
+                <p class="advert-description text">{{ advert.description }}</p>
             {% if not advert.approved and request.user.is_superuser and to_approve %}
                 <button class="primary-btn">Approve listing</button>
             {% endif %}

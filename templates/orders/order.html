@@ -9,9 +9,20 @@
                 <li {% if order.status == 'COMPLETED' %}class="active-status" {% endif %}>Completed</li>
             </ul>
         </div>
-        <h1>{{ order.advertisement.title }}</h1>
-        <h2>Offer:</h2>
-        <p>Amount: {{ order.amount }}</p>
-        <p>{{ order.description }}</p>
+        <div class="offer-info">
+            <h1 class="text">{{ order.advertisement.title }}</h1>
+            <h2 class="text">Offer:</h2>
+            <p class="text">Amount: {{ order.amount }}</p>
+            <p class="text">{{ order.description }}</p>
+        </div>
+    <div class="action-buttons">
+        {% if request.user != order.advertisement.user and order.status == 'CREATED'%}
+            <button class="primary-btn">Accept</button>
+            <button class="secondary-btn">Request change</button>
+        {% elif request.user == order.advertisement.user and order.status != 'COMPLETED'%}
+            <button class="primary-btn">Modify</button>
+            <button class="secondary-btn">Cancel</button>
+        {% endif %}
+    </div>
     </div>
 {% endblock %}

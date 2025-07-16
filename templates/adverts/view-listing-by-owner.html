@@ -14,7 +14,7 @@
             <a class="primary-btn" href="{% url 'advert_delete' object.pk object.slug %}">
                 <p class="primary-btn-text">Delete</p>
             </a>
-            <h3>Statistics:</h3>
+            <h3 class="text">Statistics:</h3>
             <canvas id="myChart" width="400" height="200"></canvas>
         </div>
         {% include 'adverts/seller-profile.html' %}

@@ -21,14 +21,14 @@
             </div>
             <div class="menu mobile-hidden" id="full-menu">
                 <div class="nav-button" id="menu-toggle"><img src="{% static 'images/account_circle_24dp_00BD9D_FILL0_wght400_GRAD0_opsz24.svg' %}"></div>
-                <ul class="nav-links" id="nav-links">
-                    <li><a href="{% url 'profile' request.user.id %}">Profile</a> </li>
-                    <li><a href="{% url 'my_listings' %}">My listings</a> </li>
-                    <li><a href="{% url 'logout' %}" onclick="event.preventDefault(); document.getElementById('logout-form').submit() ">Logout</a></li>
-                </ul>
-                <a href="{% url 'thread-list' %}"><img class="nav-button" src="{% static 'images/chat_bubble_24dp_00BD9D_FILL0_wght400_GRAD0_opsz24.svg' %}"></a>
-                <button class="login" type="button" onclick="location.href='{% url 'create_ad_view' %}'">Add a listing</button>
-            </div>
+                    <ul class="nav-links" id="nav-links">
+                        <li><a href="{% url 'profile' request.user.id %}">Profile</a> </li>
+                        <li><a href="{% url 'my_listings' %}">My listings</a> </li>
+                        <li><a href="{% url 'logout' %}" onclick="event.preventDefault(); document.getElementById('logout-form').submit() ">Logout</a></li>
+                    </ul>
+                    <a href="{% url 'thread-list' %}"><img class="nav-button" src="{% static 'images/chat_bubble_24dp_00BD9D_FILL0_wght400_GRAD0_opsz24.svg' %}"></a>
+                    <button class="login" type="button" onclick="location.href='{% url 'create_ad_view' %}'">Add a listing</button>
+                </div>
         {% endif %}
     </div>
 

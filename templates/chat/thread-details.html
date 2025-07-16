@@ -2,13 +2,18 @@
 
 {% block content %}
     <div class="chat-header">
+    {% if thread.advert.image %}
+        <img src="{{ thread.advert.image.url }}">
+    {% else %}
+        <img class="thread-advert-picture" src="https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png">
+    {% endif %}
         <h4>{{ thread.advert }}</h4>
     </div>
     <div id="chat-box" class="chat-container">
         <div class="message-area" id="chat-log">
             {% for message in messages  %}
                 <div class="message-row {% if message.sender_id == request.user.pk %}own{% else %}other{% endif %}">
-                    <p><strong>{{ message.sender.username }}: </strong>{{ message.content }}</p>
+                    <p class="text"><strong>{{ message.sender.username }}: </strong>{{ message.content }}</p>
                 </div>
             {% endfor %}
         </div>
