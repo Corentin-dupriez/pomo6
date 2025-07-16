@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.db.models import QuerySet
 from django.shortcuts import render
 from django.urls import reverse_lazy
@@ -20,7 +20,7 @@ class ThreadListView(LoginRequiredMixin, ListView):
         return Thread.objects.filter(participants=self.request.user).order_by('-created_at')
 
 
-class ThreadDetailView(LoginRequiredMixin, DetailView):
+class ThreadDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = Thread
     context_object_name = 'thread'
     template_name = 'chat/thread-details.html'
@@ -32,6 +32,9 @@ class ThreadDetailView(LoginRequiredMixin, DetailView):
 
     def get_object(self, **kwargs):
         return Thread.objects.filter(pk=self.kwargs['pk']).prefetch_related('orders').first()
+
+    def test_func(self):
+        return self.request.user in self.get_object().participants.all()
 
 
 class ThreadRedirectView(LoginRequiredMixin, RedirectView):

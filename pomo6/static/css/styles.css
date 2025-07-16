@@ -24,8 +24,11 @@
 
 @import "profile.css";
 
+@import "orders.css";
+
 .offer-container,
-.profile-container {
+.profile-container,
+.listing-container{
     margin: 0.5rem auto 0.5rem auto;
     padding: 2rem;
     background-color: #FAF8F3;

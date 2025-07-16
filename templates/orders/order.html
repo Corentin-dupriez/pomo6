@@ -1,1 +1,17 @@
 {% extends 'base.html' %}
+
+{% block content %}
+    <div class="offer-container">
+        <div class="offer-status">
+            <ul>
+                <li {% if order.status == 'CREATED' %}class="active-status" {% endif %}>Created</li>
+                <li {% if order.status == 'APPROVED' %}class="active-status" {% endif %}>Accepted</li>
+                <li {% if order.status == 'COMPLETED' %}class="active-status" {% endif %}>Completed</li>
+            </ul>
+        </div>
+        <h1>{{ order.advertisement.title }}</h1>
+        <h2>Offer:</h2>
+        <p>Amount: {{ order.amount }}</p>
+        <p>{{ order.description }}</p>
+    </div>
+{% endblock %}

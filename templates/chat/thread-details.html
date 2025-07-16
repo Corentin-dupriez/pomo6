@@ -18,15 +18,14 @@
         </div>
     </div>
     <div class="chat-actions">
-    {% if request.user == thread.advert.user and not thread.advert.orders %}
-        <a class="primary-btn" href="{% url 'create_order' thread.advert.id thread.advert.slug %}">
+    {% if request.user == thread.advert.user and not thread.orders.first %}
+        <a class="primary-btn" href="{% url 'create_order' thread.advert.pk thread.advert.slug %}">
             <p class="primary-btn-text">Create an offer</p>
         </a>
     {% endif %}
-    {% if thread.advert.orders %}
-        <a class="primary-btn" href="{% url 'order_detail' thread.orders.first.pk %}">
-            <p class="primary-btn-text">Check the offer</p>
-        </a>
+    {% if thread.orders.first %}
+        <!-- Load it only when there is an order linked to the chat, or it breaks the page. -->
+        {% include 'chat/offer_button.html' %}
     {% endif %}
     </div>
 {% endblock %}

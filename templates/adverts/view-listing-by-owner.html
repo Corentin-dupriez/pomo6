@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block content %}
-    <div class="offer-container">
+    <div class="listing-container">
         <div class="offer-details">
             {% include 'adverts/listing-details.html' %}
             <a class="primary-btn" href="{% url 'advert_delete' object.pk object.slug %}">

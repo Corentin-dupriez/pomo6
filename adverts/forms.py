@@ -66,3 +66,20 @@ class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
         fields = ['amount', 'description']
+
+    def __init__(self, *args, **kwargs) -> None:
+        print(kwargs)
+        self.user = kwargs.pop('user', None)
+        self.advert_id = kwargs.pop('advert_id', None)
+        self.thread_id = kwargs.pop('thread_id', None)
+        super(forms.ModelForm, self).__init__(*args, **kwargs)
+
+    def save(self, commit=True) -> Order:
+        obj = super().save(commit=False)
+        obj.user = self.user
+        obj.advertisement = Advertisement.objects.get(pk=self.advert_id)
+        obj.status = 'CREATED'
+        obj.thread_id = self.thread_id
+        if commit:
+            obj.save()
+        return obj

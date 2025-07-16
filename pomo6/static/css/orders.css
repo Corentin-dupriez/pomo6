@@ -1,0 +1,18 @@
+.offer-status ul {
+    list-style: none;
+    display: flex;
+    justify-content: center;
+    gap: 5rem;
+    margin: 0;
+    padding: 0;
+}
+
+.offer-status li {
+    padding: 5px 10px;
+    font-size: 1.8rem;
+    color: #888888;
+}
+
+.offer-status li.active-status{
+    color: #00BD9D;
+}

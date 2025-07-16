@@ -15,6 +15,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 
+from chat.models import Thread
+
 #import model and vectorizer required for API
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 model = joblib.load(os.path.join(BASE_DIR, "ml_model", "model.pkl"))
@@ -251,9 +253,18 @@ class CreateOrderView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     template_name = 'orders/new_order.html'
     success_url = reverse_lazy('home')
 
+    def get_form_kwargs(self) -> dict:
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        kwargs['advert_id'] = self.kwargs.get('pk')
+        kwargs['thread_id'] = Thread.objects.filter(participants=self.request.user, advert=self.kwargs.get('pk')).first().id
+        return kwargs
+
+
     def test_func(self):
         advert = get_object_or_404(Advertisement, pk=self.kwargs.get('pk'))
         return advert.user == self.request.user
+
 
 class OrderDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = Order
