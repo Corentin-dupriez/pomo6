@@ -255,6 +255,14 @@ class CreateOrderView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         advert = get_object_or_404(Advertisement, pk=self.kwargs.get('pk'))
         return advert.user == self.request.user
 
+class OrderDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
+    model = Order
+    template_name = 'orders/order.html'
+
+    def test_func(self):
+        order = get_object_or_404(Order, pk=self.kwargs.get('pk'))
+        return order.user == self.request.user or order.advertisement.user == self.request.user
+
 class PredictCategoryView(APIView):
     def post(self, request, *args, **kwargs):
         title = request.data.get('title', '')

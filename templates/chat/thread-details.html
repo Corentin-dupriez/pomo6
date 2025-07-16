@@ -18,7 +18,16 @@
         </div>
     </div>
     <div class="chat-actions">
-        <a class="primary-btn" href="{% url 'create_order' thread.advert.id thread.advert.slug %}">Create an offer</a>
+    {% if request.user == thread.advert.user and not thread.advert.orders %}
+        <a class="primary-btn" href="{% url 'create_order' thread.advert.id thread.advert.slug %}">
+            <p class="primary-btn-text">Create an offer</p>
+        </a>
+    {% endif %}
+    {% if thread.advert.orders %}
+        <a class="primary-btn" href="{% url 'order_detail' thread.orders.first.pk %}">
+            <p class="primary-btn-text">Check the offer</p>
+        </a>
+    {% endif %}
     </div>
 {% endblock %}
 

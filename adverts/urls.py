@@ -11,12 +11,11 @@ urlpatterns = [
     path('<int:pk>/<slug:slug>/', include(
         [path('', views.ListingView.as_view(), name='advert_view'),
          path('edit/', views.ListingUpdateView.as_view(), name='advert_edit'),
-         path('delete/', views.ListingDeleteView.as_view(), name='advert_delete'),
-         path('orders/', include([
-             path('create/', CreateOrderView.as_view(), name='create_order'),
-         ]))
-         ],
-    ),
-         ),
+         path('delete/', views.ListingDeleteView.as_view(), name='advert_delete'),])),
+    path('order/', include([
+        path('create/', CreateOrderView.as_view(), name='create_order'),
+        path('<int:pk>/', include([
+        path('', views.OrderDetailView.as_view(), name='order_detail'),
+             ]))])),
     path('api/predict-category/', PredictCategoryView.as_view(), name='predict_category'),
 ]

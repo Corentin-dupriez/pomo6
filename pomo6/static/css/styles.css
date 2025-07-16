@@ -107,6 +107,7 @@ select {
     font-size: 1rem;
     cursor: pointer;
     margin-top: 1rem;
+    margin-bottom: 1rem;
     padding: 0.5rem 2.5rem;
     background-color: #00bd9d;
     border: black;

@@ -31,7 +31,7 @@ class ThreadDetailView(LoginRequiredMixin, DetailView):
         return super().get_context_data(**kwargs)
 
     def get_object(self, **kwargs):
-        return Thread.objects.filter(pk=self.kwargs['pk']).first()
+        return Thread.objects.filter(pk=self.kwargs['pk']).prefetch_related('orders').first()
 
 
 class ThreadRedirectView(LoginRequiredMixin, RedirectView):

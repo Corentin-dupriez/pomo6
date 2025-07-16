@@ -101,6 +101,10 @@ class Order(CreatedDateMixin):
     advertisement = models.ForeignKey(to='Advertisement',
                                       on_delete=models.CASCADE,
                                       related_name='orders',)
+    #orders are created through a thread,
+    thread = models.ForeignKey(to='chat.Thread',
+                               on_delete=models.CASCADE,
+                               related_name='orders',)
 
     user = models.ForeignKey(UserModel,
                              on_delete=models.CASCADE,
