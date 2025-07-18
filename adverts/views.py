@@ -199,9 +199,10 @@ class ListingDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     success_url = reverse_lazy('home')
 
     def test_func(self):
-        return self.request.user.is_superuser or self.request.user == self.object.user
+        obj = self.get_object()
+        return self.request.user.is_superuser or self.request.user == obj.user
 
-    def post(self, request, *args, **kwargs) -> HttpResponse:
+    def delete(self, request, *args, **kwargs) -> HttpResponse:
         self.object = self.get_object()
         if self.object.approved:
             self.object.archived = True

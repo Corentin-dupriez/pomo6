@@ -4,6 +4,7 @@ import random
 import django
 from django.contrib.auth import get_user_model
 from django.db.models import QuerySet
+from django.utils.text import slugify
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pomo6.settings')
 django.setup()
@@ -15,6 +16,9 @@ def generate_it_advert_title():
     verbs = ['develop ', 'build ', 'fix ', 'debug ', 'improve ', 'review ', 'design ']
     techs = ['a Django website',
              'a website developed in React',
+             'anything using Python',
+             'a web app with Python',
+             'any software using Java',
              'a Java application',
              'an API in the technology of your choice',
              'a WordPress or Blogger website',
@@ -156,6 +160,7 @@ def generate_advertisement(category: str, users: QuerySet, nb_advertisements: in
         advertisement = Advertisement(title=title,
                                       category=category,
                                       user=user,
+                                      slug=slugify(title),
                                       description=title,
                                       fixed_price=random.randint(1,500),
                                       is_fixed_price=True,
