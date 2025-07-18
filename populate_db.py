@@ -2,11 +2,14 @@ import os
 import random
 
 import django
+from django.contrib.auth import get_user_model
+from django.db.models import QuerySet
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pomo6.settings')
 django.setup()
 
 from adverts.models import Advertisement
+UserModel = get_user_model()
 
 def generate_it_advert_title():
     verbs = ['develop ', 'build ', 'fix ', 'debug ', 'improve ', 'review ', 'design ']
@@ -70,19 +73,60 @@ def generate_cleaning_advert_title():
     return random.choice(verbs) + random.choice(things)
 
 def generate_childcare_advert_title():
-    pass
+    verbs = ['watch ', 'look after ', 'babysit ']
+    things = ['your kids',
+              'kids older than 6',
+              'your baby',
+              'your kid for a whole afternoon!',
+              'children under 5',
+              'children, and make them play the whole day!',
+              'kids using Montessori',
+              'your kids and teach them good manners']
+    return random.choice(verbs) + random.choice(things)
 
 def generate_tutoring_advert_title():
-    pass
+    verbs = ['teach you ',
+             'tutor you in ',
+             'help you understand ',
+             'help you learn ',
+             'train you ',
+             'upskill you in ',
+             'teach you or your kids ',
+             'tutor your kids in ']
+    things = ['maths',
+              'physics',
+              'calculus',
+              'French',
+              'computer science',
+              'English',
+              'mathematics',
+              'language learning',
+              'multiplication tables',
+              'algebra',
+              'Python',
+              'any subject'
+              ]
+    return random.choice(verbs) + random.choice(things)
 
-def generate_transport_advert_title():
-    pass
 
 def generate_pet_advert_title():
-    pass
+    verbs = ['walk ',
+             'watch ',
+             'look after ',
+             'train ',
+             'feed ']
+    things = ['your dog',
+              'your animals',
+              'your cats',
+              'dogs or cats',
+              'small dogs',
+              'french bulldogs',
+              'exotic pets',
+              'cats',
+              'and give love to your pets',
+              'your pets while you\'re away']
+    return random.choice(verbs) + random.choice(things)
 
-def generate_other_advert_title():
-    pass
 
 def generate_title(category: str):
     title_starts = ['I can ', 'I will ']
@@ -92,27 +136,49 @@ def generate_title(category: str):
         'CLEANING': generate_cleaning_advert_title,
         'CHILDCARE': generate_childcare_advert_title,
         'TUTORING': generate_tutoring_advert_title,
-        'TRANSPORTATION': generate_tutoring_advert_title,
         'PET': generate_pet_advert_title,
-        'OTHER': generate_other_advert_title,
     }
     title = title_starts[random.randint(0, len(title_starts) - 1)]
     title += title_map[category]()
     return title
 
+def get_existing_users():
+    users = UserModel.objects.all()
+    return users
 
-def generate_advertisement(category: str, nb_advertisements: int) -> list[Advertisement]:
+
+def generate_advertisement(category: str, users: QuerySet, nb_advertisements: int) -> list[Advertisement]:
     advertisements = []
     adverts_number = nb_advertisements
     for _ in range(adverts_number):
         title = generate_title(category)
-        advertisement = Advertisement(title=title, category=category)
+        user = random.choice(users)
+        advertisement = Advertisement(title=title,
+                                      category=category,
+                                      user=user,
+                                      description=title,
+                                      fixed_price=random.randint(1,500),
+                                      is_fixed_price=True,
+                                      approved=True)
         advertisements.append(advertisement)
     return advertisements
 
 categories = [category[0] for category in Advertisement.CategoryChoices.choices]
+existing_users_pks = get_existing_users()
+
+all_adverts_to_commit = []
 
 for category in categories:
-    print(f'Category: {category}')
-    adverts = generate_advertisement(category, nb_advertisements=5)
-    print(f'Advertisements: {", ". join(advert.title for advert in adverts)}')
+    adverts = generate_advertisement(category, existing_users_pks,  nb_advertisements=random.randint(80,100))
+    print(f'Generated {len(adverts)} advertisements for {category}')
+    all_adverts_to_commit.extend(adverts)
+
+print(f'Generated {len(all_adverts_to_commit)} advertisements')
+
+user_input = input('Are you sure you want to create the advertisements? (y/n)')
+if user_input == 'y':
+    print('Saving advertisements')
+    Advertisement.objects.bulk_create(all_adverts_to_commit)
+    print(f'Advertisements saved!')
+else:
+    print('Aborting')

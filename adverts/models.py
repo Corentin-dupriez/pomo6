@@ -21,9 +21,7 @@ class Advertisement(CreatedDateMixin):
         CLEANING = ('CLEANING', 'Cleaning')
         CHILDCARE = ('CHILDCARE', 'Childcare')
         TUTORING = ('TUTORING', 'Tutoring')
-        TRANSPORTATION = ('TRANSPORTATION', 'Transportation')
         PET_CARE = ('PET', 'Pet care')
-        OTHER = ('OTHER', 'Other')
 
 
     title = models.CharField(max_length=100)
@@ -31,8 +29,7 @@ class Advertisement(CreatedDateMixin):
     description = models.TextField(max_length=2000)
 
     category = models.CharField(max_length=100,
-                                choices=CategoryChoices.choices,
-                                default=CategoryChoices.OTHER)
+                                choices=CategoryChoices.choices,)
 
     slug = models.SlugField(blank=True,
                             max_length=200,)
