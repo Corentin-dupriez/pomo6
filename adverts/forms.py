@@ -62,13 +62,13 @@ class RatingResponseForm(forms.ModelForm):
         fields = ['comment']
         labels = {'comment': ''}
 
-class OrderForm(forms.ModelForm):
+class BaseOrderForm(forms.ModelForm):
     class Meta:
         model = Order
         fields = ['amount', 'description']
 
+class OrderForm(BaseOrderForm):
     def __init__(self, *args, **kwargs) -> None:
-        print(kwargs)
         self.user = kwargs.pop('user', None)
         self.advert_id = kwargs.pop('advert_id', None)
         self.thread_id = kwargs.pop('thread_id', None)
@@ -83,3 +83,6 @@ class OrderForm(forms.ModelForm):
         if commit:
             obj.save()
         return obj
+
+class UpdateOrderForm(BaseOrderForm):
+    pass

@@ -9,12 +9,13 @@ from django.db.models import Q, Avg, Count, ExpressionWrapper, FloatField, Query
 from django.core.paginator import Paginator
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, FormView, DeleteView
-from adverts.forms import AdvertForm, SearchForm, RatingResponseForm, OrderForm
+from adverts.forms import AdvertForm, SearchForm, RatingResponseForm, OrderForm, UpdateOrderForm
 from adverts.models import Advertisement, Views, Ratings, Order
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import status, generics
 
+from adverts.serializers import OrderUpdateSerializer
 from chat.models import Thread
 
 #import model and vectorizer required for API
@@ -260,11 +261,25 @@ class CreateOrderView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         kwargs['thread_id'] = Thread.objects.filter(participants=self.request.user, advert=self.kwargs.get('pk')).first().id
         return kwargs
 
-
     def test_func(self):
         advert = get_object_or_404(Advertisement, pk=self.kwargs.get('pk'))
         return advert.user == self.request.user
 
+class UpdateOrderView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+    model = Order
+    form_class = UpdateOrderForm
+    template_name = 'orders/new_order.html'
+
+    def test_func(self):
+        offer = get_object_or_404(Order, pk=self.kwargs.get('pk'))
+        return offer.user == self.request.user
+
+    def get_initial(self) -> dict:
+        object = get_object_or_404(Order, pk=self.kwargs.get('pk'))
+        return object.__dict__
+
+    def get_success_url(self) -> str:
+        return reverse_lazy('order_detail', kwargs={'pk': self.kwargs.get('pk')})
 
 class OrderDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = Order
@@ -285,3 +300,17 @@ class PredictCategoryView(APIView):
         predicted_category = model.predict(title_vec)[0]
 
         return Response({'predicted_category': predicted_category}, status=status.HTTP_200_OK)
+
+class UpdateOrderStatusView(generics.UpdateAPIView):
+    model = Order
+    serializer_class = OrderUpdateSerializer
+    queryset = Order.objects.all()
+
+    def patch(self, request, *args, **kwargs):
+        order = self.get_object()
+        serializer = self.get_serializer(instance=order,
+                                         data=request.
+                                         data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({'status': 'success'}, status=status.HTTP_200_OK)

@@ -3,26 +3,86 @@
 {% block content %}
     <div class="offer-container">
         <div class="offer-status">
+        {% if order.status != 'REJECTED' %}
             <ul>
                 <li {% if order.status == 'CREATED' %}class="active-status" {% endif %}>Created</li>
                 <li {% if order.status == 'APPROVED' %}class="active-status" {% endif %}>Accepted</li>
                 <li {% if order.status == 'COMPLETED' %}class="active-status" {% endif %}>Completed</li>
             </ul>
+        {% else %}
+            <ul>
+                <li class="active-status">Cancelled</li>
+            </ul>
+        {% endif %}
         </div>
         <div class="offer-info">
             <h1 class="text">{{ order.advertisement.title }}</h1>
             <h2 class="text">Offer:</h2>
-            <p class="text">Amount: {{ order.amount }}</p>
+            <p class="text"><b>Amount:</b> {{ order.amount }}</p>
             <p class="text">{{ order.description }}</p>
         </div>
     <div class="action-buttons">
         {% if request.user != order.advertisement.user and order.status == 'CREATED'%}
-            <button class="primary-btn">Accept</button>
-            <button class="secondary-btn">Request change</button>
-        {% elif request.user == order.advertisement.user and order.status != 'COMPLETED'%}
-            <button class="primary-btn">Modify</button>
-            <button class="secondary-btn">Cancel</button>
+            <button class="primary-btn" id="approve-btn">Accept</button>
+        {% elif request.user == order.advertisement.user and order.status == 'CREATED'%}
+            <a class="primary-btn" href="{% url 'order_update' order.pk %}">
+                <p class="primary-btn-text">Modify</p>
+            </a>
+        {% elif request.user == order.advertisement.user and order.status == 'ACCEPTED' %}
+            <button class="primary-btn" id="finish-btn">Finished!</button>
+        {% endif %}
+        {% if request.user == order.advertisement.user and order.status != 'COMPLETED' and order.status != 'REJECTED'%}
+            <button class="secondary-btn" id="reject-btn">Cancel</button>
         {% endif %}
     </div>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const approveBtn = document.getElementById("approve-btn");
+        const rejectBtn = document.getElementById("reject-btn");
+        const finishBtn = document.getElementById("finish-btn")
+
+        if (approveBtn) {
+            approveBtn.addEventListener("click", function (){
+                updateOrderStatus({{order.pk}}, "APPROVED");
+            });
+        }
+        if (rejectBtn) {
+            rejectBtn.addEventListener("click", function (){
+                updateOrderStatus({{ order.pk }}, "REJECTED");
+            })
+        }
+        if (finishBtn) {
+            finishBtn.addEventListener("click", function () {
+                updateOrderStatus({{ order.pk }}, "COMPLETED");
+            })
+        }
+    });
+
+    function updateOrderStatus(orderId, newStatus) {
+        fetch(`/adverts/api/orders/${orderId}/update-status/`, {
+            method: "PATCH",
+            headers: {
+                "Content-type": "application/json",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: JSON.stringify({status: newStatus})
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === "success") {
+                    window.location.reload();
+                } else {
+                    alert("Error updating the status")
+                }
+            })
+         .catch(error => {
+            console.error("Error updating order:", error);
+            alert("An error occurred");
+        });
+    };
+    </script>
 {% endblock %}
