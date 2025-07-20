@@ -5,30 +5,60 @@
 {% block content %}
     <form method="post" enctype="multipart/form-data">
         <div class="new-add-form">
-            <h2>Create a new listing</h2>
+            {% if not update_listing %}
+                <h2>Create a new listing</h2>
+            {% else %}
+                <h2>Update your listing</h2>
+            {% endif %}
             <div class="add-form-fields">
                 {% csrf_token %}
-                {{ form.title.label_tag }}
-                {{form.title}}
-                {{ form.category.label_tag }}
-                {{ form.category }}
-                {{ form.description.label_tag }}
-                {{ form.description }}
-                {{ form.image.label_tag }}
-                {{ form.image }}
-                {{ form.is_fixed_price.label_tag }}
-                {{ form.is_fixed_price }}
+
+                <div>
+                    {{ form.title.label_tag }}
+                    {{form.title}}
+                    {{ form.title.errors }}
+                </div>
+
+                <div>
+                    {{ form.category.label_tag }}
+                    {{ form.category }}
+                    {{ form.category.errors }}
+                </div>
+
+                <div>
+                    {{ form.description.label_tag }}
+                    {{ form.description }}
+                    {{ form.description.errors }}
+                </div>
+
+                <div>
+                    {{ form.image.label_tag }}
+                    {{ form.image }}
+                    {{ form.image.errors }}
+                </div>
+
+                <div>
+                    {{ form.is_fixed_price.label_tag }}
+                    {{ form.is_fixed_price }}
+                    {{ form.is_fixed_price.errors }}
+                </div>
+
                 <div id="fixed-price-field">
                     {{ form.fixed_price.label_tag }}
                     {{ form.fixed_price }}
+                    {{ form.fixed_price.errors }}
                 </div>
+
                 <div id="range-price-field">
                     {{ form.min_price.label_tag }}
                     {{ form.min_price }}
+                    {{ form.min_price.errors }}
                     {{ form.max_price.label_tag }}
                     {{ form.max_price }}
+                    {{ form.max_price.errors }}
                 </div>
             </div>
+
             <button type="submit" class="form-button submit-form-button">Submit</button>
             <button type="reset" class="form-button reset-form-button">Reset</button>
         </div>

@@ -1,7 +1,7 @@
 from django.urls import path, include
 
 from adverts import views
-from adverts.views import PredictCategoryView, CreateOrderView, UpdateOrderStatusView
+from adverts.views import PredictCategoryView, CreateOrderView, UpdateOrderStatusView, ApproveListingView
 
 urlpatterns = [
     path('search/', views.ResultsView.as_view(), name='search_view'),
@@ -21,5 +21,8 @@ urlpatterns = [
     path('api/', include([
         path('predict-category/', PredictCategoryView.as_view(), name='predict_category'),
         path('orders/<int:pk>/update-status/', UpdateOrderStatusView.as_view(), name='update_order_status'),
+        path('<int:pk>/', include([
+            path('approve/', ApproveListingView.as_view(), name='approve_order'),
+        ]))
     ])),
 ]

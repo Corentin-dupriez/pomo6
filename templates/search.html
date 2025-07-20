@@ -58,7 +58,7 @@ Ads search
                 </div>
                 <p class="advert-description text">{{ advert.description }}</p>
             {% if not advert.approved and request.user.is_superuser and to_approve %}
-                <button class="primary-btn">Approve listing</button>
+                <button class="primary-btn approve-btn" data-advert-id="{{ advert.id }}">Approve listing</button>
             {% endif %}
             </div>
         {% endfor %}
@@ -121,9 +121,6 @@ Ads search
         maxRatingInput.dispatchEvent(new Event('change', { bubbles: true }));
     });
 
-    </script>
-
-    <script>
         const priceSlider = document.getElementById('price-slider');
         const minInput = document.getElementById('min-price');
         const maxInput = document.getElementById('max-price');
@@ -156,9 +153,7 @@ Ads search
         minInput.dispatchEvent(new Event('change', { bubbles: true }));
         maxInput.dispatchEvent(new Event('change', { bubbles: true }));
         });
-    </script>
 
-    <script>
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.querySelector('.search-form');
 
@@ -169,6 +164,35 @@ Ads search
                 });
             });
         });
+
+        const approveBtns = document.querySelectorAll(".approve-btn");
+        if (approveBtns) {
+            approveBtns.forEach(button => {
+                button.addEventListener("click", function () {
+                    const listingId = button.dataset.advertId
+                    fetch(`/adverts/api/${listingId}/approve/`, {
+                        method: "PATCH",
+                        headers: {
+                            "content-type": "application/json",
+                            "X-CSRFToken": "{{ csrf_token }}"
+                        },
+                        body: JSON.stringify({approved: true})
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.status === "success") {
+                                window.location.reload()
+                            } else {
+                                alert("Error approving the advert")
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error updating order:", error);
+                            alert("An error occurred");
+                        });
+                });
+            })
+        };
     </script>
 
 {% endblock %}

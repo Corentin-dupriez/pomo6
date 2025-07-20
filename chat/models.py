@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth import get_user_model
+from django.urls import reverse
+
 
 class Thread(models.Model):
     participants = models.ManyToManyField(get_user_model(),
@@ -10,6 +12,10 @@ class Thread(models.Model):
     advert = models.ForeignKey(to='adverts.Advertisement',
                                   on_delete=models.CASCADE,
                                   related_name='threads')
+
+    def get_absolute_url(self):
+        return reverse('thread-detail',
+                       kwargs={'pk': self.pk})
 
 
     def __str__(self):

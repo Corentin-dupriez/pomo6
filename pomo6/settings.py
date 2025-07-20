@@ -36,7 +36,8 @@ PROJECT_APPS = ['adverts',
                 'common',
                 'chat',
                 'channels',
-                'accounts',]
+                'accounts',
+                'notifications',]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -79,6 +80,15 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'pomo6.wsgi.application'
 ASGI_APPLICATION = 'pomo6.asgi.application'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    )
+}
 
 LOGIN_REDIRECT_URL = reverse_lazy('home')
 LOGOUT_REDIRECT_URL = reverse_lazy('home')

@@ -15,8 +15,10 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, generics
 
-from adverts.serializers import OrderUpdateSerializer
+from adverts.permissions import IsOrderOwnerOrClient
+from adverts.serializers import OrderUpdateSerializer, ListingUpdateSerializer
 from chat.models import Thread
+from common import permissions
 
 #import model and vectorizer required for API
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -246,8 +248,21 @@ class ListingUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     template_name = 'adverts/new-listing.html'
     success_url = reverse_lazy('home')
 
+    def get_form_kwargs(self) -> dict:
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def get_context_data(self, *, object_list=..., **kwargs) -> dict:
+        ctx = super().get_context_data(**kwargs)
+        #Used to change the heading of the page from 'Create a new listing' to 'Update a listing'
+        ctx['update_listing'] = True
+        return ctx
+
+
     def test_func(self):
-        return self.get_object().user == self.request.user
+        obj = self.get_object()
+        return obj.user == self.request.user
 
 class CreateOrderView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
     model = Order
@@ -306,12 +321,28 @@ class UpdateOrderStatusView(generics.UpdateAPIView):
     model = Order
     serializer_class = OrderUpdateSerializer
     queryset = Order.objects.all()
+    permission_classes = (IsOrderOwnerOrClient,)
 
     def patch(self, request, *args, **kwargs):
         order = self.get_object()
         serializer = self.get_serializer(instance=order,
-                                         data=request.
-                                         data, partial=True)
+                                         data=request.data,
+                                         partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({'status': 'success'}, status=status.HTTP_200_OK)
+
+class ApproveListingView(generics.UpdateAPIView):
+    model = Advertisement
+    serializer_class = ListingUpdateSerializer
+    queryset = Advertisement.objects.all()
+    permission_classes = (permissions.IsStaff,)
+
+    def patch(self, request, *args, **kwargs):
+        listing = self.get_object()
+        serializer = self.get_serializer(instance=listing,
+                                         data=request.data,
+                                         partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({'status': 'success'}, status=status.HTTP_200_OK)

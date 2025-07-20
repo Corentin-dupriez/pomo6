@@ -10,10 +10,35 @@ Django.
 
 ## App structure 
 The app is composed of several components: 
-- pomo6: containing the home page 
-- adverts: containing forms, views and methods 
-for advert search, visualisation, modification ... 
-- profiles: same as adverts, but for user profiles 
+- **pomo6**: containing the home page, settings and URLs
+- **accounts**: contains no models, only register view and URLs
+for login, logout and register. 
+There's no specific model for users, we use the standard 
+user model.
+- **adverts**: containing forms, views and methods 
+for advert search, visualisation, modification. It also contains 
+models for views, ratings and orders. The script categories_model
+also allows for the generation of an ML model to propose categories
+on the FE to the user based on the title of the advert they are creating
+- **profiles**: contains views and models for user profiles
+- chat: app that allows real-time chat using websockets. It contains
+the models for threads and messages, as well as channels consumers 
+and routing.
+- **ml_model**: contains the exported model and vectorizer from categories_model
+- **populate_db**: a script that allows filling the DB with random values
+
+## User journey
+Upon arriving on the home page, the user has several choices:
+- register
+- login
+- search as a guest
+
+If the user decides to navigate as a guest, their functionality will
+be reduced. They can visualize listings, but have to log in to do anything 
+else (contact sellers, post a listing ...).
+
+If the user doesn't have an account yet, they can use the register button
+to create one. Otherwise, they can log in.
 
 ## Learning journey 
 The goal of the project is just to get 

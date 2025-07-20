@@ -5,6 +5,7 @@ from django.contrib.auth import get_user_model
 from django.core.files.base import ContentFile
 from django.core.validators import FileExtensionValidator
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 from django.utils.text import slugify
 from adverts.mixins import CreatedDateMixin
@@ -82,6 +83,10 @@ class Advertisement(CreatedDateMixin):
 
     def approve_listings(self) -> None:
         self.approved = True
+
+    def get_absolute_url(self) -> str:
+        return reverse('advert_view', kwargs={'id': self.pk,
+                                              'slug': self.slug})
 
     def __str__(self) -> str:
         return self.title
