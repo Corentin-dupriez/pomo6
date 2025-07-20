@@ -2,6 +2,7 @@ import json
 import os
 import joblib
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models.functions import Coalesce, TruncDate
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
@@ -232,11 +233,12 @@ class ListingsToApproveView(UserPassesTestMixin, LoginRequiredMixin, BaseResults
         return queryset
 
 
-class ListingCreateView(LoginRequiredMixin, CreateView):
+class ListingCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Advertisement
     form_class = AdvertForm
     template_name = 'adverts/new-listing.html'
     success_url = reverse_lazy('home')
+    success_message = "Advert created successfully"
 
     def get_form_kwargs(self) -> dict:
         kwargs = super().get_form_kwargs()
@@ -244,11 +246,12 @@ class ListingCreateView(LoginRequiredMixin, CreateView):
         return kwargs
 
 
-class ListingUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
+class ListingUpdateView(UserPassesTestMixin, SuccessMessageMixin, LoginRequiredMixin, UpdateView):
     model = Advertisement
     form_class = AdvertForm
     template_name = 'adverts/new-listing.html'
     success_url = reverse_lazy('home')
+    success_message = "Advert updated successfully"
 
     def get_form_kwargs(self) -> dict:
         kwargs = super().get_form_kwargs()
@@ -261,16 +264,16 @@ class ListingUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         ctx['update_listing'] = True
         return ctx
 
-
     def test_func(self):
         obj = self.get_object()
         return obj.user == self.request.user
 
-class CreateOrderView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
+class CreateOrderView(LoginRequiredMixin, SuccessMessageMixin, UserPassesTestMixin, CreateView):
     model = Order
     form_class = OrderForm
     template_name = 'orders/new_order.html'
     success_url = reverse_lazy('home')
+    success_message = "Order created successfully"
 
     def get_form_kwargs(self) -> dict:
         kwargs = super().get_form_kwargs()
@@ -283,10 +286,11 @@ class CreateOrderView(LoginRequiredMixin, UserPassesTestMixin, CreateView):
         advert = get_object_or_404(Advertisement, pk=self.kwargs.get('pk'))
         return advert.user == self.request.user
 
-class UpdateOrderView(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
+class UpdateOrderView(LoginRequiredMixin, SuccessMessageMixin, UserPassesTestMixin, UpdateView):
     model = Order
     form_class = UpdateOrderForm
     template_name = 'orders/new_order.html'
+    success_message = 'Order updated successfully'
 
     def test_func(self):
         offer = get_object_or_404(Order, pk=self.kwargs.get('pk'))

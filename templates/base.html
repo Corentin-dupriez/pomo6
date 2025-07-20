@@ -15,6 +15,13 @@
                 {% include 'nav.html' %}
             </header>
             <main class="content">
+            {% if messages %}
+                <ul class="django-messages">
+                {% for message in messages %}
+                    <li id="message-container" class="message message{% if message.tags %}-{{ message.tags }}{% endif %}">{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
                 {% block content %}{% endblock %}
             </main>
             <footer>
@@ -22,6 +29,14 @@
             </footer>
         </div>
 
+        <script>
+            const messageElement = document.getElementById("message-container");
+            if (messageElement) {
+                setTimeout(function () {
+                    messageElement.style.display = "none";
+                }, 3000);
+            }
+        </script>
     {% block scripts %}{% endblock %}
     </body>
 </html>

@@ -154,3 +154,27 @@ select {
     align-items: center;
     display: flex;
 }
+
+.django-messages {
+    position: fixed;
+    top: 70px;
+    right: 20px;
+    z-index: 9999;
+    list-style: none;
+}
+
+.message {
+    margin-bottom: 10px;
+    padding: 10px 15px;
+    border-radius: 4px;
+    color: white;
+    font-weight: bold;
+}
+
+.message-success {
+    background-color: #4CB944;
+}
+
+.message-error {
+    background-color: #B7432E;
+}
