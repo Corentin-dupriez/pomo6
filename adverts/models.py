@@ -85,7 +85,7 @@ class Advertisement(CreatedDateMixin):
         self.approved = True
 
     def get_absolute_url(self) -> str:
-        return reverse('advert_view', kwargs={'id': self.pk,
+        return reverse('advert_view', kwargs={'pk': self.pk,
                                               'slug': self.slug})
 
     def __str__(self) -> str:
@@ -133,6 +133,9 @@ class Order(CreatedDateMixin):
 
 
 class Ratings(CreatedDateMixin):
+    class Meta:
+        verbose_name_plural = 'Ratings'
+
     order = models.ForeignKey(Order,
                               on_delete=models.CASCADE,
                               related_name='ratings')
