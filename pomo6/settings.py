@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'daphne',
     'django.contrib.staticfiles',
     'pomo6',
+    'drf_spectacular'
 ] + PROJECT_APPS
 
 MIDDLEWARE = [
@@ -87,7 +88,15 @@ REST_FRAMEWORK = {
     ),
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
-    )
+    ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema'
+}
+
+DRF_SPECTACULAR_SETTINGS = {
+    'APP_LABEL': 'pomo6',
+    'DESCRIPTION': 'Pomo6 API',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
 }
 
 LOGIN_REDIRECT_URL = reverse_lazy('home')

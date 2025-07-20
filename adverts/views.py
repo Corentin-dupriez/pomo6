@@ -9,6 +9,8 @@ from django.db.models import Q, Avg, Count, ExpressionWrapper, FloatField, Query
 from django.core.paginator import Paginator
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, FormView, DeleteView
+from drf_spectacular.utils import extend_schema
+
 from adverts.forms import AdvertForm, SearchForm, RatingResponseForm, OrderForm, UpdateOrderForm
 from adverts.models import Advertisement, Views, Ratings, Order
 from rest_framework.views import APIView
@@ -16,7 +18,7 @@ from rest_framework.response import Response
 from rest_framework import status, generics
 
 from adverts.permissions import IsOrderOwnerOrClient
-from adverts.serializers import OrderUpdateSerializer, ListingUpdateSerializer
+from adverts.serializers import OrderUpdateSerializer, ListingUpdateSerializer, PredictCategorySerializer
 from chat.models import Thread
 from common import permissions
 
@@ -306,6 +308,10 @@ class OrderDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         return order.user == self.request.user or order.advertisement.user == self.request.user
 
 class PredictCategoryView(APIView):
+    @extend_schema(
+        request=PredictCategorySerializer,
+    )
+
     def post(self, request, *args, **kwargs):
         title = request.data.get('title', '')
 
@@ -322,6 +328,7 @@ class UpdateOrderStatusView(generics.UpdateAPIView):
     serializer_class = OrderUpdateSerializer
     queryset = Order.objects.all()
     permission_classes = (IsOrderOwnerOrClient,)
+    http_method_names = ['patch']
 
     def patch(self, request, *args, **kwargs):
         order = self.get_object()
@@ -337,6 +344,7 @@ class ApproveListingView(generics.UpdateAPIView):
     serializer_class = ListingUpdateSerializer
     queryset = Advertisement.objects.all()
     permission_classes = (permissions.IsStaff,)
+    http_method_names = ['patch']
 
     def patch(self, request, *args, **kwargs):
         listing = self.get_object()

@@ -12,3 +12,6 @@ class ListingUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Advertisement
         fields = ['approved']
+
+class PredictCategorySerializer(serializers.Serializer):
+    title = serializers.CharField()

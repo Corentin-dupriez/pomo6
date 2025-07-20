@@ -40,6 +40,23 @@ else (contact sellers, post a listing ...).
 If the user doesn't have an account yet, they can use the register button
 to create one. Otherwise, they can log in.
 
+## Requirements 
+- The application must have at least 10 web pages 
+- At least 5 pages must use CBV
+- The application must have at least 5 independent models
+- The application must have at least 5 forms 
+- The application must have at least 5 templates 
+- Have a public part 
+- Login/register/logout functionality
+- Private part 
+- Customized admin site with at least 5 custom options
+- Unauthenticated users have only get permissions and post on login/register
+- Authenticated users have CRUD access to their content
+- 2 groups of admins: One with full CRUD (superuser) and one with limited CRUD (staff)
+- User roles managed from admin site 
+- Role management secure and error safe 
+- Error handling and data validation to avoid crash 
+
 ## Learning journey 
 The goal of the project is just to get 
 better at Django, and try to improve the 

@@ -9,6 +9,7 @@
                 {{ field.errors }}
             {% endfor %}
             <button class="primary-btn" type="submit">Create</button>
+            <a href="{% url 'login' %}">Already have an account? Login here</a>
         </form>
     </div>
 {% endblock %}
