@@ -1,8 +1,4 @@
-import io
-import os.path
-from PIL import Image
 from django.contrib.auth import get_user_model
-from django.core.files.base import ContentFile
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.urls import reverse
@@ -10,6 +6,7 @@ from django.utils import timezone
 from django.utils.text import slugify
 from adverts.mixins import CreatedDateMixin
 from adverts.validators import RatingValidator
+from common.tasks import convert_image_task
 
 UserModel = get_user_model()
 
@@ -68,15 +65,11 @@ class Advertisement(CreatedDateMixin):
         if not self.slug:
             self.slug = slugify(self.title)
 
-        if self.image:
-            img = Image.open(self.image)
-            img = img.convert('RGB')
-            buffer = io.BytesIO()
-            img.save(buffer, format='webp')
-            filename = os.path.splitext(self.image.name)[0] + '.webp'
-            self.image.save(filename, ContentFile(buffer.getvalue()), save=False)
-
         super().save(*args, **kwargs)
+
+        if self.image and not self.image.name.lower().endswith('.webp'):
+            convert_image_task.delay(self._meta.app_label, self.__class__.__name__, self.id, 'image')
+
 
     def increase_views(self) -> None:
         Views.objects.create(advertisement=self, view_date=timezone.now())
