@@ -1,12 +1,12 @@
 from django.contrib.auth import login
-from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views.generic import CreateView
+from accounts.forms import CustomUserCreationForm
 
 
 class RegisterView(CreateView):
     template_name = 'registration/register.html'
-    form_class = UserCreationForm
+    form_class = CustomUserCreationForm
 
     def get_success_url(self):
         return reverse_lazy('profile-edit', kwargs={'pk': self.object.pk})
