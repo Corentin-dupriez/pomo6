@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="results">
+    {% for notification in notifications %}
+        <div class="result">
+            <a href="{{ notification.url }}"><p>{{ notification }}</p></a>
+            <button class="primary-btn approve-btn">Mark as read</button>
+        </div>
+    {% endfor %}
+    </div>
+{% endblock %}

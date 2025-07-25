@@ -16,7 +16,7 @@ class Notification(models.Model):
     url = models.URLField()
 
     def __str__(self):
-        return self.text[:30]
+        return self.text
 
     def mark_as_read(self):
         self.read = True

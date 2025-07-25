@@ -7,3 +7,4 @@ class AdvertsConfig(AppConfig):
 
     def ready(self):
         import notifications.signals
+        import adverts.signals

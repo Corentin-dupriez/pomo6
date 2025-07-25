@@ -5,6 +5,8 @@ UserModel = get_user_model()
 
 
 class CustomUserCreationForm(UserCreationForm):
+    #When the user form is saved, and the user is created,
+    #a signal will create an empty profile for the user
     class Meta(UserCreationForm.Meta):
         model = UserModel
         fields = ('username', 'email', 'password1', 'password2')

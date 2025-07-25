@@ -1,10 +1,8 @@
 from celery import shared_task
 from django.apps import apps
 import os
-
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
-
 from common.utils import convert_to_webp
 
 
