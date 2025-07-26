@@ -13,7 +13,7 @@
     <div class="results">
     {% for notification in notifications %}
         <div style="display: flex" class="result">
-            <a style='width: 100%'href="{{ notification.url }}"><p>{{ notification }}</p></a>
+            <a class="notification-link" data-notification-id="{{ notification.pk }}" style='width: 100%'href="{{ notification.url }}"><p>{{ notification }}</p></a>
             <button data-notification-id="{{ notification.pk }}" class="primary-btn approve-btn read-btn">Mark as read</button>
         </div>
     {% endfor %}
@@ -50,13 +50,8 @@ function showKOToast() {
     }, 3000);
 }
 
-const readBtns = document.querySelectorAll(".read-btn");
-
-if (readBtns) {
-    readBtns.forEach(button => {
-        button.addEventListener("click", function () {
-            const notifId = button.dataset.notificationId;
-            fetch(`/notifications/api/${notifId}/read/`, {
+function MarkNotificationAsRead(notifId) {
+    return fetch(`/notifications/api/${notifId}/read/`, {
                 method: "PATCH",
                 headers: {
                     "content-type": "application/json",
@@ -65,6 +60,17 @@ if (readBtns) {
                 body: JSON.stringify({read: true})
             })
                 .then(response => response.json())
+}
+
+const readBtns = document.querySelectorAll(".read-btn");
+const notifLinks = document.querySelectorAll(".notification-link");
+
+if (readBtns) {
+    readBtns.forEach(button => {
+        button.addEventListener("click", function () {
+            const notifId = button.dataset.notificationId;
+
+            MarkNotificationAsRead(notifId)
                 .then(data => {
                     if (data.status === "success") {
                         showOKToast();
@@ -79,5 +85,26 @@ if (readBtns) {
         })
     })
     };
+
+if (notifLinks) {
+    notifLinks.forEach(link => {
+        link.addEventListener("click", function (event){
+            event.preventDefault();
+            const notifId = link.dataset.notificationId;
+            const notifUrl = link.getAttribute("href");
+
+            MarkNotificationAsRead(notifId)
+                .then(data => {
+                    if (data.status === "success") {
+                        window.location.href = notifUrl;
+                    } else {
+                        showKOToast();
+                    }
+                })
+                .catch(() => showOKToast());
+        });
+    });
+};
+
 </script>
 {% endblock %}

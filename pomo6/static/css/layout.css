@@ -1,13 +1,10 @@
 html,
 body{
-    margin: 0 auto;
+    margin: 0;
     font-family: Arial, sans-serif;
     max-width: 1900px;
     width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
+    height: 100%;
 }
 
 .page-container {
@@ -22,5 +19,15 @@ body{
     width: 100%;
     display: flex;
     flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+.pagination{
+    display: flex;
+    justify-content: center;
+    gap: 1em;
 }
 

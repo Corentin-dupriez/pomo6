@@ -54,15 +54,10 @@
     min-width: 150px;
 }
 
-.pagination{
-    display: flex;
-    justify-content: center;
-    gap: 1em;
-}
-
 .results {
     display: flex;
     flex-direction: column;
+    flex: 1;
 }
 
 .result{
