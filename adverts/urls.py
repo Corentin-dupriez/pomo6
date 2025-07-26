@@ -25,4 +25,5 @@ urlpatterns = [
             path('approve/', ApproveListingView.as_view(), name='approve_order'),
         ]))
     ])),
+    path('my-orders/', views.MyOrderListView.as_view(), name='my_orders'),
 ]

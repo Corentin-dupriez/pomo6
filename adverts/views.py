@@ -113,6 +113,8 @@ class BaseResultsView(ListView):
         })
         return context
 
+
+#SEARCH VIEW
 class ResultsView(BaseResultsView):
     #Get the queryset of the base view, and filter it to return only approved and not archived listings
     #This view is used to display search results on the search page
@@ -121,7 +123,7 @@ class ResultsView(BaseResultsView):
         query = query.filter(approved=True, archived=False)
         return query
 
-
+# LISTINGS-BASED VIEWS
 class ListingView(DetailView, FormView):
     model = Advertisement
     form_class = RatingResponseForm
@@ -265,6 +267,14 @@ class ListingUpdateView(UserPassesTestMixin, SuccessMessageMixin, LoginRequiredM
     def test_func(self):
         obj = self.get_object()
         return obj.user == self.request.user
+
+# ORDERS-BASED VIEWS
+class MyOrderListView(LoginRequiredMixin, ListView):
+    model = Order
+    template_name = 'orders/orders-list.html'
+
+    def get_queryset(self) -> QuerySet:
+        return self.model.objects.filter(user=self.request.user)
 
 class CreateOrderView(LoginRequiredMixin, SuccessMessageMixin, UserPassesTestMixin, CreateView):
     model = Order

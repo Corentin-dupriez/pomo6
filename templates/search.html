@@ -15,8 +15,8 @@ Ads search
 
 {% block content %}
     <!-- Search bar -->
-    {#  The search bar is hidden when the template is loaded from the my_listings view  #}
-    {% if not my_listings %}
+    {#  The search bar is hidden when the template is loaded from the my_listings and to_approve views  #}
+    {% if not my_listings and not to_approve%}
     <div class="search-div">
         <form method="get" action="{% url 'search_view' %}" class="search-form">
             {#  form contains the searh criteria, except slider for rating and price #}

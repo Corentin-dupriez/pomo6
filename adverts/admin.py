@@ -7,7 +7,7 @@ from adverts.models import Advertisement, Order, Ratings, RatingResponse
 @admin.register(Advertisement)
 class AdvertisementAdmin(admin.ModelAdmin):
     list_display = ('title', 'category', 'created')
-    search_fields = ('title', 'category')
+    search_fields = ('title', 'category', 'user__username')
     list_filter = ('approved', 'archived', 'category')
 
 @admin.register(Order)

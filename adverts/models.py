@@ -7,11 +7,14 @@ from django.utils.text import slugify
 from adverts.mixins import CreatedDateMixin
 from adverts.validators import RatingValidator
 from common.tasks import convert_image_task
+import datetime
 
 UserModel = get_user_model()
 
 
 class Advertisement(CreatedDateMixin):
+
+    #When an advert is approved, a signal is sent to inform the user
 
     class CategoryChoices(models.TextChoices):
         IT_HELP = ('IT', 'IT Help')
@@ -122,7 +125,7 @@ class Order(CreatedDateMixin):
                                     blank=True)
 
     def __str__(self) -> str:
-        return f'Order for {self.advertisement} made on {self.created}'
+        return f'Order for {self.advertisement} made on {self.created.strftime("%b %d %y")}'
 
 
 class Ratings(CreatedDateMixin):
