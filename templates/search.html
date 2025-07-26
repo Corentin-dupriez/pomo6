@@ -1,17 +1,28 @@
 {% extends 'base.html' %}
 {% load round %}
+
+<!-- Title -->
 {% block title %}
 Ads search
 {% endblock %}
+
+<!-- Header -->
 {% block head %}
     <!-- noUiSlider CSS -->
     <link href="https://cdn.jsdelivr.net/npm/nouislider@15.7.0/dist/nouislider.min.css" rel="stylesheet">
 {% endblock %}
+
+
 {% block content %}
+    <!-- Search bar -->
+    {#  The search bar is hidden when the template is loaded from the my_listings view  #}
     {% if not my_listings %}
     <div class="search-div">
         <form method="get" action="{% url 'search_view' %}" class="search-form">
+            {#  form contains the searh criteria, except slider for rating and price #}
             {{ form }}
+
+            {#  Rating slider  #}
             <div class="form-group slider-group">
                 <label for="rating-slider" class="rating-label">Rating:</label>
                 <div class="slider-wrapper">
@@ -21,6 +32,8 @@ Ads search
                     <input type="hidden" id="max-rating" name="max_rating" value="{{ max_rating }}">
                 </div>
             </div>
+
+            {#  Price slider #}
             <div class="form-group slider-group">
                 <label for="price-slider" class="price-label">Price:</label>
                 <div class="slider-wrapper">
@@ -33,8 +46,13 @@ Ads search
         </form>
     </div>
     {% endif %}
+
+    {#  Results of the search  #}
     <div class="results">
+
         {% for advert in advertisement_list %}
+
+            {# Result block #}
             <div class="result">
                 <div class="listing-header">
                     {% if not advert.image %}
@@ -62,6 +80,7 @@ Ads search
             {% endif %}
             </div>
         {% endfor %}
+
     </div>
     {% with params="query="|add:query|add:"&category="|add:category %}
         <div class="pagination">

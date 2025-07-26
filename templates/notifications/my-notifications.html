@@ -1,12 +1,83 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+    <ul class="django-messages">
+        <li id="success-toast" style="display: none" class="message message-success">Marked as read</li>
+    </ul>
+
+    <ul class="django-messages">
+        <li id="fail-toast" style="display: none" class="message message-error">Error marking as read</li>
+    </ul>
+
     <div class="results">
     {% for notification in notifications %}
-        <div class="result">
-            <a href="{{ notification.url }}"><p>{{ notification }}</p></a>
-            <button class="primary-btn approve-btn">Mark as read</button>
+        <div style="display: flex" class="result">
+            <a style='width: 100%'href="{{ notification.url }}"><p>{{ notification }}</p></a>
+            <button data-notification-id="{{ notification.pk }}" class="primary-btn approve-btn read-btn">Mark as read</button>
         </div>
     {% endfor %}
     </div>
+
+    {# Pagination #}
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?{{ params }}&page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+        <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+            <a href="?{{ params }}&page={{ page_obj.next_page_number }}">Next</a>
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+
+function showOKToast() {
+    const toast = document.getElementById("success-toast");
+    toast.style.display = 'block';
+    setTimeout(() => {
+        toast.style.display = 'none';
+    }, 3000);
+}
+
+function showKOToast() {
+    const toast = document.getElementById("fail-toast");
+    toast.style.display = 'block';
+    setTimeout(() => {
+        toast.style.display = 'none';
+    }, 3000);
+}
+
+const readBtns = document.querySelectorAll(".read-btn");
+
+if (readBtns) {
+    readBtns.forEach(button => {
+        button.addEventListener("click", function () {
+            const notifId = button.dataset.notificationId;
+            fetch(`/notifications/api/${notifId}/read/`, {
+                method: "PATCH",
+                headers: {
+                    "content-type": "application/json",
+                    "X-CSRFToken": "{{ csrf_token }}"
+                },
+                body: JSON.stringify({read: true})
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === "success") {
+                        showOKToast();
+                        setTimeout(() => {
+                            window.location.reload();
+                        }, 1500);
+                    } else {
+                        showKOToast();
+                    }
+                    ;
+                });
+        })
+    })
+    };
+</script>
 {% endblock %}

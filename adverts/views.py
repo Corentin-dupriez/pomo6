@@ -11,13 +11,11 @@ from django.core.paginator import Paginator
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, FormView, DeleteView
 from drf_spectacular.utils import extend_schema
-
 from adverts.forms import AdvertForm, SearchForm, RatingResponseForm, OrderForm, UpdateOrderForm
 from adverts.models import Advertisement, Views, Ratings, Order
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, generics
-
 from adverts.permissions import IsOrderOwnerOrClient
 from adverts.serializers import OrderUpdateSerializer, ListingUpdateSerializer, PredictCategorySerializer
 from chat.models import Thread
