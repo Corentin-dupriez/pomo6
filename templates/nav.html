@@ -34,7 +34,8 @@
                         <li><a href="{% url 'profile' request.user.id %}">Profile</a> </li>
                         <li><a href="{% url 'notification-list' %}">My notifications</a></li>
                         <li><a href="{% url 'my_listings' %}">My listings</a> </li>
-                        <li><a href="{% url 'my_orders' %}">My orders</a> </li>
+                        <li><a href="{% url 'my_orders' %}">My orders (buyer)</a> </li>
+                        <li><a href="{% url 'seller_orders' %}">My orders (seller)</a></li>
                         {% if user.is_staff  %}<li><a href="{% url 'to_approve' %}">Approve listings (admin)</a></li>{% endif %}
                         <li><a href="{% url 'logout' %}" onclick="event.preventDefault(); document.getElementById('logout-form').submit() ">Logout</a></li>
                     </ul>

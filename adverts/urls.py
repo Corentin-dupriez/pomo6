@@ -26,4 +26,5 @@ urlpatterns = [
         ]))
     ])),
     path('my-orders/', views.MyOrderListView.as_view(), name='my_orders'),
+    path('seller-orders/', views.MyOrderAsSellerListView.as_view(), name='seller_orders'),
 ]

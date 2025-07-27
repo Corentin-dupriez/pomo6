@@ -277,6 +277,14 @@ class MyOrderListView(LoginRequiredMixin, ListView):
     def get_queryset(self) -> QuerySet:
         return self.model.objects.filter(user=self.request.user)
 
+class MyOrderAsSellerListView(LoginRequiredMixin, ListView):
+    model = Order
+    template_name = 'orders/orders-list.html'
+    paginate_by = 10
+
+    def get_queryset(self) -> QuerySet:
+        return self.model.objects.filter(advertisement__user=self.request.user)
+
 class CreateOrderView(LoginRequiredMixin, SuccessMessageMixin, UserPassesTestMixin, CreateView):
     model = Order
     form_class = OrderForm
@@ -320,6 +328,7 @@ class OrderDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         order = get_object_or_404(Order, pk=self.kwargs.get('pk'))
         return order.user == self.request.user or order.advertisement.user == self.request.user
 
+#API VIEWS
 class PredictCategoryView(APIView):
     @extend_schema(
         request=PredictCategorySerializer,
