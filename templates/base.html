@@ -11,10 +11,13 @@
     </head>
     <body>
         <div class="page-container">
+            {# Nav bar #}
             <header>
                 {% include 'nav.html' %}
             </header>
+
             <main class="content">
+            {# Display Django messages if any #}
             {% if messages %}
                 <ul class="django-messages">
                 {% for message in messages %}
@@ -22,14 +25,17 @@
                 {% endfor %}
                 </ul>
             {% endif %}
+
                 {% block content %}{% endblock %}
             </main>
+
             <footer>
                 {% include 'footer.html' %}
             </footer>
         </div>
 
         <script>
+            {# Script to hide Django messages after 3 seconds  #}
             const messageElement = document.getElementById("message-container");
             if (messageElement) {
                 setTimeout(function () {
@@ -37,6 +43,7 @@
                 }, 3000);
             }
         </script>
+{#  Additional scripts for pages inheriting #}
     {% block scripts %}{% endblock %}
     </body>
 </html>

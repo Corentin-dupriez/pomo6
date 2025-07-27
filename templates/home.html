@@ -8,15 +8,20 @@ Home
 {% endblock %}
     {% block content %}
     <div class="body">
+        {# Hero container #}
         <div class="image_container">
             <img class='home_image' src='{% static 'images/img_home.png' %}' alt='Welcome'>
+
+            {# Search bar and categories #}
             <div class="overlay_content">
                 <h1>I'm looking for...</h1>
                 <form method="get" action="{% url 'search_view' %}">
                     <input id='filter' name="query" class="overlay_input" type="text" placeholder="Some help">
                 </form>
+
+                {# List of categories #}
                 <section class="categories_overlay">
-                <h2>Browse by Category</h2>
+                    <h2>Browse by Category</h2>
                     <div class="categories_grid">
                         <div class="category_card" onclick="goToCategory('IT')">IT Help</div>
                         <div class="category_card" onclick="goToCategory('HANDYMAN')">Handyman</div>
@@ -25,19 +30,28 @@ Home
                         <div class="category_card" onclick="goToCategory('TUTORING')">Tutoring</div>
                         <div class="category_card" onclick="goToCategory('MOVING')">Moving help</div>
                         <div class="category_card" onclick="goToCategory('PET')">Pet care</div>
-                    <!-- add more -->
                     </div>
-            </section>
+
+                </section>
+
             </div>
+
         </div>
+
     </div>
+
     {% endblock %}
+
+
 {% block scripts %}
+
 <script>
+    {#  Function to go to category based on category names  #}
     function goToCategory(category) {
         const baseUrl = "{% url 'search_view' %}";
         const encoded = encodeURIComponent(category);
         window.location.href = `${baseUrl}?category=${encoded}`;
     }
 </script>
+
 {% endblock %}

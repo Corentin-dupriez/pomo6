@@ -54,12 +54,14 @@ Ads search
 
             {# Result block #}
             <div class="result">
+
                 <div class="listing-header">
                     {% if not advert.image %}
                         <img src="https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png">
                     {% else %}
                         <img src="{{ advert.image.url }}">
                     {% endif %}
+
                     <div class="title-and-category">
                         <h4 class="advert_title"><a href="{% url 'advert_view' advert.id advert.slug %}">{{ advert.title|title }}</a></h4>
                         <p class="advert_category">{{ advert.get_category_display|title }}</p>
@@ -73,6 +75,7 @@ Ads search
                             <p>{{ advert.min_price|round }} € - {{ advert.max_price|round }} €</p>
                         {% endif %}
                     </div>
+
                 </div>
                 <p class="advert-description text">{{ advert.description }}</p>
             {% if not advert.approved and request.user.is_superuser and to_approve %}
@@ -82,7 +85,9 @@ Ads search
         {% endfor %}
 
     </div>
+
     {% with params="query="|add:query|add:"&category="|add:category %}
+        {# Not using pagination from file because of custom params #}
         <div class="pagination">
             {% if page_obj.has_previous %}
                 <a href="?{{ params }}&page={{ page_obj.previous_page_number }}">Previous</a>
@@ -92,6 +97,7 @@ Ads search
                 <a href="?{{ params }}&page={{ page_obj.next_page_number }}">Next</a>
             {% endif %}
         </div>
+
     {% endwith %}
 {% endblock %}
 

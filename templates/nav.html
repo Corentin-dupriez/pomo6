@@ -23,6 +23,8 @@
                 <a href="{% url 'profile' request.user.id %}">Profile</a>
                 <a href="{% url 'notification-list' %}">My notifications</a>
                 <a href="{% url 'my_listings' %}">My listings</a>
+                <a href="{% url 'my_orders' %}">My orders (buyer)</a>
+                <a href="{% url 'seller_orders' %}">My orders (seller)</a>
                 {% if user.is_staff %}<a href="{% url 'to_approve' %}">Approve listings (admin)</a>{% endif %}
                 <a href="{% url 'logout' %}">Logout</a>
             </div>
@@ -34,7 +36,7 @@
                         <li><a href="{% url 'profile' request.user.id %}">Profile</a> </li>
                         <li><a href="{% url 'notification-list' %}">My notifications</a></li>
                         <li><a href="{% url 'my_listings' %}">My listings</a> </li>
-                        <li><a href="{% url 'my_orders' %}">My orders (buyer)</a> </li>
+                        <li><a href="{% url 'my_orders' %}">My orders (buyer)</a></li>
                         <li><a href="{% url 'seller_orders' %}">My orders (seller)</a></li>
                         {% if user.is_staff  %}<li><a href="{% url 'to_approve' %}">Approve listings (admin)</a></li>{% endif %}
                         <li><a href="{% url 'logout' %}" onclick="event.preventDefault(); document.getElementById('logout-form').submit() ">Logout</a></li>
@@ -51,6 +53,7 @@
     </form>
 
 <script>
+    {# Show the expanding menu on browser #}
     const menuToggle = document.getElementById('menu-toggle');
     const navLinks = document.getElementById('nav-links');
 
@@ -58,6 +61,7 @@
         navLinks.classList.toggle('active');
     });
 
+    {# Toggle the hamburger menu on mobile #}
     function toggleMobileMenu() {
         const menu = document.getElementById('mobile-menu');
         menu.classList.toggle('mobile-visible')
