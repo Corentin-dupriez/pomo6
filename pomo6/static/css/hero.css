@@ -2,7 +2,7 @@
     position: relative;
     width: 100vw;
     max-width: 1900px;
-    height: auto;
+    height: 100vh;
     overflow: hidden;
     z-index: 1;
 }
@@ -17,8 +17,9 @@
 
 .home_image {
     width: 100%;
-    height: auto;
-    display: block;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
 }
 
 .home_image img {

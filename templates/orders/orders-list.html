@@ -4,8 +4,9 @@
 
     <div class="results">
     {% for order in order_list %}
-        <div class="result">
+        <div class="result" style="grid-template-columns: 5fr 2fr">
             <a href="{% url 'order_detail' order.pk %}"><p>{{ order }}</p></a>
+            <p class="text" style="margin-left: 0; justify-items: left">{{ order.status }}</p>
         </div>
     {% endfor %}
 

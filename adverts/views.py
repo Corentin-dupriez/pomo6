@@ -272,6 +272,7 @@ class ListingUpdateView(UserPassesTestMixin, SuccessMessageMixin, LoginRequiredM
 class MyOrderListView(LoginRequiredMixin, ListView):
     model = Order
     template_name = 'orders/orders-list.html'
+    paginate_by = 10
 
     def get_queryset(self) -> QuerySet:
         return self.model.objects.filter(user=self.request.user)
