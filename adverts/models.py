@@ -90,15 +90,14 @@ class Advertisement(CreatedDateMixin):
 class Order(CreatedDateMixin):
     class StatusChoices(models.TextChoices):
         CREATED = ('CREATED', 'Created')
-        SUBMITTED = ('SUBMITTED', 'Submitted')
         APPROVED = ('APPROVED', 'Approved')
         REJECTED = ('REJECTED', 'Rejected')
-        PROCESSING = ('PROCESSING', 'Processing')
         COMPLETED = ('COMPLETED', 'Completed')
 
     advertisement = models.ForeignKey(to='Advertisement',
                                       on_delete=models.CASCADE,
                                       related_name='orders',)
+
     #orders are created through a thread,
     thread = models.ForeignKey(to='chat.Thread',
                                on_delete=models.CASCADE,

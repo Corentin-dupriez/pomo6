@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
     <div class="offer-container">
+
         <div class="offer-status">
         {% if order.status != 'REJECTED' %}
             <ul>
@@ -15,26 +17,29 @@
             </ul>
         {% endif %}
         </div>
+
         <div class="offer-info">
             <h1 class="text">{{ order.advertisement.title }}</h1>
             <h2 class="text">Offer:</h2>
             <p class="text"><b>Amount:</b> {{ order.amount }}</p>
             <p class="text">{{ order.description }}</p>
         </div>
-    <div class="action-buttons">
-        {% if request.user != order.advertisement.user and order.status == 'CREATED'%}
-            <button class="primary-btn" id="approve-btn">Accept</button>
-        {% elif request.user == order.advertisement.user and order.status == 'CREATED'%}
-            <a class="primary-btn" href="{% url 'order_update' order.pk %}">
-                <p class="primary-btn-text">Modify</p>
-            </a>
-        {% elif request.user == order.advertisement.user and order.status == 'ACCEPTED' %}
-            <button class="primary-btn" id="finish-btn">Finished!</button>
-        {% endif %}
-        {% if request.user == order.advertisement.user and order.status != 'COMPLETED' and order.status != 'REJECTED'%}
-            <button class="secondary-btn" id="reject-btn">Cancel</button>
-        {% endif %}
-    </div>
+
+        <div class="action-buttons">
+            {% if request.user != order.advertisement.user and order.status == 'CREATED'%}
+                <button class="primary-btn" id="approve-btn">Accept</button>
+            {% elif request.user == order.advertisement.user and order.status == 'CREATED'%}
+                <a class="primary-btn" href="{% url 'order_update' order.pk %}">
+                    <p class="primary-btn-text">Modify</p>
+                </a>
+            {% elif request.user == order.advertisement.user and order.status == 'ACCEPTED' %}
+                <button class="primary-btn" id="finish-btn">Finished!</button>
+            {% endif %}
+            {% if request.user == order.advertisement.user and order.status != 'COMPLETED' and order.status != 'REJECTED'%}
+                <button class="secondary-btn" id="reject-btn">Cancel</button>
+            {% endif %}
+        </div>
+
     </div>
 {% endblock %}
 

@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Welcome!</title>
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+            font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+
+        a:link{
+            color: #00BD9D;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        a:visited {
+            color: #00BD9D;
+        }
+
+        .header {
+            background-color: #00BD9D;
+            color: white;
+            padding-left: 10px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+        }
+
+        .content{
+            display: flex;
+            flex-direction: column;
+            margin: auto;
+            align-items: center;
+            background-color: #FAF8F3;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1 style="margin: 0; font-size: 24px;">Pomo6</h1>
+    </div>
+    <div class="content">
+        <h1 style="font-size: 20px;">A new order was created!</h1>
+
+        <p style="font-size: 16px;">Hi {{ username }}!<br> {{ client }} has accepted your offer for the listing {{ listing }}.<br>
+        You can now start working on the offer, or contact the client to let them know.</p>
+
+        <p style="font-size: 16px;">If you have any questions, feel free to reply to this email. We're always happy to help!</p>
+
+        <p style="font-size: 16px;">The Pomo6 Team</p>
+    </div>
+</body>
+</html>
