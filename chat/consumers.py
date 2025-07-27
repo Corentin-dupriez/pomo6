@@ -65,7 +65,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
     @database_sync_to_async
     def get_user(self, user_id):
         try:
-            return User.objects.get(pk=user_id)
+            return User.objects.filter(pk=user_id).first()
         except User.DoesNotExist:
             return None
 

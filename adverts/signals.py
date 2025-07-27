@@ -55,6 +55,7 @@ def send_email_to_user(sender, instance: Order, created, **kwargs):
                 action='order-completed',
                 context={
                     'username': instance.user.username,
+                    'seller': instance.advertisement.user.username,
                     'listing': str(instance.advertisement)
                 }
             )

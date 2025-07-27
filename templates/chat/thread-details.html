@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load other_participant %}
 
 {% block content %}
     <div class="chat-header">
@@ -37,7 +38,9 @@
 
 {% block scripts %}
     <script>
-        const otherUserId = '{{ thread.advert.user.pk }}';
+        {% with thread|other_participant:request.user as other_user%}
+        const otherUserId = '{{other_user}}';
+        {% endwith %}
         const userId = '{{ request.user.username }}';
         const advertId = '{{ thread.advert.pk }}'
         const socket = new WebSocket(`ws://${window.location.host}/ws/chat/${otherUserId}/${advertId}/`);
