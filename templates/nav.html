@@ -7,7 +7,6 @@
             <h1>pomo6</h1>
         </div>
 
-
         {#  Menu shown if unauthenticated user  #}
             {% if not user.is_authenticated %}
             <div class="menu">
@@ -53,7 +52,11 @@
                         {% if user.is_staff  %}<li><a href="{% url 'to_approve' %}">Approve listings (admin)</a></li>{% endif %}
                         <li><a href="{% url 'logout' %}" onclick="event.preventDefault(); document.getElementById('logout-form').submit() ">Logout</a></li>
                     </ul>
-                    <a href="{% url 'thread-list' %}"><img class="nav-button" src="{% static 'images/chat_bubble_24dp_00BD9D_FILL0_wght400_GRAD0_opsz24.svg' %}"></a>
+                    <a href="{% url 'thread-list' %}">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 24 24" fill="#00BD9D">
+                            <path d="M4 4h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H7l-3 3v-3H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z" />
+                        </svg>
+                    </a>
                     <button class="primary-btn" type="button" onclick="location.href='{% url 'create_ad_view' %}'">Add a listing</button>
                 </div>
         {% endif %}

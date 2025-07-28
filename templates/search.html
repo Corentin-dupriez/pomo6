@@ -14,6 +14,16 @@ Ads search
 
 
 {% block content %}
+
+    {% if to_approve %}
+        <ul class="django-messages">
+            <li id="success-toast" style="display: none" class="message message-success">Listing approved!</li>
+        </ul>
+
+        <ul class="django-messages">
+            <li id="fail-toast" style="display: none" class="message message-error">Error approving the listing.</li>
+        </ul>
+    {% endif %}
     <!-- Search bar -->
     {#  The search bar is hidden when the template is loaded from the my_listings and to_approve views  #}
     {% if not my_listings and not to_approve%}
@@ -106,6 +116,9 @@ Ads search
     <script src="https://cdn.jsdelivr.net/npm/nouislider@15.7.0/dist/nouislider.min.js"></script>
 
     <script>
+
+        {% if not my_listings and not to_approve%}
+
         const ratingSlider = document.getElementById('rating-slider');
         const minRatingInput = document.getElementById('min-rating');
         const maxRatingInput = document.getElementById('max-rating');
@@ -190,6 +203,26 @@ Ads search
             });
         });
 
+        {% endif %}
+
+        {% if to_approve %}
+
+            function showOKToast() {
+                const toast = document.getElementById("success-toast");
+                toast.style.display = 'block';
+                setTimeout(() => {
+                    toast.style.display = 'none';
+                }, 3000);
+            }
+
+            function showKOToast() {
+                const toast = document.getElementById("fail-toast");
+                toast.style.display = 'block';
+                setTimeout(() => {
+                    toast.style.display = 'none';
+                }, 3000);
+            }
+
         const approveBtns = document.querySelectorAll(".approve-btn");
         if (approveBtns) {
             approveBtns.forEach(button => {
@@ -208,16 +241,20 @@ Ads search
                             if (data.status === "success") {
                                 window.location.reload()
                             } else {
-                                alert("Error approving the advert")
+                                showOKToast();
+                                setTimeout(() => {
+                            window.location.reload();
+                        }, 1500);
                             }
                         })
                         .catch(error => {
                             console.error("Error updating order:", error);
-                            alert("An error occurred");
+                            showKOToast();
                         });
                 });
             })
         };
+        {% endif %}
     </script>
 
 {% endblock %}

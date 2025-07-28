@@ -26,7 +26,7 @@ class UserProfile(models.Model):
 
     def save(self, *args, **kwargs):
         if self.image and self.image.name.split('.')[-1] != 'webp':
-            convert_image_task.delay(self._meta.app_label, self.__class__.__name__, self.id, 'image')
+            convert_image_task.delay(self._meta.app_label, self.__class__.__name__, self.user_id, 'image')
 
         return super().save(*args, **kwargs)
 
