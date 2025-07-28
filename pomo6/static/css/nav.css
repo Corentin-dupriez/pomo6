@@ -57,6 +57,7 @@
     gap: 0.5rem;
     margin: 1rem;
     flex-wrap: wrap;
+    align-items: center;
 }
 
 .mobile-menu {
