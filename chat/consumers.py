@@ -8,19 +8,9 @@ from asgiref.sync import sync_to_async
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
-        self.user = self.scope['user']
-        self.other_user = self.scope['url_route']['kwargs']['other_user']
-        self.advertisement = self.scope['url_route']['kwargs']['advert_id']
-
-        self.other_user = await self.get_user(self.other_user)
-
-        if not self.user.is_authenticated or not self.other_user:
-            await self.close()
-            return
-
-        self.chat = await self.get_or_create_chat(self.user, self.other_user, advert_id=self.advertisement)
-        self.thread_id = self.chat.id
-        self.room_name = f'chat_{self.chat.id}'
+        self.thread_id = self.scope['url_route']['kwargs']['thread_id']
+        self.chat = await self.get_chat(self.thread_id)
+        self.room_name = f'chat_{self.thread_id}'
 
         await self.channel_layer.group_add(
             self.room_name,
@@ -39,11 +29,12 @@ class ChatConsumer(AsyncWebsocketConsumer):
         if not has_messages:
             await sync_to_async(self.chat.delete)()
 
-
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
         content = text_data_json['content']
         sender_id = self.scope['user'].id
+        sender = await self.get_user(sender_id)
+        sender_name = sender.username
 
         await self.save_message(sender_id, content)
 
@@ -52,13 +43,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
             {
                 'type': 'chat_message',
                 'sender_id': sender_id,
+                'sender_name': sender_name,
                 'content': content
             }
         )
 
     async def chat_message(self, event):
         await self.send(text_data=json.dumps({
-            'sender_id': self.scope['user'].username,
+            'sender_id': event['sender_id'],
+            'sender_name': event['sender_name'],
             'content': event['content']
         }))
 
@@ -70,17 +63,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
             return None
 
     @database_sync_to_async
-    def get_or_create_chat(self, user, other_user, advert_id):
-        chat = (Thread.objects.filter(participants=user)
-                .filter(participants=other_user)
-                .filter(advert=advert_id).first())
-        if chat:
-            return chat
-
-        chat = Thread.objects.create()
-        chat.participants.set([user, other_user])
-        chat.advert = advert_id
-        return chat
+    def get_chat(self, chat_id):
+        return Thread.objects.filter(pk=chat_id).first()
 
     @sync_to_async
     def save_message(self, sender_id, content):
