@@ -1,16 +1,14 @@
-import datetime
-
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
-
-from adverts.models import Advertisement, Order
+from adverts.models import Advertisement
 from chat.models import Thread
 
 UserModel = get_user_model()
 
 class OrderModelTestCase(TestCase):
     def setUp(self):
+        #arrange
         self.user = UserModel.objects.create_user(username='test',
                                                   email='test@test.com',
                                                   password='12test34')
@@ -24,24 +22,18 @@ class OrderModelTestCase(TestCase):
             category=Advertisement.CategoryChoices.IT_HELP,
             fixed_price=100,
         )
+        #act
         self.thread = Thread.objects.create(advert=self.advertisement)
         self.thread.participants.add(self.user,
                                      self.user2,)
-        self.order = Order.objects.create(
-            advertisement=self.advertisement,
-            user=self.user2,
-            thread=self.thread,
-            created=datetime.datetime(2025, 7, 9, 23, 23, 00)
-        )
 
-    def test__order_creation__initiates_default_status_and_amount(self):
-        self.assertEqual(self.order.amount, 0)
-        self.assertEqual(self.order.status, Order.StatusChoices.CREATED)
+    def test__str_thread__returns_usernames_and_advertisement(self):
+        #assert
+        self.assertEqual(str(self.thread),
+                         f'Thread between {' and '.join([user.get_username() for user in self.thread.participants.all()])} '
+                                f'for {self.thread.advert.title}')
 
-    def test__str_order__returns_related_advert_and_creation_date(self):
-        self.assertEqual(str(self.order), f'Order for {self.order.advertisement} made on {self.order.created.strftime("%b %d %y")}')
-
-    def test__advertisement_absolute_url__returns_absolute_url(self):
-        self.assertEqual(self.advertisement.get_absolute_url(), reverse('advert_view',
-                                                                        kwargs={'pk': self.advertisement.id,
-                                                                                'slug': self.advertisement.slug}))
+    def test__thread_get_absolute_url__returns_url(self):
+        #assert
+        self.assertEqual(str(self.thread.get_absolute_url()),
+                         reverse('thread-detail', kwargs={'pk': self.thread.pk}))
