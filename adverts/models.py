@@ -118,7 +118,8 @@ class Order(CreatedDateMixin):
     amount = models.FloatField(default=0)
 
     status = models.CharField(max_length=20,
-                              choices=StatusChoices.choices,)
+                              choices=StatusChoices.choices,
+                              default=StatusChoices.CREATED)
 
     completed_on = models.DateField(null=True,
                                     blank=True)

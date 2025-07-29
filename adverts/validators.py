@@ -2,8 +2,8 @@ from django.core.exceptions import ValidationError
 from django.utils.deconstruct import deconstructible
 
 @deconstructible
-class RatingValidator(object):
-    def __init__(self, message):
+class RatingValidator:
+    def __init__(self, message=None):
         self.message = message
 
     @property
@@ -19,6 +19,7 @@ class RatingValidator(object):
     def __call__(self, value):
         if not 0 <= value <= 5:
             raise ValidationError(message=self.message)
+
 
 @deconstructible
 class FileExtensionValidator:
