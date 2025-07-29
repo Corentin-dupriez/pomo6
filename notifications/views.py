@@ -1,6 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
-from django.shortcuts import render
 from django.views.generic import ListView
 from rest_framework import status
 from rest_framework.generics import UpdateAPIView

@@ -7,7 +7,6 @@ from django.utils.text import slugify
 from adverts.mixins import CreatedDateMixin
 from adverts.validators import RatingValidator
 from common.tasks import convert_image_task
-import datetime
 
 UserModel = get_user_model()
 
