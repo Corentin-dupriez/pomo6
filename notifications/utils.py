@@ -4,7 +4,7 @@ from .models import Notification
 
 UserModel = get_user_model()
 
-def notify(target_user: UserModel, text: str, target_url: str):
+def notify(target_user: UserModel, text: str, target_url: str) -> None:
     notif = Notification.objects.create(
         target_user=target_user,
         text=text,

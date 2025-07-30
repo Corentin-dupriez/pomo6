@@ -78,6 +78,7 @@ class Advertisement(CreatedDateMixin):
 
     def approve_listings(self) -> None:
         self.approved = True
+        self.save()
 
     def get_absolute_url(self) -> str:
         return reverse('advert_view', kwargs={'pk': self.pk,

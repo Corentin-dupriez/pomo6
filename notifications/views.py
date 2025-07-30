@@ -9,7 +9,6 @@ from notifications.serializers import NotificationSerializer
 from notifications.permissions import IsNotificationRecipient
 
 
-# Create your views here.
 class NotificationListView(LoginRequiredMixin, ListView):
     model = Notification
     context_object_name = 'notifications'
@@ -35,4 +34,5 @@ class ReadNotificationView(UpdateAPIView):
                                          partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response({'status': 'success'}, status=status.HTTP_200_OK)
+        return Response({'status': 'success'},
+                        status=status.HTTP_200_OK)

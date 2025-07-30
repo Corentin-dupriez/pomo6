@@ -1,7 +1,6 @@
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import DetailView, UpdateView
-
 from profiles.forms import ProfileEditForm
 from profiles.models import UserProfile
 
@@ -17,7 +16,7 @@ class ProfileEditView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     template_name = 'profiles/profile-edit.html'
     form_class = ProfileEditForm
 
-    def test_func(self):
+    def test_func(self) -> bool:
         user_profile = self.get_object()
         return user_profile.user == self.request.user
 

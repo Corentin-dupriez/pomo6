@@ -10,7 +10,7 @@ UserModel = get_user_model()
 
 
 @receiver(signals.post_save, sender=models.Advertisement)
-def create_advertisement(sender, instance: models.Advertisement, created, **kwargs) -> None:
+def inform_approved_advertisement(sender, instance: models.Advertisement, created, **kwargs) -> None:
     if created:
         return
     if not created and instance.approved:
