@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.db.models import Q
+from django.db.models import Q, QuerySet
 from django.views.generic import ListView
 from rest_framework import status
 from rest_framework.generics import UpdateAPIView
@@ -16,7 +16,7 @@ class NotificationListView(LoginRequiredMixin, ListView):
     template_name = 'notifications/my-notifications.html'
     paginate_by = 10
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet:
         return Notification.objects.filter(Q(target_user=self.request.user) &
                                            Q(read=False))
 
@@ -28,7 +28,7 @@ class ReadNotificationView(UpdateAPIView):
     permission_classes = (IsNotificationRecipient,)
     http_method_names = ['patch']
 
-    def patch(self, request, **kwargs):
+    def patch(self, request, **kwargs) -> Response:
         notif = self.get_object()
         serializer = self.get_serializer(instance=notif,
                                          data=request.data,

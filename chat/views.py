@@ -30,17 +30,17 @@ class ThreadDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         kwargs.update({'messages': Message.objects.filter(thread=self.get_object())})
         return super().get_context_data(**kwargs)
 
-    def get_object(self, **kwargs):
+    def get_object(self, **kwargs) -> Thread:
         return Thread.objects.filter(pk=self.kwargs['pk']).prefetch_related('orders').first()
 
-    def test_func(self):
+    def test_func(self) -> bool:
         return self.request.user in self.get_object().participants.all()
 
 
 class ThreadRedirectView(LoginRequiredMixin, RedirectView):
     permanent = False
 
-    def get_redirect_url(self, *args, **kwargs):
+    def get_redirect_url(self, *args, **kwargs) -> str:
         advert = Advertisement.objects.get(pk=self.kwargs['advert_id'])
         chat = Thread.objects.filter(advert_id=advert.pk).filter(participants=self.request.user).first()
 

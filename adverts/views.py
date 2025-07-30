@@ -203,7 +203,7 @@ class ListingDeleteView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Advertisement
     success_url = reverse_lazy('home')
 
-    def test_func(self):
+    def test_func(self) -> bool:
         obj = self.get_object()
         return self.request.user.is_superuser or self.request.user == obj.user
 
@@ -264,7 +264,7 @@ class ListingUpdateView(UserPassesTestMixin, SuccessMessageMixin, LoginRequiredM
         ctx['update_listing'] = True
         return ctx
 
-    def test_func(self):
+    def test_func(self) -> bool:
         obj = self.get_object()
         return obj.user == self.request.user
 
@@ -299,7 +299,7 @@ class CreateOrderView(LoginRequiredMixin, SuccessMessageMixin, UserPassesTestMix
         kwargs['thread_id'] = Thread.objects.filter(participants=self.request.user, advert=self.kwargs.get('pk')).first().id
         return kwargs
 
-    def test_func(self):
+    def test_func(self) -> bool:
         advert = get_object_or_404(Advertisement, pk=self.kwargs.get('pk'))
         return advert.user == self.request.user
 
@@ -309,7 +309,7 @@ class UpdateOrderView(LoginRequiredMixin, SuccessMessageMixin, UserPassesTestMix
     template_name = 'orders/new_order.html'
     success_message = 'Order updated successfully'
 
-    def test_func(self):
+    def test_func(self) -> bool:
         offer = get_object_or_404(Order, pk=self.kwargs.get('pk'))
         return offer.user == self.request.user
 
@@ -324,7 +324,7 @@ class OrderDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
     model = Order
     template_name = 'orders/order.html'
 
-    def test_func(self):
+    def test_func(self) -> bool:
         order = get_object_or_404(Order, pk=self.kwargs.get('pk'))
         return order.user == self.request.user or order.advertisement.user == self.request.user
 
@@ -334,7 +334,7 @@ class PredictCategoryView(APIView):
         request=PredictCategorySerializer,
     )
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs) -> Response:
         title = request.data.get('title', '')
 
         if not title:
@@ -352,7 +352,7 @@ class UpdateOrderStatusView(generics.UpdateAPIView):
     permission_classes = (IsOrderOwnerOrClient,)
     http_method_names = ['patch']
 
-    def patch(self, request, *args, **kwargs):
+    def patch(self, request, *args, **kwargs) -> Response:
         order = self.get_object()
         serializer = self.get_serializer(instance=order,
                                          data=request.data,
@@ -368,7 +368,7 @@ class ApproveListingView(generics.UpdateAPIView):
     permission_classes = (permissions.IsStaff,)
     http_method_names = ['patch']
 
-    def patch(self, request, *args, **kwargs):
+    def patch(self, request, *args, **kwargs) -> Response:
         listing = self.get_object()
         serializer = self.get_serializer(instance=listing,
                                          data=request.data,

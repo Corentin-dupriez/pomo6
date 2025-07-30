@@ -22,7 +22,7 @@ urlpatterns = [
         path('predict-category/', PredictCategoryView.as_view(), name='predict_category'),
         path('orders/<int:pk>/update-status/', UpdateOrderStatusView.as_view(), name='update_order_status'),
         path('<int:pk>/', include([
-            path('approve/', ApproveListingView.as_view(), name='approve_order'),
+            path('approve/', ApproveListingView.as_view(), name='approve_listing'),
         ]))
     ])),
     path('my-orders/', views.MyOrderListView.as_view(), name='my_orders'),
