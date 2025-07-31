@@ -1,12 +1,16 @@
 import json
 import os
+from collections import defaultdict
+
 import joblib
+import nltk
+nltk.data.path.append('nltk_data')
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models.functions import Coalesce, TruncDate
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
-from django.db.models import Q, Avg, Count, ExpressionWrapper, FloatField, QuerySet
+from django.db.models import Q, Avg, Count, ExpressionWrapper, FloatField, QuerySet, When, Value, Case
 from django.core.paginator import Paginator
 from django.urls import reverse_lazy
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, FormView, DeleteView
@@ -20,11 +24,16 @@ from adverts.permissions import IsOrderOwnerOrClient
 from adverts.serializers import OrderUpdateSerializer, ListingUpdateSerializer, PredictCategorySerializer
 from chat.models import Thread
 from common import permissions
+from search_indexing.models import SearchIndex
+from nltk.corpus import stopwords
+from nltk.stem import PorterStemmer
 
 #import model and vectorizer required for API
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 model = joblib.load(os.path.join(BASE_DIR, "ml_model", "model.pkl"))
 vectorizer = joblib.load(os.path.join(BASE_DIR, "ml_model", "vectorizer.pkl"))
+ps = PorterStemmer()
+stop_words = set(stopwords.words('english'))
 
 
 class BaseResultsView(ListView):
@@ -58,6 +67,20 @@ class BaseResultsView(ListView):
         min_price = int(self.request.GET.get('min_price', 0))
         max_price = int(self.request.GET.get('max_price', 1000))
 
+
+        search_terms = [ps.stem(word.lower()) for word in query.split() if word not in stop_words]
+
+        relevant_ads = SearchIndex.objects.filter(
+            word__in=search_terms,
+        )
+
+        ad_scores = defaultdict(float)
+        for ad in relevant_ads:
+            ad_scores[ad.advert.id] += (ad.title_tfidf * 2.0 ) * (ad.body_tfidf * 1.0)
+
+        sorted_ad_scores = sorted(ad_scores.items(), key=lambda x: x[1], reverse=True)
+        relevant_ads_id = [ad_id for ad_id, _ in sorted_ad_scores]
+
         #To the queryset, we add a note column, which is based on average rating and orders count
         queryset = Advertisement.objects.all().annotate(
             avg_rating=Coalesce(Avg('orders__ratings__rating'), 0, output_field=FloatField()),
@@ -70,9 +93,15 @@ class BaseResultsView(ListView):
         )
 
         if query:
-            queryset = queryset.filter(Q(title__icontains=query) |
-                                       Q(description__icontains=query) |
-                                       Q(category__icontains=query))
+            cases = [
+                When(id=ad_id, then=Value(score))
+                for ad_id, score in ad_scores.items()
+            ]
+
+            queryset = (queryset.annotate(
+                relevance=Case(*cases, default=Value(0), output_field=FloatField()))
+                        .filter(Q(pk__in=relevant_ads_id) |
+                                Q(category__icontains=query))).order_by('relevance')
 
         if category:
             queryset = queryset.filter(category=category)
@@ -93,7 +122,7 @@ class BaseResultsView(ListView):
                                        Q(fixed_price__isnull=True) |
                                        Q(max_price__lte=max_price))
 
-        return queryset.order_by('-note')
+        return queryset
 
     def get_context_data(self, *, object_list=..., **kwargs) -> dict:
         min_rating, max_rating = self.get_ratings()
