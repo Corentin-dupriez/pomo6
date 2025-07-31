@@ -38,6 +38,11 @@
             {% if request.user == order.advertisement.user and order.status != 'COMPLETED' and order.status != 'REJECTED'%}
                 <button class="secondary-btn" id="reject-btn">Cancel</button>
             {% endif %}
+        {% if request.user == order.user and order.status == 'COMPLETED'%}
+            <a class="primary-btn" href="{% url 'rate' order.pk %}">
+                    <p class="primary-btn-text">Rate</p>
+                </a>
+        {% endif %}
         </div>
 
     </div>

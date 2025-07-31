@@ -1,6 +1,6 @@
 from django import forms
 
-from adverts.models import Advertisement, RatingResponse, Order
+from adverts.models import Advertisement, RatingResponse, Order, Ratings
 
 
 class SearchForm(forms.Form):
@@ -53,6 +53,22 @@ class AdvertForm(forms.ModelForm):
             obj.save()
         return obj
 
+class RatingForm(forms.ModelForm):
+    class Meta:
+        model = Ratings
+        fields = ['rating', 'comment']
+
+    def __init__(self, *args, **kwargs) -> None:
+        self.order_id = kwargs.pop('order_id', None)
+        super().__init__(*args, **kwargs)
+
+    def save(self, commit=True) -> Ratings:
+        obj = super().save(commit=False)
+        obj.order = Order.objects.get(pk=self.order_id)
+
+        if commit:
+            obj.save()
+        return obj
 
 class RatingResponseForm(forms.ModelForm):
     to_rating_id = forms.IntegerField(widget=forms.HiddenInput())

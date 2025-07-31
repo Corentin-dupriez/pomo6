@@ -17,7 +17,9 @@ urlpatterns = [
         path('<int:pk>/', include([
         path('', views.OrderDetailView.as_view(), name='order_detail'),
         path('update/', views.UpdateOrderView.as_view(), name='order_update'),
+        path('rate/', views.RatingView.as_view(), name='rate'),
              ]))])),
+
     path('api/', include([
         path('predict-category/', PredictCategoryView.as_view(), name='predict_category'),
         path('orders/<int:pk>/update-status/', UpdateOrderStatusView.as_view(), name='update_order_status'),
