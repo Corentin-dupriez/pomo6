@@ -23,6 +23,7 @@ ENV/
 
 # Static/media (optional if using collectstatic)
 media/
+/staticfiles/
 
 # Migrations (optional if you don’t want to track them early)
 **/migrations/

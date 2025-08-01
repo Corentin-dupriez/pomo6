@@ -1,20 +1,13 @@
 from .base import *
-from decouple import config
+from decouple import config, Csv
 
 SECRET_KEY = config('SECRET_KEY', 'dev-secret-key')
 DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = [
-    '127.0.0.1',
-    'pomo6.com',
-    'localhost',
-]
+ALLOWED_HOSTS = config('ALLOWED_HOSTS').split(',')
 
-CSRF_TRUSTED_ORIGINS = [
-    'pomo6.com',
-    'localhost',
-    '127.0.0.1',
-]
+CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS').split(','),
+
 
 DATABASES = {
     'default': {
