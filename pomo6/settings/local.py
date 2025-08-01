@@ -30,8 +30,3 @@ CHANNEL_LAYERS = {
 }
 
 CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
-
-DEFAULT_FROM_EMAIL = 'c.dupriez@gmail.com'
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'localhost'
-EMAIL_PORT = 1025

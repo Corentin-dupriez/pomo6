@@ -1,10 +1,10 @@
 import os
 import random
-
 import django
 from django.contrib.auth import get_user_model
 from django.db.models import QuerySet
 from django.utils.text import slugify
+from search_indexing.utils import index_ad, calculate_tf_idf
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'pomo6.settings')
 django.setup()
@@ -183,7 +183,14 @@ print(f'Generated {len(all_adverts_to_commit)} advertisements')
 user_input = input('Are you sure you want to create the advertisements? (y/n)')
 if user_input == 'y':
     print('Saving advertisements')
-    Advertisement.objects.bulk_create(all_adverts_to_commit)
-    print(f'Advertisements saved!')
+    commited_adverts = Advertisement.objects.bulk_create(all_adverts_to_commit)
+    print('Advertisements saved!')
+
+    for advert in commited_adverts:
+        index_ad(advert)
+
+    calculate_tf_idf()
+    print('Adverts indexed and tf-idf calculated!')
+
 else:
     print('Aborting')

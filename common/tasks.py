@@ -1,8 +1,10 @@
 from celery import shared_task
 from django.apps import apps
 import os
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMultiAlternatives
 from django.template.loader import render_to_string
+from django.utils.html import strip_tags
+
 from common.utils import convert_to_webp
 
 
@@ -25,4 +27,8 @@ def send_email(subject: str, from_email: str, to_email: str, action: str, contex
     except:
         raise Exception('Failed to find template')
 
-    send_mail(subject, html_content, from_email, [to_email], fail_silently=False)
+    text_content = strip_tags(html_content)
+
+    email = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
+    email.attach_alternative(html_content, "text/html")
+    email.send()

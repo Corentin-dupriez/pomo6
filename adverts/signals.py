@@ -6,7 +6,7 @@ from django.db.models import signals
 
 
 @receiver(signals.post_save, sender=Advertisement)
-def send_email_to_user(sender, instance: Advertisement, created, **kwargs):
+def send_approved_email_to_user(sender, instance: Advertisement, created, **kwargs):
     if not created:
         if instance.approved:
             send_email.delay(
@@ -21,7 +21,7 @@ def send_email_to_user(sender, instance: Advertisement, created, **kwargs):
             )
 
 @receiver(signals.post_save, sender=Order)
-def send_email_to_user(sender, instance: Order, created, **kwargs):
+def send_order_email_to_user(sender, instance: Order, created, **kwargs):
     if created:
             send_email.delay(
                 subject='New order created',

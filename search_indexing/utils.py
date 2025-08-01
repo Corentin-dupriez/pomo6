@@ -1,5 +1,8 @@
+import math
 from collections import defaultdict
 import nltk
+from django.db.models import Count, F
+
 nltk.data.path.append('nltk_data')
 from adverts.models import Advertisement
 from nltk.corpus import stopwords
@@ -56,3 +59,18 @@ def index_ad(advertisement: Advertisement):
             body_tf=description_tf,
         )
 
+def calculate_tf_idf():
+    indexes = (SearchIndex.objects.values('word')
+               .annotate(doc_count=Count('advert', distinct=True)))
+    advert_number = Advertisement.objects.count()
+
+    for index in indexes:
+        word = index['word']
+        df = index['doc_count']
+        idf = math.log(advert_number / (1 + df))
+        # Update each row with the IDF of the word
+        SearchIndex.objects.filter(word=word).update(idf=idf)
+
+    # Update each row again with the TF-IDF
+    SearchIndex.objects.all().update(title_tfidf=F('title_tf') * F('idf'),
+                                     body_tfidf=F('body_tf') * F('idf'), )
