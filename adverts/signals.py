@@ -1,7 +1,7 @@
 from django.dispatch import receiver
 from common.tasks import send_email
 from adverts.models import Advertisement, Order
-from pomo6 import settings
+from django.conf import settings
 from django.db.models import signals
 
 

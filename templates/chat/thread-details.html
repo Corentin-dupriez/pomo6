@@ -47,7 +47,14 @@
         const threadID = '{{ thread.pk }}'
         const userId = '{{ request.user.pk }}';
         const userName = '{{ request.user.username }}'
-        const socket = new WebSocket(`ws://${window.location.host}/ws/chat/${threadID}/`);
+
+        const socket = new WebSocket(
+            'ws://'
+            +window.location.host
+            +'/ws/chat/'
+            + threadID
+            +'/'
+        );
 
         socket.onmessage = function (e) {
           const data = JSON.parse(e.data);

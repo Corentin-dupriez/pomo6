@@ -1,4 +1,4 @@
-from pomo6 import settings
+from django.conf import settings
 from .models import UserProfile
 from common.tasks import send_email
 from django.db.models import signals
