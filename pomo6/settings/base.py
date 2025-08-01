@@ -1,5 +1,6 @@
 import os
 from pathlib import Path
+from decouple import config
 from django.urls import reverse_lazy
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -23,7 +24,9 @@ INSTALLED_APPS = [
     'uvicorn',
     'django.contrib.staticfiles',
     'pomo6',
-    'drf_spectacular'
+    'drf_spectacular',
+    'cloudinary',
+    'cloudinary_storage',
 ] + PROJECT_APPS
 
 MIDDLEWARE = [
@@ -59,6 +62,9 @@ STORAGES = {
     # ...
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+    "default": {
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
 }
 
@@ -125,6 +131,13 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': config('CLOUDINARY_CLOUD_NAME'),
+    'API_KEY': config('CLOUDINARY_API_KEY'),
+    'API_SECRET': config('CLOUDINARY_API_SECRET'),
+}
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
