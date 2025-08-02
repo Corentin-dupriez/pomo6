@@ -1,7 +1,6 @@
 import json
 import os
 from collections import defaultdict
-
 import joblib
 import nltk
 nltk.data.path.append('nltk_data')

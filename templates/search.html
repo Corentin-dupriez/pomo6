@@ -236,15 +236,14 @@ Ads search
                         },
                         body: JSON.stringify({approved: true})
                     })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.status === "success") {
-                                window.location.reload()
-                            } else {
-                                showOKToast();
+                        .then(response => {
+                            if (response.ok) {
+                                showOKToast()
                                 setTimeout(() => {
-                            window.location.reload();
-                        }, 1500);
+                                    window.location.reload();
+                                }, 1500);
+                            } else {
+                                showKOToast();
                             }
                         })
                         .catch(error => {
