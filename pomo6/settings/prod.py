@@ -29,4 +29,4 @@ CHANNEL_LAYERS = {
     },
 }
 
-CELERY_BROKER_URL = f"redis://{config('REDIS_HOST')}:{config('REDIS_PORT')}/0"
+CELERY_BROKER_URL = f"rediss://{config('REDIS_HOST')}:{config('REDIS_PORT')}/0"
