@@ -14,7 +14,6 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('chat', '0003_thread_advert_alter_message_thread'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 

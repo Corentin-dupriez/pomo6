@@ -22,7 +22,6 @@ class Migration(migrations.Migration):
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
                 ('participants', models.ManyToManyField(related_name='threads', to=settings.AUTH_USER_MODEL)),
-                ('advert', models.ForeignKey(default=20, on_delete=django.db.models.deletion.CASCADE, related_name='threads', to='adverts.advertisement')),
             ],
         ),
         migrations.CreateModel(
