@@ -53,7 +53,6 @@ class Migration(migrations.Migration):
                 ('last_modified', models.DateField(blank=True, null=True)),
                 ('status', models.CharField(choices=[('CREATED', 'Created'), ('APPROVED', 'Approved'), ('REJECTED', 'Rejected'), ('COMPLETED', 'Completed')], default='CREATED', max_length=20)),
                 ('description', models.TextField(default=1, max_length=2000)),
-                ('thread', models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, related_name='orders', to='chat.thread')),
             ],
             options={
                 'abstract': False,
