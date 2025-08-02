@@ -24,10 +24,14 @@ CHANNEL_LAYERS = {
     "default": {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
-            "hosts": [(config('REDIS_HOST'), config('REDIS_PORT', cast=int))],
+            "hosts": [{
+                "address": (config('REDIS_HOST'), config('REDIS_PORT', cast=int)),
+                "password": config('REDIS_PASSWORD'),
+                "ssl": True,
+            }],
         },
     },
 }
 
-CELERY_BROKER_URL = f"rediss://{config('REDIS_HOST')}:{config('REDIS_PORT')}/0"
+CELERY_BROKER_URL = f"rediss://:{config('REDIS_PASSWORD')}@{config('REDIS_HOST')}:{config('REDIS_PORT')}/0"
 CELERY_RESULT_BACKEND=CELERY_BROKER_URL
