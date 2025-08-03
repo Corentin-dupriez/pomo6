@@ -28,6 +28,7 @@ class ThreadDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
 
     def get_context_data(self, **kwargs) -> dict:
         kwargs.update({'messages': Message.objects.filter(thread=self.get_object())})
+        kwargs.update({'hide_messages': True})
         return super().get_context_data(**kwargs)
 
     def get_object(self, **kwargs) -> Thread:

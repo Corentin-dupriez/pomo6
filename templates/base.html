@@ -18,7 +18,7 @@
 
             <main class="content">
             {# Display Django messages if any #}
-            {% if messages %}
+            {% if messages and not hide_messages %}
                 <ul class="django-messages">
                 {% for message in messages %}
                     <li id="message-container" class="message message{% if message.tags %}-{{ message.tags }}{% endif %}">{{ message }}</li>

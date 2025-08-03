@@ -105,23 +105,23 @@ class BaseResultsView(ListView):
                                 Q(category__icontains=query))).order_by('relevance')
 
         if category:
-            queryset = queryset.filter(category=category)
+            queryset = queryset.filter(category=category).order_by('avg_rating')
 
         if min_rating:
-            queryset = queryset.filter(Q(note__gte=min_rating))
+            queryset = queryset.filter(Q(note__gte=min_rating)).order_by('avg_rating')
 
         if max_rating:
-            queryset = queryset.filter(Q(note__lte=max_rating))
+            queryset = queryset.filter(Q(note__lte=max_rating)).order_by('avg_rating')
 
         if min_price:
             queryset = queryset.filter(Q(fixed_price__gte=min_price) |
                                        Q(min_price__gte=min_price) |
-                                       Q(min_price__lte=max_price))
+                                       Q(min_price__lte=max_price)).order_by('avg_rating')
 
         if max_price:
             queryset = queryset.filter(Q(fixed_price__lte=max_price) |
                                        Q(fixed_price__isnull=True) |
-                                       Q(max_price__lte=max_price))
+                                       Q(max_price__lte=max_price)).order_by('avg_rating')
 
         return queryset
 
@@ -191,7 +191,7 @@ class ListingView(DetailView, FormView):
     def get_object(self, queryset:QuerySet=None) -> Advertisement:
         queryset = Advertisement.objects.annotate(
             avg_rating=Coalesce(Avg('orders__ratings__rating'), 0, output_field=FloatField()),
-            nb_ratings=Coalesce(Count('orders', filter=Q(orders__status='COMPLETED'), distinct=True), 0),
+            nb_ratings=Coalesce(Count('orders__ratings', filter=Q(orders__status='COMPLETED'), distinct=True), 0),
         ).prefetch_related('orders__ratings').prefetch_related('orders__ratings__responses')
         return get_object_or_404(queryset, pk=self.kwargs.get('pk'))
 

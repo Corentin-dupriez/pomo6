@@ -8,7 +8,7 @@
     {% else %}
         <img class="thread-advert-picture" src="https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png">
     {% endif %}
-        <h4>{{ thread.advert }}</h4>
+        <a href="{% url 'advert_view' thread.advert.pk thread.advert.slug %}"><h4>{{ thread.advert }}</h4></a>
     </div>
     <div id="chat-box" class="chat-container">
         <div class="message-area" id="chat-log">

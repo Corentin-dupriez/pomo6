@@ -19,7 +19,7 @@
         </div>
 
         <div class="offer-info">
-            <h1 class="text">{{ order.advertisement.title }}</h1>
+            <a href="{% url 'advert_view' order.advertisement.pk order.advertisement.slug %}"><h1>{{ order.advertisement.title }}</h1></a>
             <h2 class="text">Offer:</h2>
             <p class="text"><b>Amount:</b> {{ order.amount }}</p>
             <p class="text">{{ order.description }}</p>

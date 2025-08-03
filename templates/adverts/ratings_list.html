@@ -2,33 +2,37 @@
 
 <div class="ad-comments">
     <h3 class="text">Reviews: </h3>
-    {% if advertisement.orders.all and orders.ratings.all %}
-        {% for order in advertisement.orders.all %}
-                {% for rating in order.ratings.all %}
-                    <div class="comment-info">
-                        <p class="comment-user text">{{ order.user }}</p>
-                        <p class="comment-rating text">{{ rating.rating | round }}/5</p>
-                        <p class="comment-text">{{ rating.comment }}</p>
-                        {% if rating.responses.all %}
-                            {% for response in rating.responses.all %}
-                            <p class="rating-response-comment">{{ response.comment }}</p>
-                            {% endfor %}
-                        {% else %}
-                            {% if advertisement.user == request.user%}
-                            <div class="response-container">
-                                <form method="post">
-                                    {% csrf_token %}
-                                    {{form}}
-                                    <input type="hidden" name="to_rating_id" value="{{ rating.id }}">
-                                    <button class="primary-btn">Send</button>
-                                </form>
+    {% if advertisement.nb_ratings != 0  %}
+        {% with advertisement.orders.all as orders %}
+            {% for order in orders %}
+                    {% with order.ratings.all as ratings %}
+                        {% for rating in ratings %}
+                            <div class="comment-info">
+                                <p class="comment-user text">{{ order.user }}</p>
+                                <p class="comment-rating text">{{ rating.rating | round }}/5</p>
+                                <p class="comment-text">{{ rating.comment }}</p>
+                                {% if rating.responses.all %}
+                                    {% for response in rating.responses.all %}
+                                    <p class="rating-response-comment">{{ response.comment }}</p>
+                                    {% endfor %}
+                                {% else %}
+                                    {% if advertisement.user == request.user%}
+                                    <div class="response-container">
+                                        <form method="post">
+                                            {% csrf_token %}
+                                            {{form}}
+                                            <input type="hidden" name="to_rating_id" value="{{ rating.id }}">
+                                            <button class="primary-btn">Send</button>
+                                        </form>
+                                    </div>
+                                    {% endif %}
+                                {% endif %}
                             </div>
-                            {% endif %}
-                        {% endif %}
-                    </div>
-                {% endfor %}
-        {% endfor %}
-        {% else %}
-            <h4>No ratings yet</h4>
+                    {% endfor %}
+                    {% endwith %}
+            {% endfor %}
+        {% endwith %}
+    {% else %}
+        <h4>No reviews yet</h4>
     {% endif %}
 </div>

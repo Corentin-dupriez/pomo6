@@ -7,9 +7,6 @@
     align-items: center;
 }
 
-.chat-header h4 {
-    color: #333333;
-}
 
 .thread-advert-picture {
     height: 3rem;
@@ -61,16 +58,35 @@
     padding: 10px;
 }
 
-.message-row {
+.message-row{
     display: flex;
+}
+
+.message-row p{
+    max-width: 70%;
+    padding: 10px 14px;
+    border-radius: 16px;
+    font-size: 15px;
+    line-height: 1.4;
+    word-wrap: break-word;
 }
 
 .message-row.own{
     justify-content: flex-end;
 }
 
-.message-row.other{
+.message-row.own p{
+    justify-content: flex-end;
+    background-color: #00BD9D;
+    color: white;
+    border-bottom-right-radius: 0;
+}
+
+.message-row.other p{
     justify-content: flex-start;
+    background-color: #666;
+    color: white;
+    border-bottom-left-radius: 0;
 }
 
 .new-message {
