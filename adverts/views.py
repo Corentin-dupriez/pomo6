@@ -3,6 +3,7 @@ import os
 from collections import defaultdict
 import joblib
 import nltk
+from django.views import View
 nltk.data.path.append('nltk_data')
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
@@ -12,9 +13,10 @@ from django.shortcuts import get_object_or_404
 from django.db.models import Q, Avg, Count, ExpressionWrapper, FloatField, QuerySet, When, Value, Case
 from django.core.paginator import Paginator
 from django.urls import reverse_lazy
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, FormView, DeleteView
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, FormView, DeleteView, RedirectView
 from drf_spectacular.utils import extend_schema
-from adverts.forms import AdvertForm, SearchForm, RatingResponseForm, OrderForm, UpdateOrderForm, RatingForm
+from adverts.forms import AdvertForm, SearchForm, RatingResponseForm, OrderForm, UpdateOrderForm, \
+    RatingCreateForm, RatingUpdateForm
 from adverts.models import Advertisement, Views, Ratings, Order
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -357,22 +359,51 @@ class OrderDetailView(LoginRequiredMixin, UserPassesTestMixin, DetailView):
         return order.user == self.request.user or order.advertisement.user == self.request.user
 
 #RATING VIEW
-class RatingView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, CreateView):
+class RatingRedirectView(LoginRequiredMixin, RedirectView):
+    permanent = False
+
+    def get_redirect_url(self, *args, **kwargs):
+        order_id = self.kwargs.get('pk')
+        rating = Ratings.objects.filter(order=order_id).first()
+
+        if rating:
+            return reverse_lazy('rating-details', kwargs={'pk': order_id,
+                                                          'rating_pk': rating.pk})
+        else:
+            return reverse_lazy('rate')
+
+class BaseRatingView(LoginRequiredMixin, UserPassesTestMixin, View):
     model = Ratings
-    form_class = RatingForm
-    template_name = 'ratings/new-rating.html'
-    success_url = reverse_lazy('home')
-    success_message = "Rating created successfully"
 
     def test_func(self):
         order = get_object_or_404(Order, pk=self.kwargs.get('pk'))
         rating = Ratings.objects.filter(order=order).count()
-        return self.request.user == order.user and rating == 0
+        return self.request.user == order.user
+
+class RatingCreateView(BaseRatingView, SuccessMessageMixin, CreateView):
+    form_class = RatingCreateForm
+    template_name = 'ratings/new-rating.html'
+    success_url = reverse_lazy('home')
+    success_message = "Rating created successfully"
 
     def get_form_kwargs(self) -> dict:
         kwargs = super().get_form_kwargs()
         kwargs['order_id'] = self.kwargs.get('pk')
         return kwargs
+
+    def get_context_data(self, *, object_list=..., **kwargs) -> dict:
+        ctx = super().get_context_data()
+        ctx['create_rating'] = True
+        return ctx
+
+class RatingDetailsView(BaseRatingView, SuccessMessageMixin, UpdateView):
+    form_class = RatingUpdateForm
+    template_name = 'ratings/new-rating.html'
+
+    def get_context_data(self, *, object_list=..., **kwargs) -> dict:
+        ctx = super().get_context_data()
+        ctx['create_rating'] = False
+        return ctx
 
 #API VIEWS
 class PredictCategoryView(APIView):

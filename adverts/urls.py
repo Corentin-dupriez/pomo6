@@ -15,9 +15,11 @@ urlpatterns = [
          path('order/create/', CreateOrderView.as_view(), name='create_order'),])),
     path('order/', include([
         path('<int:pk>/', include([
-        path('', views.OrderDetailView.as_view(), name='order_detail'),
-        path('update/', views.UpdateOrderView.as_view(), name='order_update'),
-        path('rate/', views.RatingView.as_view(), name='rate'),
+            path('', views.OrderDetailView.as_view(), name='order_detail'),
+            path('update/', views.UpdateOrderView.as_view(), name='order_update'),
+            path('ratings/', views.RatingRedirectView.as_view(), name='check-ratings'),
+            path('rate/', views.RatingCreateView.as_view(), name='rate'),
+            path('rating/<int:rating_pk>/', views.RatingDetailsView.as_view(), name='rating-details'),
              ]))])),
 
     path('api/', include([

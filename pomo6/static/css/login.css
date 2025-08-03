@@ -6,7 +6,7 @@
     display: flex;
     background-color: #FAF8F3;
     width: 40%;
-    height: 50vh;
+    max-height: 80vh;
     align-items: center;
     justify-content: center;
 }
@@ -25,6 +25,7 @@
 .login_section label {
     margin-bottom: 0.5rem;
     font-weight: bold;
+    color: #333333;;
 }
 
 .login_section input {

@@ -3,10 +3,12 @@
 {% block content %}
 
     <form method="post">
-    <div class="new-add-form">
+    <div class="add-edit-form">
         {% csrf_token %}
         {{ form }}
-    <button class="primary-btn" style="justify-content: center" type="submit">Save</button>
+        {% if create_rating %}
+            <button class="primary-btn" style="justify-content: center" type="submit">Save</button>
+        {% endif %}
     </div>
     </form>
 

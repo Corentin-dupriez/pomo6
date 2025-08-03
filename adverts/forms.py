@@ -53,7 +53,7 @@ class AdvertForm(forms.ModelForm):
             obj.save()
         return obj
 
-class RatingForm(forms.ModelForm):
+class BaseRatingForm(forms.ModelForm):
     class Meta:
         model = Ratings
         fields = ['rating', 'comment']
@@ -69,6 +69,18 @@ class RatingForm(forms.ModelForm):
         if commit:
             obj.save()
         return obj
+
+class RatingCreateForm(BaseRatingForm):
+    pass
+
+class RatingUpdateForm(BaseRatingForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field in self.fields.values():
+            field.widget.attrs['readonly'] = True
+            field.widget.attrs['disabled'] = True
+
 
 class RatingResponseForm(forms.ModelForm):
     to_rating_id = forms.IntegerField(widget=forms.HiddenInput())
