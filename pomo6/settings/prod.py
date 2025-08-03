@@ -1,5 +1,6 @@
 from .base import *
 from decouple import config
+import ssl
 
 SECRET_KEY = config('SECRET_KEY')
 DEBUG = config('DEBUG', cast=bool)
@@ -35,6 +36,6 @@ CHANNEL_LAYERS = {
 
 CELERY_BROKER_URL = f"rediss://:{config('REDIS_PASSWORD')}@{config('REDIS_HOST')}:{config('REDIS_PORT')}/0"
 CELERY_BROKER_USE_SSL = {
-    "ssl_cert_reqs": "CERT_NONE",
+    "ssl_cert_reqs": ssl.CERT_NONE,
 }
 CELERY_RESULT_BACKEND=CELERY_BROKER_URL
