@@ -4,7 +4,6 @@ from collections import defaultdict
 import joblib
 import nltk
 from django.views import View
-nltk.data.path.append('nltk_data')
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models.functions import Coalesce, TruncDate
@@ -29,6 +28,8 @@ from search_indexing.models import SearchIndex
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 
+nltk.data.path.append('nltk_data')
+
 #import model and vectorizer required for API
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 model = joblib.load(os.path.join(BASE_DIR, "ml_model", "model.pkl"))
@@ -47,6 +48,10 @@ class BaseResultsView(ListView):
     paginator_class = Paginator
 
     def get_ratings(self) -> tuple:
+        """
+        Get the ratings for the get request, or 0
+        :return: the tuple of min rating and max rating
+        """
         try:
             min_rating = int(self.request.GET.get('min_rating', 0))
         except ValueError:

@@ -21,12 +21,16 @@ models for views, ratings and orders. The script categories_model
 also allows for the generation of an ML model to propose categories
 on the FE to the user based on the title of the advert they are creating
 - **profiles**: contains views and models for user profiles
-- chat: app that allows real-time chat using websockets. It contains
+- **chat**: app that allows real-time chat using websockets. It contains
 the models for threads and messages, as well as channels consumers 
 and routing.
+- **common**: contains some common elements (i.e: some template tags)
 - **notifications**: contains the models, utilities and signals to create notifications
 - **ml_model**: contains the exported model and vectorizer from categories_model
-- **populate_db**: a script that allows filling the DB with random values
+- **nltk_data**: some data used for natural language analysis. Used for the reverse index for searching ads
+
+## How to start the project
+After migrating, it is possible to use the command ```python manage.py populate_db```. It creates a list of random ads for every category.
 
 ## User journey
 Upon arriving on the home page, the user has several choices:
@@ -65,13 +69,3 @@ to create one. Otherwise, they can log in.
 - Extend Django user
 - Deploy project 
 - Other functionalities 
-
-## Learning journey 
-The goal of the project is just to get 
-better at Django, and try to improve the 
-app incrementally, following the SoftUni lesson.
-
-If you have any comments on the structure
-of the app, or beginner mistakes, feel free to comment.
-
-Thank you!

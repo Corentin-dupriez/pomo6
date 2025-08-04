@@ -35,7 +35,13 @@ CHANNEL_LAYERS = {
 }
 
 CELERY_BROKER_URL = f"rediss://:{config('REDIS_PASSWORD')}@{config('REDIS_HOST')}:{config('REDIS_PORT')}/0"
+
 CELERY_BROKER_USE_SSL = {
     "ssl_cert_reqs": ssl.CERT_NONE,
 }
+
+CELERY_REDIS_BACKEND_USE_SSL = {
+    "ssl_cert_reqs": ssl.CERT_NONE,
+}
+
 CELERY_RESULT_BACKEND=CELERY_BROKER_URL
