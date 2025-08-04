@@ -26,7 +26,6 @@ CHANNEL_LAYERS = {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
             "hosts": [f"rediss://:{config('REDIS_PASSWORD')}@{config('REDIS_HOST')}:{config('REDIS_PORT')}/0" ],
-            "ssl_cert_reqs": ssl.CERT_NONE,
         },
     },
 }
