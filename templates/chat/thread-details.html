@@ -4,7 +4,7 @@
 {% block content %}
     <div class="chat-header">
     {% if thread.advert.image %}
-        <img src="{{ thread.advert.image.url }}">
+        <img class="thread-advert-picture" src="{{ thread.advert.image.url }}">
     {% else %}
         <img class="thread-advert-picture" src="https://developers.elementor.com/docs/assets/img/elementor-placeholder-image.png">
     {% endif %}
