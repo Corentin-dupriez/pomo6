@@ -98,14 +98,15 @@ class BaseOrderForm(forms.ModelForm):
 class OrderForm(BaseOrderForm):
     def __init__(self, *args, **kwargs) -> None:
         self.user = kwargs.pop('user', None)
+        self.other_user = kwargs.pop('other_user', None)
         self.advert_id = kwargs.pop('advert_id', None)
         self.thread_id = kwargs.pop('thread_id', None)
         super(forms.ModelForm, self).__init__(*args, **kwargs)
 
     def save(self, commit=True) -> Order:
         obj = super().save(commit=False)
-        obj.user = self.user
-        obj.advertisement = Advertisement.objects.get(pk=self.advert_id)
+        obj.user = self.other_user
+        obj.advertisement = self.advert_id
         obj.status = 'CREATED'
         obj.thread_id = self.thread_id
         if commit:

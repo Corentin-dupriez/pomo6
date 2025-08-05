@@ -25,7 +25,7 @@
     </div>
     <div class="chat-actions">
     {% if request.user == thread.advert.user and not thread.orders.first %}
-        <a class="primary-btn" href="{% url 'create_order' thread.advert.pk thread.advert.slug %}">
+        <a class="primary-btn" href="{% url 'create_order' thread.advert.pk thread.advert.slug thread.pk %}">
             <p class="primary-btn-text">Create an offer</p>
         </a>
     {% endif %}

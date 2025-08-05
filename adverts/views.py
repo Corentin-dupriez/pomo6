@@ -328,10 +328,12 @@ class CreateOrderView(LoginRequiredMixin, SuccessMessageMixin, UserPassesTestMix
     success_message = "Order created successfully"
 
     def get_form_kwargs(self) -> dict:
+        current_thread_pk = self.kwargs.get('thread_id')
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
-        kwargs['advert_id'] = self.kwargs.get('pk')
-        kwargs['thread_id'] = Thread.objects.filter(participants=self.request.user, advert=self.kwargs.get('pk')).first().id
+        kwargs['other_user'] = Thread.objects.filter(pk=current_thread_pk).first().participants.exclude(pk=self.request.user.pk).first()
+        kwargs['advert_id'] = Advertisement.objects.get(threads=current_thread_pk)
+        kwargs['thread_id'] = current_thread_pk
         return kwargs
 
     def test_func(self) -> bool:
