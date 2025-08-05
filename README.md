@@ -31,6 +31,7 @@ and routing.
 
 ## How to start the project
 After migrating, it is possible to use the command ```python manage.py populate_db```. It creates a list of random ads for every category.
+Otherwise, it's also possible to start with an empty database.
 
 ## User journey
 Upon arriving on the home page, the user has several choices:
