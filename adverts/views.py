@@ -348,7 +348,7 @@ class UpdateOrderView(LoginRequiredMixin, SuccessMessageMixin, UserPassesTestMix
 
     def test_func(self) -> bool:
         offer = get_object_or_404(Order, pk=self.kwargs.get('pk'))
-        return offer.user == self.request.user
+        return offer.advertisement.user == self.request.user
 
     def get_initial(self) -> dict:
         object = get_object_or_404(Order, pk=self.kwargs.get('pk'))
