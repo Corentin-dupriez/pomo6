@@ -36,3 +36,9 @@
     font-size: 1rem;
 }
 
+@media (max-width: 768px) {
+    .login_section {
+        min-width: 80vw;
+        min-height: 80vh;
+    }
+}

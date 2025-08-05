@@ -29,3 +29,16 @@
     display: flex;
     gap: 1rem;
 }
+
+@media (max-width: 768px) {
+    .offer-status ul {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.2rem;
+        padding-bottom: 0.5rem;
+    }
+
+    .offer-info {
+        margin-top: 0.4rem;
+    }
+}

@@ -99,9 +99,14 @@
     .offer-container{
         grid-template-columns: 1fr;
     }
+
     .seller-profile{
         grid-column: 1;
         margin-top: 2rem;
+    }
+
+    .ad-comments {
+        grid-column: 1;
     }
 
 }
