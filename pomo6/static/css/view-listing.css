@@ -109,4 +109,8 @@
         grid-column: 1;
     }
 
+    .chart-container {
+        height: 400px;
+    }
+
 }
