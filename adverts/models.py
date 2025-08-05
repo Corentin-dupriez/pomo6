@@ -36,6 +36,7 @@ class Advertisement(CreatedDateMixin):
 
     image = models.ImageField(upload_to='images/',
                               blank=True,
+                              max_length=500,
                               null=True,
                               validators=[FileExtensionValidator(['png', 'jpg', 'jpeg', 'webp'])])
 

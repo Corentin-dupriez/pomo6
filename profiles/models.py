@@ -21,6 +21,7 @@ class UserProfile(models.Model):
 
     image = models.ImageField(blank=True,
                               null=True,
+                              max_length=500,
                               upload_to='images/',
                               validators=[FileExtensionValidator(['png', 'jpg', 'jpeg', 'webp'])])
 
