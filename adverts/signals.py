@@ -4,6 +4,10 @@ from adverts.models import Advertisement, Order
 from django.conf import settings
 from django.db.models import signals
 
+@receiver(signals.post_save, sender=Advertisement)
+def approve_listing(sender, instance: Advertisement, created: bool, **kwargs):
+    if created:
+        pass
 
 @receiver(signals.post_save, sender=Advertisement)
 def send_approved_email_to_user(sender, instance: Advertisement, created, **kwargs):

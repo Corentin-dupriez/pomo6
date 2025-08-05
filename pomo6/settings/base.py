@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 from decouple import config
 from django.urls import reverse_lazy
+import cloudinary
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -137,6 +138,12 @@ CLOUDINARY_STORAGE = {
     'API_KEY': config('CLOUDINARY_API_KEY'),
     'API_SECRET': config('CLOUDINARY_API_SECRET'),
 }
+
+cloudinary.config(
+  cloud_name = config('CLOUDINARY_CLOUD_NAME'),
+  api_key = config('CLOUDINARY_API_KEY'),
+  api_secret = config('CLOUDINARY_API_SECRET')
+)
 
 DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

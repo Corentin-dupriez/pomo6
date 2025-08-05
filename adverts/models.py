@@ -1,4 +1,6 @@
+from cloudinary import CloudinaryResource
 from django.contrib.auth import get_user_model
+from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.urls import reverse
@@ -7,6 +9,7 @@ from django.utils.text import slugify
 from adverts.mixins import CreatedDateMixin
 from adverts.validators import RatingValidator
 from common.tasks import convert_image_task
+from common.validators import CustomImageFormatValidator
 
 UserModel = get_user_model()
 
@@ -38,7 +41,7 @@ class Advertisement(CreatedDateMixin):
                               blank=True,
                               max_length=500,
                               null=True,
-                              validators=[FileExtensionValidator(['png', 'jpg', 'jpeg', 'webp'])])
+                              validators=[CustomImageFormatValidator()])
 
     is_fixed_price = models.BooleanField(default=True)
 
@@ -65,13 +68,25 @@ class Advertisement(CreatedDateMixin):
         ]
     
     def save(self, *args, **kwargs) -> None:
+        #Once the advert is saved, we call a signal in search_indexing to index it
         if not self.slug:
             self.slug = slugify(self.title)
 
-        super().save(*args, **kwargs)
+        if self.image:
+            if isinstance(self, CloudinaryResource):
+                if self.image.format != 'webp':
+                    convert_image_task.delay(self._meta.app_label,
+                                             self.__class__.__name__,
+                                             self.user_id, 'image')
+            elif isinstance(self, InMemoryUploadedFile):
+                if not self.name.endswith('.webp'):
+                    convert_image_task.delay(self._meta.app_label,
+                                             self.__class__.__name__,
+                                             self.user_id, 'image')
 
-        if self.image and not self.image.name.lower().endswith('.webp'):
-            convert_image_task.delay(self._meta.app_label, self.__class__.__name__, self.id, 'image')
+        self.approved = True
+
+        super().save(*args, **kwargs)
 
 
     def increase_views(self) -> None:

@@ -4,7 +4,6 @@ import os
 from django.core.mail import send_mail, EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.utils.html import strip_tags
-
 from common.utils import convert_to_webp
 
 

@@ -1,6 +1,6 @@
 from django.dispatch import receiver
 from adverts.models import Advertisement
-from search_indexing.utils import index_ad
+from search_indexing.utils import index_ad, calculate_tf_idf
 from django.db.models import signals
 
 
@@ -8,3 +8,4 @@ from django.db.models import signals
 def index_advertisement(sender, instance: Advertisement, created, **kwargs):
     if created:
         index_ad(instance)
+        calculate_tf_idf()
