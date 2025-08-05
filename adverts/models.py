@@ -143,6 +143,9 @@ class Order(CreatedDateMixin):
     def __str__(self) -> str:
         return f'Order for {self.advertisement} made on {self.created.strftime("%b %d %y")}'
 
+    def get_absolute_url(self) -> str:
+        return reverse('order_detail', kwargs={'pk': self.pk,})
+
 
 class Ratings(CreatedDateMixin):
     class Meta:

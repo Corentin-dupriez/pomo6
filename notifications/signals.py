@@ -29,3 +29,14 @@ def create_message(sender, instance: Message, created, **kwargs) -> None:
                 text=f'{instance.sender} has sent you a message',
                 target_url=instance.thread.get_absolute_url()
             )
+
+@receiver(signals.post_save, sender=models.Order)
+def create_order(sender, instance: models.Order, created, **kwargs) -> None:
+    if created:
+        recipient = instance.user
+        if recipient:
+            notify(
+                target_user=recipient,
+                text=f'{instance.advertisement.user} has created an order for {instance.advertisement}',
+                target_url=instance.get_absolute_url()
+            )
